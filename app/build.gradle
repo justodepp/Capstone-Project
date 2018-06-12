@@ -1,6 +1,10 @@
 apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
 
+// ###
+def GLOBALGIVING_API_KEY = '"' + GlobalGivingApiKey + '"' ?: '"Define Global Giving API Key"'
+// ###
+
 android {
     compileSdkVersion 27
     defaultConfig {
@@ -10,6 +14,10 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        // Please ensure you have a valid API KEY for globalgiving to use this app
+        // A valid key will need to be entered
+        buildConfigField 'String', 'GlobalGivingApiKey', GLOBALGIVING_API_KEY
     }
 
     signingConfigs {

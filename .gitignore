@@ -101,6 +101,7 @@ obj/
 
 # User-specific configurations
 google-services.json
+/gradle.properties
 
 .idea/caches/
 .idea/libraries/
