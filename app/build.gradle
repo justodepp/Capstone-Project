@@ -43,8 +43,6 @@ dependencies {
 
     // Intro
     implementation 'com.github.apl-devs:appintro:v4.2.3'
-    // Google Sign-in
-    implementation 'com.google.android.gms:play-services-auth:15.0.1'
     // Attribution
     implementation 'com.github.franmontiel:AttributionPresenter:1.0'
     // Room
@@ -63,6 +61,8 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
     // Firebase
     implementation 'com.google.firebase:firebase-core:16.0.0'
+    // Google Sign-in
+    implementation 'com.google.android.gms:play-services-auth:15.0.1'
     // Crashlytics
     implementation 'com.crashlytics.sdk.android:crashlytics:2.9.3'
     // Test
