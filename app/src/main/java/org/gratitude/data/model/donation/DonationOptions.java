@@ -1,11 +1,15 @@
 
 package org.gratitude.data.model.donation;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class DonationOptions {
+public class DonationOptions implements Parcelable {
 
     @Expose
     private List<DonationOption> donationOption;
@@ -31,4 +35,33 @@ public class DonationOptions {
 
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeList(this.donationOption);
+    }
+
+    public DonationOptions() {
+    }
+
+    protected DonationOptions(Parcel in) {
+        this.donationOption = new ArrayList<DonationOption>();
+        in.readList(this.donationOption, DonationOption.class.getClassLoader());
+    }
+
+    public static final Parcelable.Creator<DonationOptions> CREATOR = new Parcelable.Creator<DonationOptions>() {
+        @Override
+        public DonationOptions createFromParcel(Parcel source) {
+            return new DonationOptions(source);
+        }
+
+        @Override
+        public DonationOptions[] newArray(int size) {
+            return new DonationOptions[size];
+        }
+    };
 }

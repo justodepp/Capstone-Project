@@ -1,6 +1,9 @@
 
 package org.gratitude.data.model.projects;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 
 import org.gratitude.data.model.donation.DonationOptions;
@@ -9,7 +12,7 @@ import org.gratitude.data.model.organization.Organization;
 import org.gratitude.data.model.video.Videos;
 
 @SuppressWarnings("unused")
-public class Project {
+public class Project implements Parcelable {
 
     @Expose
     private Boolean active;
@@ -516,4 +519,106 @@ public class Project {
 
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeValue(this.active);
+        dest.writeString(this.activities);
+        dest.writeString(this.additionalDocumentation);
+        dest.writeString(this.approvedDate);
+        dest.writeString(this.contactAddress);
+        dest.writeString(this.contactAddress2);
+        dest.writeString(this.contactCity);
+        dest.writeString(this.contactCountry);
+        dest.writeString(this.contactName);
+        dest.writeString(this.contactPostal);
+        dest.writeString(this.contactState);
+        dest.writeString(this.contactTitle);
+        dest.writeString(this.contactUrl);
+        dest.writeString(this.country);
+        dest.writeParcelable(this.donationOptions, flags);
+        dest.writeValue(this.funding);
+        dest.writeValue(this.goal);
+        dest.writeValue(this.id);
+        dest.writeParcelable(this.image, flags);
+        dest.writeValue(this.imageGallerySize);
+        dest.writeString(this.imageLink);
+        dest.writeString(this.iso3166CountryCode);
+        dest.writeValue(this.latitude);
+        dest.writeString(this.longTermImpact);
+        dest.writeValue(this.longitude);
+        dest.writeString(this.need);
+        dest.writeValue(this.numberOfDonations);
+        dest.writeParcelable(this.organization, flags);
+        dest.writeString(this.progressReportLink);
+        dest.writeString(this.projectLink);
+        dest.writeString(this.region);
+        dest.writeValue(this.remaining);
+        dest.writeString(this.status);
+        dest.writeString(this.summary);
+        dest.writeString(this.themeName);
+        dest.writeString(this.title);
+        dest.writeString(this.type);
+        dest.writeParcelable(this.videos, flags);
+    }
+
+    public Project() {
+    }
+
+    protected Project(Parcel in) {
+        this.active = (Boolean) in.readValue(Boolean.class.getClassLoader());
+        this.activities = in.readString();
+        this.additionalDocumentation = in.readString();
+        this.approvedDate = in.readString();
+        this.contactAddress = in.readString();
+        this.contactAddress2 = in.readString();
+        this.contactCity = in.readString();
+        this.contactCountry = in.readString();
+        this.contactName = in.readString();
+        this.contactPostal = in.readString();
+        this.contactState = in.readString();
+        this.contactTitle = in.readString();
+        this.contactUrl = in.readString();
+        this.country = in.readString();
+        this.donationOptions = in.readParcelable(DonationOptions.class.getClassLoader());
+        this.funding = (Double) in.readValue(Double.class.getClassLoader());
+        this.goal = (Long) in.readValue(Long.class.getClassLoader());
+        this.id = (Long) in.readValue(Long.class.getClassLoader());
+        this.image = in.readParcelable(Image.class.getClassLoader());
+        this.imageGallerySize = (Long) in.readValue(Long.class.getClassLoader());
+        this.imageLink = in.readString();
+        this.iso3166CountryCode = in.readString();
+        this.latitude = (Double) in.readValue(Double.class.getClassLoader());
+        this.longTermImpact = in.readString();
+        this.longitude = (Double) in.readValue(Double.class.getClassLoader());
+        this.need = in.readString();
+        this.numberOfDonations = (Long) in.readValue(Long.class.getClassLoader());
+        this.organization = in.readParcelable(Organization.class.getClassLoader());
+        this.progressReportLink = in.readString();
+        this.projectLink = in.readString();
+        this.region = in.readString();
+        this.remaining = (Double) in.readValue(Double.class.getClassLoader());
+        this.status = in.readString();
+        this.summary = in.readString();
+        this.themeName = in.readString();
+        this.title = in.readString();
+        this.type = in.readString();
+        this.videos = in.readParcelable(Videos.class.getClassLoader());
+    }
+
+    public static final Parcelable.Creator<Project> CREATOR = new Parcelable.Creator<Project>() {
+        @Override
+        public Project createFromParcel(Parcel source) {
+            return new Project(source);
+        }
+
+        @Override
+        public Project[] newArray(int size) {
+            return new Project[size];
+        }
+    };
 }

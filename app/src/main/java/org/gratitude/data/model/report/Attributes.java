@@ -1,12 +1,12 @@
 
 package org.gratitude.data.model.report;
 
-import javax.annotation.Generated;
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.SerializedName;
 
-@Generated("net.hexar.json2pojo")
-@SuppressWarnings("unused")
-public class Attributes {
+public class Attributes implements Parcelable {
 
     @SerializedName("xml:base")
     private String xmlBase;
@@ -32,4 +32,32 @@ public class Attributes {
 
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.xmlBase);
+    }
+
+    public Attributes() {
+    }
+
+    protected Attributes(Parcel in) {
+        this.xmlBase = in.readString();
+    }
+
+    public static final Parcelable.Creator<Attributes> CREATOR = new Parcelable.Creator<Attributes>() {
+        @Override
+        public Attributes createFromParcel(Parcel source) {
+            return new Attributes(source);
+        }
+
+        @Override
+        public Attributes[] newArray(int size) {
+            return new Attributes[size];
+        }
+    };
 }

@@ -1,11 +1,15 @@
 
 package org.gratitude.data.model.countries;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class Countries {
+public class Countries implements Parcelable {
 
     @Expose
     private List<Country> country;
@@ -31,4 +35,33 @@ public class Countries {
 
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeList(this.country);
+    }
+
+    public Countries() {
+    }
+
+    protected Countries(Parcel in) {
+        this.country = new ArrayList<Country>();
+        in.readList(this.country, Country.class.getClassLoader());
+    }
+
+    public static final Parcelable.Creator<Countries> CREATOR = new Parcelable.Creator<Countries>() {
+        @Override
+        public Countries createFromParcel(Parcel source) {
+            return new Countries(source);
+        }
+
+        @Override
+        public Countries[] newArray(int size) {
+            return new Countries[size];
+        }
+    };
 }

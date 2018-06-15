@@ -1,12 +1,15 @@
 
 package org.gratitude.data.model.organization;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 
 import org.gratitude.data.model.countries.Countries;
 import org.gratitude.data.model.themes.Themes;
 
-public class Organization {
+public class Organization implements Parcelable {
 
     @Expose
     private Long activeProjects;
@@ -253,4 +256,66 @@ public class Organization {
 
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeValue(this.activeProjects);
+        dest.writeString(this.addressLine1);
+        dest.writeString(this.addressLine2);
+        dest.writeValue(this.bridgeId);
+        dest.writeString(this.city);
+        dest.writeParcelable(this.countries, flags);
+        dest.writeString(this.country);
+        dest.writeString(this.ein);
+        dest.writeValue(this.id);
+        dest.writeString(this.iso3166CountryCode);
+        dest.writeString(this.logoUrl);
+        dest.writeString(this.mission);
+        dest.writeString(this.name);
+        dest.writeString(this.postal);
+        dest.writeString(this.state);
+        dest.writeParcelable(this.themes, flags);
+        dest.writeValue(this.totalProjects);
+        dest.writeString(this.url);
+    }
+
+    public Organization() {
+    }
+
+    protected Organization(Parcel in) {
+        this.activeProjects = (Long) in.readValue(Long.class.getClassLoader());
+        this.addressLine1 = in.readString();
+        this.addressLine2 = in.readString();
+        this.bridgeId = (Long) in.readValue(Long.class.getClassLoader());
+        this.city = in.readString();
+        this.countries = in.readParcelable(Countries.class.getClassLoader());
+        this.country = in.readString();
+        this.ein = in.readString();
+        this.id = (Long) in.readValue(Long.class.getClassLoader());
+        this.iso3166CountryCode = in.readString();
+        this.logoUrl = in.readString();
+        this.mission = in.readString();
+        this.name = in.readString();
+        this.postal = in.readString();
+        this.state = in.readString();
+        this.themes = in.readParcelable(Themes.class.getClassLoader());
+        this.totalProjects = (Long) in.readValue(Long.class.getClassLoader());
+        this.url = in.readString();
+    }
+
+    public static final Parcelable.Creator<Organization> CREATOR = new Parcelable.Creator<Organization>() {
+        @Override
+        public Organization createFromParcel(Parcel source) {
+            return new Organization(source);
+        }
+
+        @Override
+        public Organization[] newArray(int size) {
+            return new Organization[size];
+        }
+    };
 }

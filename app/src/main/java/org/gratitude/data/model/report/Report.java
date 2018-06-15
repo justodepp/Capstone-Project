@@ -1,11 +1,15 @@
 
 package org.gratitude.data.model.report;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class Report {
+public class Report implements Parcelable {
 
     @Expose
     private Attributes attributes;
@@ -96,4 +100,45 @@ public class Report {
 
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeParcelable(this.attributes, flags);
+        dest.writeList(this.authors);
+        dest.writeList(this.entries);
+        dest.writeString(this.id);
+        dest.writeList(this.links);
+        dest.writeString(this.title);
+    }
+
+    public Report() {
+    }
+
+    protected Report(Parcel in) {
+        this.attributes = in.readParcelable(Attributes.class.getClassLoader());
+        this.authors = new ArrayList<Author>();
+        in.readList(this.authors, Author.class.getClassLoader());
+        this.entries = new ArrayList<Entry>();
+        in.readList(this.entries, Entry.class.getClassLoader());
+        this.id = in.readString();
+        this.links = new ArrayList<Link>();
+        in.readList(this.links, Link.class.getClassLoader());
+        this.title = in.readString();
+    }
+
+    public static final Parcelable.Creator<Report> CREATOR = new Parcelable.Creator<Report>() {
+        @Override
+        public Report createFromParcel(Parcel source) {
+            return new Report(source);
+        }
+
+        @Override
+        public Report[] newArray(int size) {
+            return new Report[size];
+        }
+    };
 }

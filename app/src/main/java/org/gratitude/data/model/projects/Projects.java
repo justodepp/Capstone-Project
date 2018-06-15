@@ -1,11 +1,15 @@
 
 package org.gratitude.data.model.projects;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class Projects {
+public class Projects implements Parcelable {
 
     @Expose
     private Boolean hasNext;
@@ -70,4 +74,39 @@ public class Projects {
 
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeValue(this.hasNext);
+        dest.writeValue(this.nextProjectId);
+        dest.writeValue(this.numberFound);
+        dest.writeList(this.project);
+    }
+
+    public Projects() {
+    }
+
+    protected Projects(Parcel in) {
+        this.hasNext = (Boolean) in.readValue(Boolean.class.getClassLoader());
+        this.nextProjectId = (Long) in.readValue(Long.class.getClassLoader());
+        this.numberFound = (Long) in.readValue(Long.class.getClassLoader());
+        this.project = new ArrayList<Project>();
+        in.readList(this.project, Project.class.getClassLoader());
+    }
+
+    public static final Parcelable.Creator<Projects> CREATOR = new Parcelable.Creator<Projects>() {
+        @Override
+        public Projects createFromParcel(Parcel source) {
+            return new Projects(source);
+        }
+
+        @Override
+        public Projects[] newArray(int size) {
+            return new Projects[size];
+        }
+    };
 }

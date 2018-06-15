@@ -1,11 +1,14 @@
 
 package org.gratitude.data.model.response;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 
 import org.gratitude.data.model.organization.Organizations;
 
-public class AllOrganizations {
+public class AllOrganizations implements Parcelable {
 
     @Expose
     private Organizations organizations;
@@ -31,4 +34,32 @@ public class AllOrganizations {
 
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeParcelable(this.organizations, flags);
+    }
+
+    public AllOrganizations() {
+    }
+
+    protected AllOrganizations(Parcel in) {
+        this.organizations = in.readParcelable(Organizations.class.getClassLoader());
+    }
+
+    public static final Parcelable.Creator<AllOrganizations> CREATOR = new Parcelable.Creator<AllOrganizations>() {
+        @Override
+        public AllOrganizations createFromParcel(Parcel source) {
+            return new AllOrganizations(source);
+        }
+
+        @Override
+        public AllOrganizations[] newArray(int size) {
+            return new AllOrganizations[size];
+        }
+    };
 }
