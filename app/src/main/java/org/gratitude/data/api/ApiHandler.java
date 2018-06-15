@@ -44,7 +44,7 @@ public class ApiHandler {
 
                         HttpUrl originalHttpUrl = originalRequest.url();
                         HttpUrl url = originalHttpUrl.newBuilder()
-                                .addQueryParameter("apikey", BuildConfig.GlobalGivingApiKey)
+                                .addQueryParameter("api_key", BuildConfig.GlobalGivingApiKey)
                                 .build();
 
                         Request.Builder requestBuilder = originalRequest.newBuilder().url(url);
