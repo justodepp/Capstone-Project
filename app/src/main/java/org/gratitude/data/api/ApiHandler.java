@@ -48,7 +48,7 @@ public class ApiHandler {
                                     .header("Cache-Control", "public, max-age=" + maxAge)
                                     .build();
                         } else {
-                            int maxStale = 60 * 60 * 24 * 28; // tolerate 2-weeks stale
+                            int maxStale = 60 * 60 * 24 * 7; // tolerate 7-days stale
                             return originalResponse.newBuilder()
                                     .header("Cache-Control", "public, only-if-cached, max-stale=" + maxStale)
                                     .build();
