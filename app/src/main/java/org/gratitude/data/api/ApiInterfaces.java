@@ -1,42 +1,48 @@
 package org.gratitude.data.api;
 
+import org.gratitude.data.model.report.Report;
+import org.gratitude.data.model.response.AllOrganizations;
+import org.gratitude.data.model.response.AllProjects;
+import org.gratitude.data.model.response.FeaturedProjects;
+import org.gratitude.data.model.response.OrganizationByBridgeId;
+import org.gratitude.data.model.response.ProjectById;
+import org.gratitude.data.model.response.ProjectByOrganization;
+import org.gratitude.data.model.response.ProjectByTheme;
+import org.gratitude.data.model.response.AllThemes;
+
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
-
-/**
- * Created by paoloc on 26/01/17.
- */
 
 public interface ApiInterfaces {
 
     // In case you don’t want to pass optional param with the request, just pass null
 
     @GET("projectservice/featured/projects")
-    Call<> getFeaturedProjects();
+    Call<FeaturedProjects> getFeaturedProjects();
 
     @GET("projectservice/themes")
-    Call<> getThemes();
+    Call<AllThemes> getThemes();
 
     @GET("projectservice/themes/{theme}/projects")
-    Call<> getAllProjectsForTheme(@Path("theme") String theme, @Query("nextProjectId") int nextProjectId);
+    Call<ProjectByTheme> getAllProjectsForTheme(@Path("theme") String theme, @Query("nextProjectId") int nextProjectId);
 
     @GET("orgservice/all/organizations")
-    Call<> getOrganizations(@Query("nextOrgId") int nextOrgId);
+    Call<AllOrganizations> getOrganizations(@Query("nextOrgId") int nextOrgId);
 
     @GET("projectservice/organizations/{orgId}/projects")
-    Call<> getAllProjectsForOrganization(@Path("orgId") String theme, @Query("nextProjectId") int nextProjectId);
+    Call<ProjectByOrganization> getAllProjectsForOrganization(@Path("orgId") String theme, @Query("nextProjectId") int nextProjectId);
 
     @GET("orgservice/organization/bridge/{bridgeId}")
-    Call<> getOrganizationByBridgeId(@Path("bridgeId") String bridgeId);
+    Call<OrganizationByBridgeId> getOrganizationByBridgeId(@Path("bridgeId") String bridgeId);
 
     @GET("projectservice/all/projects")
-    Call<> getAllProjects(@Query("nextProjectId") int nextProjectId);
+    Call<AllProjects> getAllProjects(@Query("nextProjectId") int nextProjectId);
 
     @GET("projectservice/projects/{projectId}")
-    Call<> getProject(@Path("projectId") int projectId);
+    Call<ProjectById> getProject(@Path("projectId") int projectId);
 
     @GET("projectservice/projects/{projectId}/reports")
-    Call<> getProjectReport(@Path("projectId") int projectId);
+    Call<Report> getProjectReport(@Path("projectId") int projectId);
 }

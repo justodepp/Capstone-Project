@@ -1,0 +1,256 @@
+
+package org.gratitude.data.model.organization;
+
+import com.google.gson.annotations.Expose;
+
+import org.gratitude.data.model.countries.Countries;
+import org.gratitude.data.model.themes.Themes;
+
+public class Organization {
+
+    @Expose
+    private Long activeProjects;
+    @Expose
+    private String addressLine1;
+    @Expose
+    private String addressLine2;
+    @Expose
+    private Long bridgeId;
+    @Expose
+    private String city;
+    @Expose
+    private Countries countries;
+    @Expose
+    private String country;
+    @Expose
+    private String ein;
+    @Expose
+    private Long id;
+    @Expose
+    private String iso3166CountryCode;
+    @Expose
+    private String logoUrl;
+    @Expose
+    private String mission;
+    @Expose
+    private String name;
+    @Expose
+    private String postal;
+    @Expose
+    private String state;
+    @Expose
+    private Themes themes;
+    @Expose
+    private Long totalProjects;
+    @Expose
+    private String url;
+
+    public Long getActiveProjects() {
+        return activeProjects;
+    }
+
+    public String getAddressLine1() {
+        return addressLine1;
+    }
+
+    public String getAddressLine2() {
+        return addressLine2;
+    }
+
+    public Long getBridgeId() {
+        return bridgeId;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public Countries getCountries() {
+        return countries;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public String getEin() {
+        return ein;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getIso3166CountryCode() {
+        return iso3166CountryCode;
+    }
+
+    public String getLogoUrl() {
+        return logoUrl;
+    }
+
+    public String getMission() {
+        return mission;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getPostal() {
+        return postal;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public Themes getThemes() {
+        return themes;
+    }
+
+    public Long getTotalProjects() {
+        return totalProjects;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public static class Builder {
+
+        private Long activeProjects;
+        private String addressLine1;
+        private String addressLine2;
+        private Long bridgeId;
+        private String city;
+        private Countries countries;
+        private String country;
+        private String ein;
+        private Long id;
+        private String iso3166CountryCode;
+        private String logoUrl;
+        private String mission;
+        private String name;
+        private String postal;
+        private String state;
+        private Themes themes;
+        private Long totalProjects;
+        private String url;
+
+        public Organization.Builder withActiveProjects(Long activeProjects) {
+            this.activeProjects = activeProjects;
+            return this;
+        }
+
+        public Organization.Builder withAddressLine1(String addressLine1) {
+            this.addressLine1 = addressLine1;
+            return this;
+        }
+
+        public Organization.Builder withAddressLine2(String addressLine2) {
+            this.addressLine2 = addressLine2;
+            return this;
+        }
+
+        public Organization.Builder withBridgeId(Long bridgeId) {
+            this.bridgeId = bridgeId;
+            return this;
+        }
+
+        public Organization.Builder withCity(String city) {
+            this.city = city;
+            return this;
+        }
+
+        public Organization.Builder withCountries(Countries countries) {
+            this.countries = countries;
+            return this;
+        }
+
+        public Organization.Builder withCountry(String country) {
+            this.country = country;
+            return this;
+        }
+
+        public Organization.Builder withEin(String ein) {
+            this.ein = ein;
+            return this;
+        }
+
+        public Organization.Builder withId(Long id) {
+            this.id = id;
+            return this;
+        }
+
+        public Organization.Builder withIso3166CountryCode(String iso3166CountryCode) {
+            this.iso3166CountryCode = iso3166CountryCode;
+            return this;
+        }
+
+        public Organization.Builder withLogoUrl(String logoUrl) {
+            this.logoUrl = logoUrl;
+            return this;
+        }
+
+        public Organization.Builder withMission(String mission) {
+            this.mission = mission;
+            return this;
+        }
+
+        public Organization.Builder withName(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public Organization.Builder withPostal(String postal) {
+            this.postal = postal;
+            return this;
+        }
+
+        public Organization.Builder withState(String state) {
+            this.state = state;
+            return this;
+        }
+
+        public Organization.Builder withThemes(Themes themes) {
+            this.themes = themes;
+            return this;
+        }
+
+        public Organization.Builder withTotalProjects(Long totalProjects) {
+            this.totalProjects = totalProjects;
+            return this;
+        }
+
+        public Organization.Builder withUrl(String url) {
+            this.url = url;
+            return this;
+        }
+
+        public Organization build() {
+            Organization organization = new Organization();
+            organization.activeProjects = activeProjects;
+            organization.addressLine1 = addressLine1;
+            organization.addressLine2 = addressLine2;
+            organization.bridgeId = bridgeId;
+            organization.city = city;
+            organization.countries = countries;
+            organization.country = country;
+            organization.ein = ein;
+            organization.id = id;
+            organization.iso3166CountryCode = iso3166CountryCode;
+            organization.logoUrl = logoUrl;
+            organization.mission = mission;
+            organization.name = name;
+            organization.postal = postal;
+            organization.state = state;
+            organization.themes = themes;
+            organization.totalProjects = totalProjects;
+            organization.url = url;
+            return organization;
+        }
+
+    }
+
+}
