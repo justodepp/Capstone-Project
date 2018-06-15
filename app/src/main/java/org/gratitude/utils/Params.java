@@ -5,5 +5,5 @@ package org.gratitude.utils;
  */
 
 public class Params {
-    public static final String ENDPOINT = "";
+    public static final String ENDPOINT = "https://api.globalgiving.org/api/public/";
 }

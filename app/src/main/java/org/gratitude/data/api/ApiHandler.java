@@ -5,14 +5,17 @@ import android.content.Context;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import org.gratitude.BuildConfig;
 import org.gratitude.utils.Params;
 import org.gratitude.utils.Utility;
 
 import java.io.IOException;
 
 import okhttp3.Cache;
+import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
+import okhttp3.Request;
 import okhttp3.Response;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
@@ -41,7 +44,19 @@ public class ApiHandler {
                     @Override
                     public Response intercept(Chain chain) throws IOException {
 
-                        Response originalResponse = chain.proceed(chain.request());
+                        Request originalRequest = chain.request();
+
+                        HttpUrl originalHttpUrl = originalRequest.url();
+                        HttpUrl url = originalHttpUrl.newBuilder()
+                                .addQueryParameter("apikey", BuildConfig.GlobalGivingApiKey)
+                                .build();
+
+                        Request.Builder requestBuilder = originalRequest.newBuilder().url(url);
+                        requestBuilder.header("Accept", "application/json");
+
+                        Request request = requestBuilder.build();
+                        Response originalResponse = chain.proceed(request);
+
                         if (Utility.isNetworkAvailable(context)) {
                             int maxAge = 60; // read from cache for 1 minute
                             return originalResponse.newBuilder()
@@ -56,19 +71,6 @@ public class ApiHandler {
                     }
                 })
                 .build();
-
-        /*OkHttpClient okHttpClient = new OkHttpClient.Builder().addInterceptor(new Interceptor() {
-            @Override
-            public Response intercept(Chain chain) throws IOException {
-
-                Request original = chain.request();
-                Request.Builder requestBuilder = original.newBuilder();
-                Request request = requestBuilder.build();
-                Log.d(TAG, request.toString());
-                return chain.proceed(request);
-
-            }
-        }).build();*/
 
         Retrofit.Builder retrofitBuilder = new Retrofit.Builder()
                 .baseUrl(ENDPOINT)
