@@ -2,6 +2,7 @@ package org.gratitude;
 
 import android.app.Application;
 import android.content.Context;
+import android.support.annotation.NonNull;
 
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.core.CrashlyticsCore;
@@ -69,13 +70,13 @@ public class Gratitude extends Application{
 
         responseFeatured.enqueue(new Callback<FeaturedProjects>() {
             @Override
-            public void onResponse(Call<FeaturedProjects> call, Response<FeaturedProjects> response) {
+            public void onResponse(@NonNull Call<FeaturedProjects> call, @NonNull Response<FeaturedProjects> response) {
                 Timber.d(response.toString());
                 //mCallback.onFinished();
             }
 
             @Override
-            public void onFailure(Call<FeaturedProjects> call, Throwable t) {
+            public void onFailure(@NonNull Call<FeaturedProjects> call, @NonNull Throwable t) {
                 Timber.e(t);
             }
         });

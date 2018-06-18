@@ -1,3 +1,17 @@
 <resources>
     <string name="app_name">Gratitude</string>
+
+    <!-- Menu -->
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_cat">Themes</string>
+    <string name="menu_org">Organizations</string>
+    <string name="menu_prj">Projects</string>
+    <string name="menu_about">Info</string>
+    <string name="menu_settings">Settings</string>
+    <!-- Menu -->
+    <!-- Menu -->
+    <!-- Menu -->
 </resources>
