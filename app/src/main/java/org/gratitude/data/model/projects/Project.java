@@ -1,17 +1,27 @@
 
 package org.gratitude.data.model.projects;
 
+import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
 import com.google.gson.annotations.Expose;
 
+import org.gratitude.data.api.ApiHandler;
+import org.gratitude.data.api.ApiInterfaces;
 import org.gratitude.data.model.donation.DonationOptions;
 import org.gratitude.data.model.image.Image;
 import org.gratitude.data.model.organization.Organization;
+import org.gratitude.data.model.response.FeaturedProjects;
 import org.gratitude.data.model.video.Videos;
+import org.gratitude.main.interfaces.ResponseInterface;
 
-@SuppressWarnings("unused")
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import timber.log.Timber;
+
 public class Project implements Parcelable {
 
     @Expose
@@ -621,4 +631,30 @@ public class Project implements Parcelable {
             return new Project[size];
         }
     };
+
+    public static void getProjects(Context context, int nextProjectId,final ResponseInterface responseInterface) {
+        getProjects(context, nextProjectId, responseInterface);
+    }
+
+    public static void getProjects(Context context, final ResponseInterface responseInterface) {
+        ApiInterfaces apiService = ApiHandler.getApiService(context, false);
+        Call<FeaturedProjects> responseFeatured = apiService.getFeaturedProjects();
+
+        responseFeatured.enqueue(new Callback<FeaturedProjects>() {
+            @Override
+            public void onResponse(@NonNull Call<FeaturedProjects> call, @NonNull Response<FeaturedProjects> response) {
+                Timber.d(response.toString());
+                Projects projects = new FeaturedProjects.Builder()
+                        .withProjects(response.body().getProjects())
+                        .build()
+                        .getProjects();
+                responseInterface.onResponseLoaded(projects);
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<FeaturedProjects> call, @NonNull Throwable t) {
+                Timber.e(t);
+            }
+        });
+    }
 }

@@ -15,20 +15,21 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 
-import org.gratitude.ui.ContentFragment;
+import org.gratitude.ui.ProjectsFragment;
 
 import timber.log.Timber;
 
 
-public class MainActivity extends AppCompatActivity implements Gratitude.OnFinishedListener{
+public class MainActivity extends AppCompatActivity {
 
+    public static final String ARGUMENT_TYPE_CODE = "typeCode";
     private static final int DELAY_MILLIS = 250;
 
     private View mProgressBar;
     private Toolbar mToolbar;
     private DrawerLayout mDrawer;
     private ActionBarDrawerToggle mDrawerToggle;
-    private NavigationView mNavigationView;
+    private View mContentFrame;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,10 +37,11 @@ public class MainActivity extends AppCompatActivity implements Gratitude.OnFinis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        final Gratitude app = (Gratitude) getApplication();
-        app.setInterface(MainActivity.this);
+        /*final Gratitude app = (Gratitude) getApplication();
+        app.setInterface(MainActivity.this);*/
 
         mProgressBar = findViewById(R.id.indeterminateBar);
+        mContentFrame = findViewById(R.id.content_frame);
 
         init();
     }
@@ -47,6 +49,19 @@ public class MainActivity extends AppCompatActivity implements Gratitude.OnFinis
     private void init() {
         setupToolbar();
         setupDrawer();
+        //showHomeFragment();
+    }
+
+    private void showHomeFragment() {
+        Fragment fragment;
+        Class fragmentClass = ProjectsFragment.class;
+        try {
+            assert fragmentClass != null;
+            fragment = (Fragment) fragmentClass.newInstance();
+            replaceFragmentWithDelay(null, fragment);
+        } catch (Exception e) {
+            Timber.e(e);
+        }
     }
 
     //region Fragment
@@ -57,7 +72,7 @@ public class MainActivity extends AppCompatActivity implements Gratitude.OnFinis
         Class fragmentClass;
         switch(menuItem.getItemId()) {
             case R.id.menu_home:
-                fragmentClass = ContentFragment.class;
+                fragmentClass = ProjectsFragment.class;
                 bundle = getFragmentBundleType(menuItem.getItemId());
                 break;
             case R.id.menu_cat:
@@ -82,7 +97,7 @@ public class MainActivity extends AppCompatActivity implements Gratitude.OnFinis
                 break;
             default:
                 // Home
-                fragmentClass = null;
+                fragmentClass = ProjectsFragment.class;
                 bundle = getFragmentBundleType(menuItem.getItemId());
         }
 
@@ -121,7 +136,7 @@ public class MainActivity extends AppCompatActivity implements Gratitude.OnFinis
     @NonNull
     private Bundle getFragmentBundleType(final int typeCode) {
         final Bundle bundle = new Bundle();
-        bundle.putInt(ContentFragment.ARGUMENT_TYPE_CODE, typeCode);
+        bundle.putInt(ARGUMENT_TYPE_CODE, typeCode);
         return bundle;
     }
     //endregion
@@ -145,10 +160,11 @@ public class MainActivity extends AppCompatActivity implements Gratitude.OnFinis
         // Find our drawer view
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerToggle = setupDrawerToggle();
+
         // Tie DrawerLayout events to the ActionBarToggle
         mDrawer.addDrawerListener(mDrawerToggle);
 
-        mNavigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView mNavigationView = findViewById(R.id.nav_view);
         // Setup drawer view
         setupDrawerContent(mNavigationView);
     }
@@ -172,10 +188,8 @@ public class MainActivity extends AppCompatActivity implements Gratitude.OnFinis
     //region Override
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                mDrawer.openDrawer(GravityCompat.START);
-                return true;
+        if (mDrawerToggle.onOptionsItemSelected(item)) {
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -199,8 +213,12 @@ public class MainActivity extends AppCompatActivity implements Gratitude.OnFinis
     }
 
     @Override
-    public void onFinished() {
-        mProgressBar.setVisibility(View.GONE);
+    public void onBackPressed() {
+        if (mDrawer.isDrawerOpen(GravityCompat.START)) {
+            mDrawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
     }
     //endregion
 }

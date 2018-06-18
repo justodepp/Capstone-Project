@@ -2,21 +2,14 @@ package org.gratitude;
 
 import android.app.Application;
 import android.content.Context;
-import android.support.annotation.NonNull;
 
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.core.CrashlyticsCore;
 import com.facebook.stetho.Stetho;
 
-import org.gratitude.data.api.ApiHandler;
-import org.gratitude.data.api.ApiInterfaces;
-import org.gratitude.data.model.response.FeaturedProjects;
 import org.gratitude.utils.ReleaseCrashlyticsTree;
 
 import io.fabric.sdk.android.Fabric;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import timber.log.Timber;
 
 public class Gratitude extends Application{
@@ -62,24 +55,6 @@ public class Gratitude extends Application{
                         .enableWebKitInspector(
                                 Stetho.defaultInspectorModulesProvider(this))
                         .build());
-        //endregion
-
-        //region Calling API
-        ApiInterfaces apiService = ApiHandler.getApiService(this, false);
-        Call<FeaturedProjects> responseFeatured = apiService.getFeaturedProjects();
-
-        responseFeatured.enqueue(new Callback<FeaturedProjects>() {
-            @Override
-            public void onResponse(@NonNull Call<FeaturedProjects> call, @NonNull Response<FeaturedProjects> response) {
-                Timber.d(response.toString());
-                //mCallback.onFinished();
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<FeaturedProjects> call, @NonNull Throwable t) {
-                Timber.e(t);
-            }
-        });
         //endregion
     }
 }
