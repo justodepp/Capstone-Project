@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/general_margin_8dp"
         android:layout_marginEnd="@dimen/general_margin_8dp"
-        android:layout_marginTop="@dimen/general_margin_8dp"
+        android:layout_marginBottom="@dimen/general_margin_8dp"
         android:minHeight="@dimen/min_height"
         style="@style/CardView.Style" >
 

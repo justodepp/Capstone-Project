@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -43,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
     private void init() {
         setupToolbar();
         setupDrawer();
-        showHomeFragment();
+        // showHomeFragment();
     }
 
     private void showHomeFragment() {
@@ -118,7 +117,6 @@ public class MainActivity extends AppCompatActivity {
         fragment.setArguments(bundle);
         getSupportFragmentManager()
                 .beginTransaction()
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .replace(R.id.content_frame, fragment)
                 .commit();
     }

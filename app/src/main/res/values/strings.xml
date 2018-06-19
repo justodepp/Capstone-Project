@@ -15,7 +15,7 @@
     <!-- CardView -->
     <string name="project_image_contentDescritpion">Project Image</string>
     <string name="project_share_contentDescritpion">Share</string>
-    <string name="money_raised_text">$%1$d raised of $%2$d goal</string>
+    <string name="money_raised_text"><![CDATA[<font color="#3C8787">$%1$s</font> raised of <font color="#3C8787">$%2$s</font> goal]]></string>
     <string name="money_raised_text_tool">$236,557 raised of $300,000 goal</string>
 
     <!-- Menu -->

@@ -4,11 +4,14 @@ import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 
 import org.gratitude.R;
 import org.gratitude.data.model.projects.Project;
@@ -68,14 +71,23 @@ public class ProjectsAdapter extends RecyclerView.Adapter<ProjectsAdapter.Projec
 
         public void bind(int position){
             Project project = mProject.get(position);
+
             Glide.with(mContext)
                     .load(project.getImageLink())
+                    .apply(
+                            RequestOptions.centerCropTransform()
+                                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                    .placeholder(R.drawable.gg_logo)
+                                    .error(R.drawable.gg_logo)
+                    )
                     .into(mBinding.includeHeader.projectImageview);
 
             mBinding.includeHeader.projectTitle.setText(project.getTitle());
 
-            String text = String.format(mContext.getString(R.string.money_raised_text), project.getFunding(), project.getGoal());
-            mBinding.includeRaised.moneyRaised.setText(text);
+            String text = String.format(mContext.getString(R.string.money_raised_text),
+                    String.valueOf(project.getFunding()),
+                    String.valueOf(project.getGoal()));
+            mBinding.includeRaised.moneyRaised.setText(Html.fromHtml(text));
         }
 
         @Override
