@@ -13,7 +13,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.view.View;
 
 import org.gratitude.ui.ProjectsFragment;
 
@@ -25,11 +24,12 @@ public class MainActivity extends AppCompatActivity {
     public static final String ARGUMENT_TYPE_CODE = "typeCode";
     private static final int DELAY_MILLIS = 250;
 
-    private View mProgressBar;
     private Toolbar mToolbar;
     private DrawerLayout mDrawer;
+
+    // Make sure to be using android.support.v7.app.ActionBarDrawerToggle version.
+    // The android.support.v4.app.ActionBarDrawerToggle has been deprecated.
     private ActionBarDrawerToggle mDrawerToggle;
-    private View mContentFrame;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,28 +37,22 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        /*final Gratitude app = (Gratitude) getApplication();
-        app.setInterface(MainActivity.this);*/
-
-        mProgressBar = findViewById(R.id.indeterminateBar);
-        mContentFrame = findViewById(R.id.content_frame);
-
         init();
     }
 
     private void init() {
         setupToolbar();
         setupDrawer();
-        //showHomeFragment();
+        showHomeFragment();
     }
 
     private void showHomeFragment() {
         Fragment fragment;
         Class fragmentClass = ProjectsFragment.class;
         try {
-            assert fragmentClass != null;
             fragment = (Fragment) fragmentClass.newInstance();
             replaceFragmentWithDelay(null, fragment);
+            setTitle(getString(R.string.menu_home));
         } catch (Exception e) {
             Timber.e(e);
         }
