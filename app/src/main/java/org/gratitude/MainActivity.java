@@ -2,10 +2,10 @@ package org.gratitude;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
         Class fragmentClass = ProjectsFragment.class;
         try {
             fragment = (Fragment) fragmentClass.newInstance();
-            replaceFragmentWithDelay(null, fragment);
+            replaceFragmentWithTransition(null, fragment);
             setTitle(getString(R.string.menu_home));
         } catch (Exception e) {
             Timber.e(e);
@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
         try {
             assert fragmentClass != null;
             fragment = (Fragment) fragmentClass.newInstance();
-            replaceFragmentWithDelay(bundle, fragment);
+            replaceFragmentWithTransition(bundle, fragment);
         } catch (Exception e) {
             Timber.e(e);
         }
@@ -114,17 +114,13 @@ public class MainActivity extends AppCompatActivity {
     /**
      * We start the transaction with delay to avoid junk while closing the drawer
      */
-    private void replaceFragmentWithDelay(@NonNull final Bundle bundle, final Fragment fragment) {
+    private void replaceFragmentWithTransition(@NonNull final Bundle bundle, final Fragment fragment) {
         fragment.setArguments(bundle);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.content_frame, fragment)
-                        .commit();
-            }
-        }, DELAY_MILLIS);
+        getSupportFragmentManager()
+                .beginTransaction()
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                .replace(R.id.content_frame, fragment)
+                .commit();
     }
 
     @NonNull
