@@ -1,4 +1,4 @@
-package org.gratitude;
+package org.gratitude.main;
 
 import android.app.Application;
 import android.content.Context;
@@ -7,6 +7,7 @@ import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.core.CrashlyticsCore;
 import com.facebook.stetho.Stetho;
 
+import org.gratitude.BuildConfig;
 import org.gratitude.utils.ReleaseCrashlyticsTree;
 
 import io.fabric.sdk.android.Fabric;

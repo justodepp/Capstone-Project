@@ -1,4 +1,4 @@
-package org.gratitude;
+package org.gratitude.ui;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -14,7 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
-import org.gratitude.ui.ProjectsFragment;
+import org.gratitude.R;
 
 import timber.log.Timber;
 

@@ -38,6 +38,8 @@ android {
             signingConfig signingConfigs.config
         }
     }
+
+    dataBinding.enabled = true
 }
 
 dependencies {

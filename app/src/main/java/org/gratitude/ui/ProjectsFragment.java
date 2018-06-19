@@ -1,5 +1,6 @@
 package org.gratitude.ui;
 
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,15 +15,20 @@ import android.view.ViewGroup;
 import org.gratitude.R;
 import org.gratitude.data.model.projects.Project;
 import org.gratitude.data.model.projects.Projects;
+import org.gratitude.databinding.FragmentProjectListBinding;
 import org.gratitude.main.interfaces.ResponseInterface;
 import org.gratitude.ui.adapter.ProjectsAdapter;
 
-public class ProjectsFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener{
+import java.util.Objects;
+
+public class ProjectsFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, ProjectsAdapter.ProjectClickListener{
 
     //private View mProgressBar;
     SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView rv;
     private ProjectsAdapter mAdapter;
+
+    FragmentProjectListBinding mBinding;
 
     @Nullable
     @Override
@@ -34,6 +40,7 @@ public class ProjectsFragment extends Fragment implements SwipeRefreshLayout.OnR
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        mBinding = DataBindingUtil.setContentView(Objects.requireNonNull(getActivity()), R.layout.fragment_project_list);
 //        mProgressBar = view.findViewById(R.id.indeterminateBar);
 //        mProgressBar.setVisibility(View.GONE);
 
@@ -41,6 +48,7 @@ public class ProjectsFragment extends Fragment implements SwipeRefreshLayout.OnR
         setupRecyclerView();
 
         mSwipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
+        mSwipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorAccent));
         mSwipeRefreshLayout.setOnRefreshListener(this);
 
         makeCall();
@@ -61,7 +69,7 @@ public class ProjectsFragment extends Fragment implements SwipeRefreshLayout.OnR
             @Override
             public void onResponseLoaded(Projects projects) {
                 //mProgressBar.setVisibility(View.GONE);
-                mAdapter = new ProjectsAdapter(getActivity(), projects.getProject());
+                mAdapter = new ProjectsAdapter(getActivity(), projects.getProject(),ProjectsFragment.this);
                 rv.setAdapter(mAdapter);
             }
 
@@ -70,5 +78,10 @@ public class ProjectsFragment extends Fragment implements SwipeRefreshLayout.OnR
 
             }
         });
+    }
+
+    @Override
+    public void onClickProjectItem(Project project) {
+
     }
 }
