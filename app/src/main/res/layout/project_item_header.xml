@@ -9,8 +9,8 @@
     <ImageView
         android:id="@+id/recipe_imageview"
         android:layout_width="match_parent"
-        android:layout_height="194dp"
-        android:contentDescription="image"
+        android:layout_height="@dimen/image_height"
+        android:contentDescription="@string/project_image_contentDescritpion"
         tools:src="@tools:sample/avatars" />
 
     <View
@@ -26,15 +26,15 @@
         android:id="@+id/project_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:paddingBottom="8dp"
-        android:paddingEnd="16dp"
-        android:paddingStart="16dp"
-        android:paddingTop="8dp"
+        android:layout_marginBottom="@dimen/general_margin_8dp"
+        android:paddingBottom="@dimen/general_padding_8dp"
+        android:paddingEnd="@dimen/general_padding_16dp"
+        android:paddingStart="@dimen/general_padding_16dp"
+        android:paddingTop="@dimen/general_padding_8dp"
         android:textColor="@android:color/white"
-        android:textSize="18sp"
+        android:textSize="@dimen/title_text_size"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        tools:text="Pice of cake" />
+        tools:text="Title of Project" />
 
 </android.support.constraint.ConstraintLayout>

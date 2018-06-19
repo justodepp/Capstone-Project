@@ -10,26 +10,30 @@
         android:id="@+id/money_raised"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:paddingBottom="8dp"
-        android:paddingEnd="16dp"
-        android:paddingStart="16dp"
-        android:paddingTop="8dp"
+        android:layout_marginEnd="@dimen/general_margin_8dp"
+        android:paddingBottom="@dimen/general_padding_8dp"
+        android:paddingEnd="@dimen/general_padding_16dp"
+        android:paddingStart="@dimen/general_padding_16dp"
+        android:paddingTop="@dimen/general_padding_8dp"
         android:textAppearance="?android:textAppearanceSearchResultSubtitle"
-        android:textColor="@android:color/black"
+        android:textStyle="bold"
+        android:textColor="@color/colorPrimary"
+        android:text="@string/money_raised_text"
+        tools:text="@string/money_raised_text_tool"
         app:layout_constraintEnd_toStartOf="@+id/share"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="$236,557 raised of $300,000 goal" />
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <ProgressBar
         android:id="@+id/progressBar"
         style="@style/MyProgressBar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="@dimen/general_margin_8dp"
+        android:paddingBottom="@dimen/general_padding_8dp"
+        android:paddingEnd="@dimen/general_padding_16dp"
+        android:paddingStart="@dimen/general_padding_16dp"
+        android:paddingTop="@dimen/general_padding_8dp"
         android:indeterminate="false"
         android:max="100"
         android:progress="60"
@@ -41,13 +45,14 @@
 
     <ImageView
         android:id="@+id/share"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
-        android:layout_margin="8dp"
+        android:layout_width="@dimen/image_share_dimen"
+        android:layout_height="@dimen/image_share_dimen"
+        android:layout_margin="@dimen/general_margin_8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:tint="@color/colorPrimaryDark"
-        android:src="@drawable/ic_share"/>
+        android:src="@drawable/ic_share"
+        android:contentDescription="@string/project_share_contentDescritpion" />
 
 </android.support.constraint.ConstraintLayout>
