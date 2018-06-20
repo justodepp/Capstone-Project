@@ -17,8 +17,7 @@
                 android:layout_height="match_parent"
                 android:paddingTop="@dimen/general_padding_16dp"
                 android:paddingBottom="@dimen/general_padding_16dp"
-                android:clipToPadding="false"
-                tools:listitem="@layout/project_item" />
+                android:clipToPadding="false" />
 
         </android.support.v4.widget.SwipeRefreshLayout>
 

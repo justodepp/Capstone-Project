@@ -632,11 +632,33 @@ public class Project implements Parcelable {
         }
     };
 
-    public static void getProjects(Context context, int nextProjectId,final ResponseInterface responseInterface) {
-        getProjects(context, nextProjectId, responseInterface);
+    public static void getProjects(Context context, final ResponseInterface responseInterface) {
+        getProjects(context, Integer.parseInt(null), responseInterface);
     }
 
-    public static void getProjects(Context context, final ResponseInterface responseInterface) {
+    public static void getProjects(Context context, int nextProjectId, final ResponseInterface responseInterface) {
+        ApiInterfaces apiService = ApiHandler.getApiService(context, false);
+        Call<FeaturedProjects> responseFeatured = apiService.getFeaturedProjects();
+
+        responseFeatured.enqueue(new Callback<FeaturedProjects>() {
+            @Override
+            public void onResponse(@NonNull Call<FeaturedProjects> call, @NonNull Response<FeaturedProjects> response) {
+                Timber.d(response.toString());
+                Projects projects = new FeaturedProjects.Builder()
+                        .withProjects(response.body().getProjects())
+                        .build()
+                        .getProjects();
+                responseInterface.onResponseLoaded(projects);
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<FeaturedProjects> call, @NonNull Throwable t) {
+                Timber.e(t);
+            }
+        });
+    }
+
+    public static void getFeaturedProjects(Context context, final ResponseInterface responseInterface) {
         ApiInterfaces apiService = ApiHandler.getApiService(context, false);
         Call<FeaturedProjects> responseFeatured = apiService.getFeaturedProjects();
 

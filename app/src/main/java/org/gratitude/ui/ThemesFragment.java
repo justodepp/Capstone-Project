@@ -12,23 +12,24 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.gratitude.R;
-import org.gratitude.data.model.projects.Project;
-import org.gratitude.data.model.projects.Projects;
-import org.gratitude.databinding.FragmentProjectListBinding;
+import org.gratitude.data.model.themes.Theme;
+import org.gratitude.data.model.themes.Themes;
+import org.gratitude.databinding.FragmentThemeListBinding;
 import org.gratitude.main.interfaces.ResponseInterface;
-import org.gratitude.ui.adapter.ProjectsAdapter;
+import org.gratitude.ui.adapter.ThemesAdapter;
 
 import timber.log.Timber;
 
-public class ProjectsFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, ProjectsAdapter.ProjectClickListener{
+public class ThemesFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, ThemesAdapter.ThemeClickListener{
 
-    private ProjectsAdapter mAdapter;
-    FragmentProjectListBinding mBinding;
+    private ThemesAdapter mAdapter;
+    FragmentThemeListBinding mBinding;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_project_list, container, false);
+        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_theme_list, container, false);
+        mBinding.progressBar.indeterminateBar.setVisibility(View.VISIBLE);
         return mBinding.getRoot();
     }
 
@@ -40,21 +41,23 @@ public class ProjectsFragment extends Fragment implements SwipeRefreshLayout.OnR
         mBinding.swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorAccent));
         mBinding.swipeRefreshLayout.setOnRefreshListener(this);
 
-        makeCall();
+        callTheme();
     }
 
     @Override
     public void onRefresh() {
-        makeCall();
+        callTheme();
     }
 
-    private void makeCall(){
-        Project.getProjects(getContext(), new ResponseInterface() {
+    private void callTheme(){
+        Theme.getThemes(getContext(), new ResponseInterface() {
             @Override
             public void onResponseLoaded(Object object) {
-                Projects projects = (Projects) object;
-                mAdapter = new ProjectsAdapter(getActivity(), projects.getProject(),ProjectsFragment.this);
+                Themes themes = (Themes) object;
+                mAdapter = new ThemesAdapter(getActivity(), themes.getTheme(),ThemesFragment.this);
                 mBinding.recyclerview.setAdapter(mAdapter);
+
+                mBinding.progressBar.indeterminateBar.setVisibility(View.GONE);
                 mBinding.swipeRefreshLayout.setRefreshing(false);
             }
 
@@ -66,7 +69,7 @@ public class ProjectsFragment extends Fragment implements SwipeRefreshLayout.OnR
     }
 
     @Override
-    public void onClickProjectItem(Project project) {
+    public void onClickThemeItem(Theme theme) {
 
     }
 }

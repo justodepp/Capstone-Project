@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
         Class fragmentClass = ProjectsFragment.class;
         try {
             fragment = (Fragment) fragmentClass.newInstance();
-            replaceFragmentWithTransition(null, fragment);
+            replaceFragmentWithTransition(getFragmentBundleType(123456), fragment);
             setTitle(getString(R.string.menu_home));
         } catch (Exception e) {
             Timber.e(e);
@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
                 bundle = getFragmentBundleType(menuItem.getItemId());
                 break;
             case R.id.menu_cat:
-                fragmentClass = null;
+                fragmentClass = ThemesFragment.class;
                 bundle = getFragmentBundleType(menuItem.getItemId());
                 break;
             case R.id.menu_org:
@@ -123,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
                 .beginTransaction()
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .replace(R.id.content_frame, fragment)
-                .commit();
+                .commitNow();
     }
 
     @NonNull
