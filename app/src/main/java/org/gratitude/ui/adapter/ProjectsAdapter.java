@@ -98,7 +98,13 @@ public class ProjectsAdapter extends RecyclerView.Adapter<ProjectsAdapter.Projec
                     String.valueOf(project.getGoal()));
             mBinding.includeRaised.moneyRaised.setText(Html.fromHtml(text));
 
-            int progress = (int)((project.getFunding() / project.getGoal()) * 100);
+            double result = ((project.getFunding() / project.getGoal()) * 100);
+            int progress;
+            if(result > 0 && result < 1) {
+                progress = 1;
+            } else {
+                progress = (int) result;
+            }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 mBinding.includeRaised.moneyProgressBar.setProgress(progress, true);
             } else {
