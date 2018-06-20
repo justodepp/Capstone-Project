@@ -18,8 +18,6 @@ import org.gratitude.databinding.FragmentProjectListBinding;
 import org.gratitude.main.interfaces.ResponseInterface;
 import org.gratitude.ui.adapter.ProjectsAdapter;
 
-import java.util.Objects;
-
 import timber.log.Timber;
 
 public class ProjectsFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, ProjectsAdapter.ProjectClickListener{
@@ -30,13 +28,13 @@ public class ProjectsFragment extends Fragment implements SwipeRefreshLayout.OnR
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_project_list, container, false);
+        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_project_list, container, false);
+        return mBinding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mBinding = DataBindingUtil.setContentView(Objects.requireNonNull(getActivity()), R.layout.fragment_project_list);
 
         mBinding.recyclerview.setLayoutManager(new LinearLayoutManager(getContext()));
         mBinding.swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorAccent));

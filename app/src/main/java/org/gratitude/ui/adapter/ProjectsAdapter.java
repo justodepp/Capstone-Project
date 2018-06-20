@@ -2,20 +2,20 @@ package org.gratitude.ui.adapter;
 
 import android.content.Context;
 import android.databinding.DataBindingUtil;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.RequestOptions;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 
 import org.gratitude.R;
 import org.gratitude.data.model.projects.Project;
 import org.gratitude.databinding.ProjectItemBinding;
+import org.gratitude.utils.ImageHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +26,9 @@ public class ProjectsAdapter extends RecyclerView.Adapter<ProjectsAdapter.Projec
     private ArrayList<Project> mProject;
 
     private final ProjectClickListener mProjectClickListener;
+
+    // Allows to remember the last item shown on screen
+    private int lastPosition = -1;
 
     public interface ProjectClickListener {
         void onClickProjectItem(Project project);
@@ -50,6 +53,22 @@ public class ProjectsAdapter extends RecyclerView.Adapter<ProjectsAdapter.Projec
     @Override
     public void onBindViewHolder(@NonNull ProjectHolder holder, int position) {
         holder.bind(position);
+
+        setAnimation(holder.itemView, position);
+    }
+
+    /**
+     * Here is the key method to apply the animation
+     */
+    private void setAnimation(View viewToAnimate, int position)
+    {
+        // If the bound view wasn't previously displayed on screen, it's animated
+        if (position > lastPosition)
+        {
+            Animation animation = AnimationUtils.loadAnimation(mContext, R.anim.item_animation_from_right);
+            viewToAnimate.startAnimation(animation);
+            lastPosition = position;
+        }
     }
 
     @Override
@@ -72,22 +91,26 @@ public class ProjectsAdapter extends RecyclerView.Adapter<ProjectsAdapter.Projec
         public void bind(int position){
             Project project = mProject.get(position);
 
-            Glide.with(mContext)
-                    .load(project.getImageLink())
-                    .apply(
-                            RequestOptions.centerCropTransform()
-                                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                    .placeholder(R.drawable.gg_logo)
-                                    .error(R.drawable.gg_logo)
-                    )
-                    .into(mBinding.includeHeader.projectImageview);
-
             mBinding.includeHeader.projectTitle.setText(project.getTitle());
 
             String text = String.format(mContext.getString(R.string.money_raised_text),
                     String.valueOf(project.getFunding()),
                     String.valueOf(project.getGoal()));
             mBinding.includeRaised.moneyRaised.setText(Html.fromHtml(text));
+
+            int progress = (int)((project.getFunding() / project.getGoal()) * 100);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                mBinding.includeRaised.moneyProgressBar.setProgress(progress, true);
+            } else {
+                mBinding.includeRaised.moneyProgressBar.setProgress(progress);
+            }
+
+            ImageHandler.imageHandler(mContext, mBinding.includeHeader.projectImageview, project);
+        }
+
+        @Override
+        public String toString() {
+            return super.toString();
         }
 
         @Override

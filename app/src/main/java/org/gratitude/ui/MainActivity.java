@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -12,6 +13,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
 
 import org.gratitude.R;
 
@@ -21,10 +23,12 @@ import timber.log.Timber;
 public class MainActivity extends AppCompatActivity {
 
     public static final String ARGUMENT_TYPE_CODE = "typeCode";
-    private static final int DELAY_MILLIS = 250;
 
     private Toolbar mToolbar;
     private DrawerLayout mDrawer;
+
+    private Fragment fragment = null;
+    private Bundle bundle;
 
     // Make sure to be using android.support.v7.app.ActionBarDrawerToggle version.
     // The android.support.v4.app.ActionBarDrawerToggle has been deprecated.
@@ -42,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
     private void init() {
         setupToolbar();
         setupDrawer();
-        // showHomeFragment();
+        showHomeFragment();
     }
 
     private void showHomeFragment() {
@@ -60,8 +64,8 @@ public class MainActivity extends AppCompatActivity {
     //region Fragment
     public void selectDrawerItem(MenuItem menuItem) {
         // Create a new fragment and specify the fragment to show based on nav item clicked
-        Fragment fragment;
-        Bundle bundle;
+//        Fragment fragment = null;
+//        Bundle bundle;
         Class fragmentClass;
         switch(menuItem.getItemId()) {
             case R.id.menu_home:
@@ -97,11 +101,11 @@ public class MainActivity extends AppCompatActivity {
         try {
             assert fragmentClass != null;
             fragment = (Fragment) fragmentClass.newInstance();
-            replaceFragmentWithTransition(bundle, fragment);
         } catch (Exception e) {
             Timber.e(e);
         }
 
+        mDrawer.closeDrawer(GravityCompat.START);
         // Highlight the selected item has been done by NavigationView
         menuItem.setChecked(true);
         // Set action bar title
@@ -117,6 +121,7 @@ public class MainActivity extends AppCompatActivity {
         fragment.setArguments(bundle);
         getSupportFragmentManager()
                 .beginTransaction()
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .replace(R.id.content_frame, fragment)
                 .commit();
     }
@@ -151,6 +156,30 @@ public class MainActivity extends AppCompatActivity {
 
         // Tie DrawerLayout events to the ActionBarToggle
         mDrawer.addDrawerListener(mDrawerToggle);
+        mDrawer.addDrawerListener(
+                new DrawerLayout.DrawerListener() {
+                    @Override
+                    public void onDrawerSlide(View drawerView, float slideOffset) {
+                        // Respond when the drawer's position changes
+                    }
+
+                    @Override
+                    public void onDrawerOpened(View drawerView) {
+                        // Respond when the drawer is opened
+                    }
+
+                    @Override
+                    public void onDrawerClosed(View drawerView) {
+                        // Respond when the drawer is closed
+                        replaceFragmentWithTransition(bundle, fragment);
+                    }
+
+                    @Override
+                    public void onDrawerStateChanged(int newState) {
+                        // Respond when the drawer motion state changes
+                    }
+                }
+        );
 
         NavigationView mNavigationView = findViewById(R.id.nav_view);
         // Setup drawer view
