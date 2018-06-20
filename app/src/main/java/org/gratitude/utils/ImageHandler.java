@@ -60,7 +60,7 @@ public class ImageHandler {
 
         RequestOptions requestOptionsThumbnail =  new RequestOptions()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .centerCrop();
+                .fitCenter();
 
         RequestOptions requestOptions =  new RequestOptions()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
@@ -75,6 +75,7 @@ public class ImageHandler {
 
         Glide.with(context)
                 .load(getImageUrl(project, IMAGE_LARGE))
+                .apply(requestOptions)
                 .thumbnail(
                         Glide.with(context)
                                 .load(getImageUrl(project, IMAGE_THUMBNAIL))
@@ -88,10 +89,10 @@ public class ImageHandler {
 
                     @Override
                     public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                        target.onResourceReady(resource, new DrawableCrossFadeTransition(400, isFirstResource));
+                        target.onResourceReady(resource, new DrawableCrossFadeTransition(600, isFirstResource));
                         return true;
                     }
                 })
-                .into(imageView);
+                .into(imageView).clearOnDetach();
     }
 }
