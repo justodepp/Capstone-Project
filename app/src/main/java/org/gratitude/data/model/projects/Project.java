@@ -633,7 +633,7 @@ public class Project implements Parcelable {
     };
 
     public static void getProjects(Context context, final ResponseInterface responseInterface) {
-        getProjects(context, Integer.parseInt(null), responseInterface);
+        getProjects(context, 0, responseInterface);
     }
 
     public static void getProjects(Context context, int nextProjectId, final ResponseInterface responseInterface) {

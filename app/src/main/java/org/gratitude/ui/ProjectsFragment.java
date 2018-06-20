@@ -56,6 +56,7 @@ public class ProjectsFragment extends Fragment implements SwipeRefreshLayout.OnR
                 mAdapter = new ProjectsAdapter(getActivity(), projects.getProject(),ProjectsFragment.this);
                 mBinding.recyclerview.setAdapter(mAdapter);
                 mBinding.swipeRefreshLayout.setRefreshing(false);
+                mBinding.progressBar.indeterminateBar.setVisibility(View.GONE);
             }
 
             @Override
