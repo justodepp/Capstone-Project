@@ -117,6 +117,7 @@ public class ProjectsFragment extends Fragment implements SwipeRefreshLayout.OnR
                 hasNext = object.getHasNext();
                 mNextProjectId = object.getNextProjectId();
 
+                mProjectList.clear();
                 mProjectList.addAll(object.getProject());
 
                 if(mBinding.itemProgressBar.getVisibility() == View.VISIBLE)

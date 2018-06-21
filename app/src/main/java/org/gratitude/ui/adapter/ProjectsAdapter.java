@@ -95,13 +95,6 @@ public class ProjectsAdapter extends RecyclerView.Adapter<ProjectsAdapter.Projec
         public void bind(int position){
             Project project = mProject.get(position);
 
-            mBinding.includeHeader.projectTitle.setText(project.getTitle());
-
-            String text = String.format(mContext.getString(R.string.money_raised_text),
-                    String.valueOf(project.getFunding()),
-                    String.valueOf(project.getGoal()));
-            mBinding.includeRaised.moneyRaised.setText(Html.fromHtml(text));
-
             double result = ((project.getFunding() / project.getGoal()) * 100);
             int progress;
             if(result > 0 && result < 1) {
@@ -109,13 +102,28 @@ public class ProjectsAdapter extends RecyclerView.Adapter<ProjectsAdapter.Projec
             } else {
                 progress = (int) result;
             }
+
+            mBinding.includeHeader.projectTitle.setText(project.getTitle());
+
+            if (progress < 100) {
+                String text = String.format(mContext.getString(R.string.money_raised_text),
+                        String.valueOf(project.getFunding()),
+                        String.valueOf(project.getGoal()));
+                mBinding.includeRaised.moneyRaised.setText(Html.fromHtml(text));
+            } else {
+                String text = String.format(mContext.getString(R.string.money_raised_text),
+                        String.valueOf(project.getFunding()),
+                        String.valueOf(project.getGoal()));
+                mBinding.includeRaised.moneyRaised.setText(Html.fromHtml(text));
+                //goalReached();
+            }
+
+            ImageHandler.imageHandler(mContext, mBinding.includeHeader.projectImageview, project);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 mBinding.includeRaised.moneyProgressBar.setProgress(progress, true);
             } else {
                 mBinding.includeRaised.moneyProgressBar.setProgress(progress);
             }
-
-            ImageHandler.imageHandler(mContext, mBinding.includeHeader.projectImageview, project);
         }
 
         @Override
@@ -127,6 +135,10 @@ public class ProjectsAdapter extends RecyclerView.Adapter<ProjectsAdapter.Projec
         public void onClick(View view) {
             int clickPosition = getAdapterPosition();
             mProjectClickListener.onClickProjectItem(mProject.get(clickPosition));
+        }
+
+        private void goalReached(){
+            mBinding.projectCard.setBackgroundResource(R.color.colorPrimary);
         }
     }
 }
