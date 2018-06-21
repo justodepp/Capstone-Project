@@ -57,6 +57,10 @@ public class ProjectsAdapter extends RecyclerView.Adapter<ProjectsAdapter.Projec
         setAnimation(holder.itemView, position);
     }
 
+    public void setProjectList(List<Project> projectList){
+        mProject.addAll(projectList);
+    }
+
     /**
      * Here is the key method to apply the animation
      */
@@ -65,7 +69,7 @@ public class ProjectsAdapter extends RecyclerView.Adapter<ProjectsAdapter.Projec
         // If the bound view wasn't previously displayed on screen, it's animated
         if (position > lastPosition)
         {
-            Animation animation = AnimationUtils.loadAnimation(mContext, R.anim.item_animation_from_right);
+            Animation animation = AnimationUtils.loadAnimation(mContext, R.anim.item_animation_from_bottom);
             viewToAnimate.startAnimation(animation);
             lastPosition = position;
         }

@@ -30,6 +30,7 @@ public class ProjectsFragment extends Fragment implements SwipeRefreshLayout.OnR
     private String typeCode;
 
     private ArrayList<Project> mProjectList = new ArrayList<>();
+    private LinearLayoutManager mLinearLayoutManager;
 
     private boolean hasNext;
     private long mNextProjectId;
@@ -52,22 +53,18 @@ public class ProjectsFragment extends Fragment implements SwipeRefreshLayout.OnR
             typeCode = bundle.getString(MainActivity.ARGUMENT_TYPE_CODE);
         }
 
-        LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(getContext());
+        mLinearLayoutManager = new LinearLayoutManager(getContext());
         mBinding.recyclerview.setLayoutManager(mLinearLayoutManager);
         mBinding.swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorAccent));
         mBinding.swipeRefreshLayout.setOnRefreshListener(this);
 
-        endlessScroll = new EndlessRecyclerViewScrollListener(mLinearLayoutManager){
+        endlessScroll = new EndlessRecyclerViewScrollListener(){
             @Override
-            public int getFooterViewType(int defaultNoFooterViewType) {
-                return 0;
-            }
-
-            @Override
-            public void onLoadMore(int page, int totalItemsCount) {
+            public void onLoadMore() {
                 if(hasNext) {
+                    mBinding.itemProgressBar.setVisibility(View.VISIBLE);
+
                     callProjects(mNextProjectId);
-                    mAdapter.notifyDataSetChanged();
                 }
             }
         };
@@ -109,7 +106,7 @@ public class ProjectsFragment extends Fragment implements SwipeRefreshLayout.OnR
     }
 
     private void callProjects(){
-        mProjectList.clear();
+        resetData();
         callProjects(null);
     }
 
@@ -122,8 +119,17 @@ public class ProjectsFragment extends Fragment implements SwipeRefreshLayout.OnR
 
                 mProjectList.addAll(object.getProject());
 
-                mAdapter = new ProjectsAdapter(getActivity(), mProjectList,ProjectsFragment.this);
-                mBinding.recyclerview.setAdapter(mAdapter);
+                if(mBinding.itemProgressBar.getVisibility() == View.VISIBLE)
+                    mBinding.itemProgressBar.setVisibility(View.GONE);
+
+                if(mAdapter == null) {
+                    mAdapter = new ProjectsAdapter(getActivity(), mProjectList, ProjectsFragment.this);
+                    mBinding.recyclerview.setAdapter(mAdapter);
+                } else {
+                    mAdapter.setProjectList(mProjectList);
+                    mAdapter.notifyItemRangeChanged(endlessScroll.getPreviousTotal()+1, mProjectList.size());
+                }
+
                 mBinding.swipeRefreshLayout.setRefreshing(false);
                 mBinding.progressBar.indeterminateBar.setVisibility(View.GONE);
             }
@@ -133,6 +139,12 @@ public class ProjectsFragment extends Fragment implements SwipeRefreshLayout.OnR
                 Timber.e("Error retriving data");
             }
         });
+    }
+
+    private void resetData(){
+        mProjectList.clear();
+        endlessScroll.resetPreviousTotal();
+        mAdapter = null;
     }
 
     @Override
