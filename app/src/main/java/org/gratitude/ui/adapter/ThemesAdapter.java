@@ -85,7 +85,8 @@ public class ThemesAdapter extends RecyclerView.Adapter<ThemesAdapter.ThemeHolde
             mBinding.themeCard.setOnClickListener(this);
         }
 
-        public void bind(int position){
+        private void bind(int position){
+            mBinding.themeText.setText(mTheme.get(position).getName());
         }
 
         @Override

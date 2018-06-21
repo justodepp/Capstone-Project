@@ -50,11 +50,10 @@ public class ThemesFragment extends Fragment implements SwipeRefreshLayout.OnRef
     }
 
     private void callTheme(){
-        Theme.getThemes(getContext(), new ResponseInterface() {
+        Theme.getThemes(getContext(), new ResponseInterface<Themes>() {
             @Override
-            public void onResponseLoaded(Object object) {
-                Themes themes = (Themes) object;
-                mAdapter = new ThemesAdapter(getActivity(), themes.getTheme(),ThemesFragment.this);
+            public void onResponseLoaded(Themes object) {
+                mAdapter = new ThemesAdapter(getActivity(), object.getTheme(),ThemesFragment.this);
                 mBinding.recyclerview.setAdapter(mAdapter);
 
                 mBinding.progressBar.indeterminateBar.setVisibility(View.GONE);

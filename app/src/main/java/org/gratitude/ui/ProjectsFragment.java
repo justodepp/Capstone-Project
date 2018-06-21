@@ -49,11 +49,10 @@ public class ProjectsFragment extends Fragment implements SwipeRefreshLayout.OnR
     }
 
     private void makeCall(){
-        Project.getProjects(getContext(), new ResponseInterface() {
+        Project.getProjects(getContext(), new ResponseInterface<Projects>() {
             @Override
-            public void onResponseLoaded(Object object) {
-                Projects projects = (Projects) object;
-                mAdapter = new ProjectsAdapter(getActivity(), projects.getProject(),ProjectsFragment.this);
+            public void onResponseLoaded(Projects object) {
+                mAdapter = new ProjectsAdapter(getActivity(), object.getProject(),ProjectsFragment.this);
                 mBinding.recyclerview.setAdapter(mAdapter);
                 mBinding.swipeRefreshLayout.setRefreshing(false);
                 mBinding.progressBar.indeterminateBar.setVisibility(View.GONE);
