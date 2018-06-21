@@ -637,7 +637,7 @@ public class Project implements Parcelable {
         getProjects(context, null, responseInterface);
     }
 
-    public static void getProjects(Context context, Integer nextProjectId, final ResponseInterface<Projects> responseInterface) {
+    public static void getProjects(Context context, Long nextProjectId, final ResponseInterface<Projects> responseInterface) {
         ApiInterfaces apiService = ApiHandler.getApiService(context, false);
         Call<AllProjects> responseProjects = apiService.getAllProjects(nextProjectId);
 

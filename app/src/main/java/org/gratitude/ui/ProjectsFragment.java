@@ -17,6 +17,9 @@ import org.gratitude.data.model.projects.Projects;
 import org.gratitude.databinding.FragmentProjectListBinding;
 import org.gratitude.main.interfaces.ResponseInterface;
 import org.gratitude.ui.adapter.ProjectsAdapter;
+import org.gratitude.utils.EndlessRecyclerViewScrollListener;
+
+import java.util.ArrayList;
 
 import timber.log.Timber;
 
@@ -25,6 +28,13 @@ public class ProjectsFragment extends Fragment implements SwipeRefreshLayout.OnR
     private ProjectsAdapter mAdapter;
     FragmentProjectListBinding mBinding;
     private String typeCode;
+
+    private ArrayList<Project> mProjectList = new ArrayList<>();
+
+    private boolean hasNext;
+    private long mNextProjectId;
+
+    private EndlessRecyclerViewScrollListener endlessScroll;
 
     @Nullable
     @Override
@@ -42,11 +52,29 @@ public class ProjectsFragment extends Fragment implements SwipeRefreshLayout.OnR
             typeCode = bundle.getString(MainActivity.ARGUMENT_TYPE_CODE);
         }
 
-        mBinding.recyclerview.setLayoutManager(new LinearLayoutManager(getContext()));
+        LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(getContext());
+        mBinding.recyclerview.setLayoutManager(mLinearLayoutManager);
         mBinding.swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorAccent));
         mBinding.swipeRefreshLayout.setOnRefreshListener(this);
 
+        endlessScroll = new EndlessRecyclerViewScrollListener(mLinearLayoutManager){
+            @Override
+            public int getFooterViewType(int defaultNoFooterViewType) {
+                return 0;
+            }
+
+            @Override
+            public void onLoadMore(int page, int totalItemsCount) {
+                if(hasNext) {
+                    callProjects(mNextProjectId);
+                    mAdapter.notifyDataSetChanged();
+                }
+            }
+        };
+
         handleCall();
+
+        mBinding.recyclerview.addOnScrollListener(endlessScroll);
     }
 
     private void handleCall(){
@@ -81,10 +109,20 @@ public class ProjectsFragment extends Fragment implements SwipeRefreshLayout.OnR
     }
 
     private void callProjects(){
-        Project.getProjects(getContext(), new ResponseInterface<Projects>() {
+        mProjectList.clear();
+        callProjects(null);
+    }
+
+    private void callProjects(Long nexProjectId){
+        Project.getProjects(getContext(), nexProjectId, new ResponseInterface<Projects>() {
             @Override
             public void onResponseLoaded(Projects object) {
-                mAdapter = new ProjectsAdapter(getActivity(), object.getProject(),ProjectsFragment.this);
+                hasNext = object.getHasNext();
+                mNextProjectId = object.getNextProjectId();
+
+                mProjectList.addAll(object.getProject());
+
+                mAdapter = new ProjectsAdapter(getActivity(), mProjectList,ProjectsFragment.this);
                 mBinding.recyclerview.setAdapter(mAdapter);
                 mBinding.swipeRefreshLayout.setRefreshing(false);
                 mBinding.progressBar.indeterminateBar.setVisibility(View.GONE);

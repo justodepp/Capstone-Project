@@ -38,7 +38,7 @@ public interface ApiInterfaces {
     Call<OrganizationByBridgeId> getOrganizationByBridgeId(@Path("bridgeId") String bridgeId);
 
     @GET("projectservice/all/projects")
-    Call<AllProjects> getAllProjects(@Query("nextProjectId") Integer nextProjectId);
+    Call<AllProjects> getAllProjects(@Query("nextProjectId") Long nextProjectId);
 
     @GET("projectservice/projects/{projectId}")
     Call<ProjectById> getProject(@Path("projectId") int projectId);
