@@ -24,6 +24,7 @@ public class ProjectsFragment extends Fragment implements SwipeRefreshLayout.OnR
 
     private ProjectsAdapter mAdapter;
     FragmentProjectListBinding mBinding;
+    private String typeCode;
 
     @Nullable
     @Override
@@ -36,19 +37,50 @@ public class ProjectsFragment extends Fragment implements SwipeRefreshLayout.OnR
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        Bundle bundle = this.getArguments();
+        if(bundle != null){
+            typeCode = bundle.getString(MainActivity.ARGUMENT_TYPE_CODE);
+        }
+
         mBinding.recyclerview.setLayoutManager(new LinearLayoutManager(getContext()));
         mBinding.swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorAccent));
         mBinding.swipeRefreshLayout.setOnRefreshListener(this);
 
-        makeCall();
+        handleCall();
+    }
+
+    private void handleCall(){
+        if(typeCode.equals(getString(R.string.menu_home))){
+            callFeatured();
+        } else if(typeCode.equals(getString(R.string.menu_prj))){
+            callProjects();
+        }
+
     }
 
     @Override
     public void onRefresh() {
-        makeCall();
+        handleCall();
     }
 
-    private void makeCall(){
+    private void callFeatured(){
+        Project.getFeaturedProjects(getContext(), new ResponseInterface<Projects>() {
+            @Override
+            public void onResponseLoaded(Projects object) {
+                mAdapter = new ProjectsAdapter(getActivity(), object.getProject(),ProjectsFragment.this);
+                mBinding.recyclerview.setAdapter(mAdapter);
+                mBinding.swipeRefreshLayout.setRefreshing(false);
+                mBinding.progressBar.indeterminateBar.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onResponseFailed() {
+                Timber.e("Error retriving data");
+            }
+        });
+    }
+
+    private void callProjects(){
         Project.getProjects(getContext(), new ResponseInterface<Projects>() {
             @Override
             public void onResponseLoaded(Projects object) {

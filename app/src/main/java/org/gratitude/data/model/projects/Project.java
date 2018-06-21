@@ -13,6 +13,7 @@ import org.gratitude.data.api.ApiInterfaces;
 import org.gratitude.data.model.donation.DonationOptions;
 import org.gratitude.data.model.image.Image;
 import org.gratitude.data.model.organization.Organization;
+import org.gratitude.data.model.response.AllProjects;
 import org.gratitude.data.model.response.FeaturedProjects;
 import org.gratitude.data.model.video.Videos;
 import org.gratitude.main.interfaces.ResponseInterface;
@@ -632,17 +633,17 @@ public class Project implements Parcelable {
         }
     };
 
-    public static void getProjects(Context context, final ResponseInterface responseInterface) {
-        getProjects(context, 0, responseInterface);
+    public static void getProjects(Context context, final ResponseInterface<Projects> responseInterface) {
+        getProjects(context, null, responseInterface);
     }
 
-    public static void getProjects(Context context, int nextProjectId, final ResponseInterface responseInterface) {
+    public static void getProjects(Context context, Integer nextProjectId, final ResponseInterface<Projects> responseInterface) {
         ApiInterfaces apiService = ApiHandler.getApiService(context, false);
-        Call<FeaturedProjects> responseFeatured = apiService.getFeaturedProjects();
+        Call<AllProjects> responseProjects = apiService.getAllProjects(nextProjectId);
 
-        responseFeatured.enqueue(new Callback<FeaturedProjects>() {
+        responseProjects.enqueue(new Callback<AllProjects>() {
             @Override
-            public void onResponse(@NonNull Call<FeaturedProjects> call, @NonNull Response<FeaturedProjects> response) {
+            public void onResponse(@NonNull Call<AllProjects> call, @NonNull Response<AllProjects> response) {
                 Timber.d(response.toString());
                 Projects projects = new FeaturedProjects.Builder()
                         .withProjects(response.body().getProjects())
@@ -652,13 +653,13 @@ public class Project implements Parcelable {
             }
 
             @Override
-            public void onFailure(@NonNull Call<FeaturedProjects> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<AllProjects> call, @NonNull Throwable t) {
                 Timber.e(t);
             }
         });
     }
 
-    public static void getFeaturedProjects(Context context, final ResponseInterface responseInterface) {
+    public static void getFeaturedProjects(Context context, final ResponseInterface<Projects> responseInterface) {
         ApiInterfaces apiService = ApiHandler.getApiService(context, false);
         Call<FeaturedProjects> responseFeatured = apiService.getFeaturedProjects();
 

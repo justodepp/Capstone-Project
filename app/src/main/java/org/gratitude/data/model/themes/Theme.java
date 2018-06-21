@@ -55,7 +55,7 @@ public class Theme {
 
     }
 
-    public static void getThemes(Context context, final ResponseInterface responseInterface) {
+    public static void getThemes(Context context, final ResponseInterface<Themes> responseInterface) {
         ApiInterfaces apiService = ApiHandler.getApiService(context, false);
         Call<AllThemes> responseThemes = apiService.getThemes();
 

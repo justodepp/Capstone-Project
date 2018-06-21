@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
 
     private Toolbar mToolbar;
     private DrawerLayout mDrawer;
+    private NavigationView mNavigationView;
 
     private Fragment fragment = null;
     private Bundle bundle;
@@ -54,7 +55,9 @@ public class MainActivity extends AppCompatActivity {
         Class fragmentClass = ProjectsFragment.class;
         try {
             fragment = (Fragment) fragmentClass.newInstance();
-            replaceFragmentWithTransition(getFragmentBundleType(123456), fragment);
+            replaceFragmentWithTransition(getFragmentBundleType(
+                    mNavigationView.getMenu().findItem(R.id.menu_home).getTitle().toString()),
+                    fragment);
             setTitle(getString(R.string.menu_home));
         } catch (Exception e) {
             Timber.e(e);
@@ -70,32 +73,32 @@ public class MainActivity extends AppCompatActivity {
         switch(menuItem.getItemId()) {
             case R.id.menu_home:
                 fragmentClass = ProjectsFragment.class;
-                bundle = getFragmentBundleType(menuItem.getItemId());
+                bundle = getFragmentBundleType(menuItem.getTitle().toString());
                 break;
             case R.id.menu_cat:
                 fragmentClass = ThemesFragment.class;
-                bundle = getFragmentBundleType(menuItem.getItemId());
+                bundle = getFragmentBundleType(menuItem.getTitle().toString());
                 break;
             case R.id.menu_org:
                 fragmentClass = null;
-                bundle = getFragmentBundleType(menuItem.getItemId());
+                bundle = getFragmentBundleType(menuItem.getTitle().toString());
                 break;
             case R.id.menu_prj:
-                fragmentClass = null;
-                bundle = getFragmentBundleType(menuItem.getItemId());
+                fragmentClass = ProjectsFragment.class;
+                bundle = getFragmentBundleType(menuItem.getTitle().toString());
                 break;
             case R.id.menu_about:
                 fragmentClass = null;
-                bundle = getFragmentBundleType(menuItem.getItemId());
+                bundle = getFragmentBundleType(menuItem.getTitle().toString());
                 break;
             case R.id.menu_settings:
                 fragmentClass = null;
-                bundle = getFragmentBundleType(menuItem.getItemId());
+                bundle = getFragmentBundleType(menuItem.getTitle().toString());
                 break;
             default:
                 // Home
                 fragmentClass = ProjectsFragment.class;
-                bundle = getFragmentBundleType(menuItem.getItemId());
+                bundle = getFragmentBundleType(menuItem.getTitle().toString());
         }
 
         try {
@@ -114,9 +117,6 @@ public class MainActivity extends AppCompatActivity {
         mDrawer.closeDrawers();
     }
 
-    /**
-     * We start the transaction with delay to avoid junk while closing the drawer
-     */
     private void replaceFragmentWithTransition(@NonNull final Bundle bundle, final Fragment fragment) {
         fragment.setArguments(bundle);
         getSupportFragmentManager()
@@ -127,9 +127,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @NonNull
-    private Bundle getFragmentBundleType(final int typeCode) {
+    private Bundle getFragmentBundleType(final String typeCode) {
         final Bundle bundle = new Bundle();
-        bundle.putInt(ARGUMENT_TYPE_CODE, typeCode);
+        bundle.putString(ARGUMENT_TYPE_CODE, typeCode);
         return bundle;
     }
     //endregion
@@ -181,7 +181,7 @@ public class MainActivity extends AppCompatActivity {
                 }
         );
 
-        NavigationView mNavigationView = findViewById(R.id.nav_view);
+        mNavigationView = findViewById(R.id.nav_view);
         // Setup drawer view
         setupDrawerContent(mNavigationView);
     }
