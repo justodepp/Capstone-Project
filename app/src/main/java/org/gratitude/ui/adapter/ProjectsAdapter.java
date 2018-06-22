@@ -28,10 +28,6 @@ public class ProjectsAdapter extends RecyclerView.Adapter<ProjectsAdapter.Projec
     // Allows to remember the last item shown on screen
     private int lastPosition = -1;
 
-    public interface ProjectClickListener {
-        void onClickProjectItem(Project project);
-    }
-
     public ProjectsAdapter(Context context, List<Project> projectList) {
         mContext = context;
         mProject = new ArrayList<>(projectList);
