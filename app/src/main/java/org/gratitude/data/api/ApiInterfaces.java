@@ -26,13 +26,13 @@ public interface ApiInterfaces {
     Call<AllThemes> getThemes();
 
     @GET("projectservice/themes/{theme}/projects")
-    Call<ProjectByTheme> getAllProjectsForTheme(@Path("theme") String theme, @Query("nextProjectId") Integer nextProjectId);
+    Call<ProjectByTheme> getAllProjectsForTheme(@Path("theme") String theme, @Query("nextProjectId") Long nextProjectId);
 
-    @GET("orgservice/all/organizations")
-    Call<AllOrganizations> getOrganizations(@Query("nextOrgId") Integer nextOrgId);
+    @GET("orgservice/all/organizations/active")
+    Call<AllOrganizations> getOrganizations(@Query("nextOrgId") Long nextOrgId);
 
     @GET("projectservice/organizations/{orgId}/projects")
-    Call<ProjectByOrganization> getAllProjectsForOrganization(@Path("orgId") String theme, @Query("nextProjectId") Integer nextProjectId);
+    Call<ProjectByOrganization> getAllProjectsForOrganization(@Path("orgId") String theme, @Query("nextProjectId") Long nextProjectId);
 
     @GET("orgservice/organization/bridge/{bridgeId}")
     Call<OrganizationByBridgeId> getOrganizationByBridgeId(@Path("bridgeId") String bridgeId);

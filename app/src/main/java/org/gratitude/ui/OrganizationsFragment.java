@@ -26,7 +26,7 @@ import java.util.ArrayList;
 
 import timber.log.Timber;
 
-public class ProjectsFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
+public class OrganizationsFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
     private ProjectsAdapter mAdapter;
     FragmentProjectListBinding mBinding;
