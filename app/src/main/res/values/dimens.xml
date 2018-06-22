@@ -2,14 +2,22 @@
 <resources>
     <dimen name="general_margin_8dp">8dp</dimen>
     <dimen name="general_margin_16dp">16dp</dimen>
+    <dimen name="general_padding_4dp">4dp</dimen>
     <dimen name="general_padding_8dp">8dp</dimen>
     <dimen name="general_padding_16dp">16dp</dimen>
 
     <dimen name="project_item_width">382dp</dimen>
 
-    <!-- CardView -->
+    <!-- Project CardView -->
     <dimen name="min_height">200dp</dimen>
     <dimen name="image_height">194dp</dimen>
     <dimen name="title_text_size">18sp</dimen>
     <dimen name="image_share_dimen">36dp</dimen>
+
+    <!-- Organization CardView -->
+    <dimen name="org_card_height">112dp</dimen>
+    <dimen name="org_image_width">84dp</dimen>
+    <dimen name="org_name_text_size">20sp</dimen>
+    <dimen name="org_mission_text_size">16sp</dimen>
+    <dimen name="org_num_text_size">14sp</dimen>
 </resources>

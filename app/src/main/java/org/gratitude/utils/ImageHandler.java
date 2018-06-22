@@ -1,6 +1,7 @@
 package org.gratitude.utils;
 
 import android.content.Context;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
 import android.widget.ImageView;
@@ -97,21 +98,10 @@ public class ImageHandler {
     }
 
     public static void orgImageHandler(Context context, ImageView imageView, Organization org) {
-
-        RequestOptions requestOptions =  new RequestOptions()
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .placeholder(R.drawable.gg_logo_color)
-                .error(R.drawable.gg_logo_color)
-                .fitCenter();
-
-        Glide.with(context)
+        
+        GlideApp.with(context)
                 .load(org.getLogoUrl())
-                .apply(requestOptions)
-                .preload();
-
-        Glide.with(context)
-                .load(org.getLogoUrl())
-                .apply(requestOptions)
+                .placeholder(new ColorDrawable(context.getResources().getColor(R.color.colorAccent)))
                 .listener(new RequestListener<Drawable>() {
                     @Override
                     public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
