@@ -112,7 +112,7 @@ public class ProjectsAdapter extends RecyclerView.Adapter<ProjectsAdapter.Projec
                 //goalReached();
             }
 
-            ImageHandler.imageHandler(mContext, mBinding.includeHeader.projectImageview, project);
+            ImageHandler.projectImageHandler(mContext, mBinding.includeHeader.projectImageview, project);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 mBinding.includeRaised.moneyProgressBar.setProgress(progress, true);
             } else {

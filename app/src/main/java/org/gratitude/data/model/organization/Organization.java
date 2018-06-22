@@ -1,13 +1,24 @@
 
 package org.gratitude.data.model.organization;
 
+import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
 import com.google.gson.annotations.Expose;
 
+import org.gratitude.data.api.ApiHandler;
+import org.gratitude.data.api.ApiInterfaces;
 import org.gratitude.data.model.countries.Countries;
+import org.gratitude.data.model.response.AllOrganizations;
 import org.gratitude.data.model.themes.Themes;
+import org.gratitude.main.interfaces.ResponseInterface;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import timber.log.Timber;
 
 public class Organization implements Parcelable {
 
@@ -318,4 +329,26 @@ public class Organization implements Parcelable {
             return new Organization[size];
         }
     };
+
+    public static void getOrganizations(Context context, Long nextOrgId, final ResponseInterface<Organizations> responseInterface) {
+        ApiInterfaces apiService = ApiHandler.getApiService(context, false);
+        Call<AllOrganizations> responseOrg = apiService.getOrganizations(nextOrgId);
+
+        responseOrg.enqueue(new Callback<AllOrganizations>() {
+            @Override
+            public void onResponse(@NonNull Call<AllOrganizations> call, @NonNull Response<AllOrganizations> response) {
+                Timber.d(response.toString());
+                Organizations organizations = new AllOrganizations.Builder()
+                        .withOrganizations(response.body().getOrganizations())
+                        .build()
+                        .getOrganizations();
+                responseInterface.onResponseLoaded(organizations);
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<AllOrganizations> call, @NonNull Throwable t) {
+                Timber.e(t);
+            }
+        });
+    }
 }

@@ -13,12 +13,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.gratitude.R;
-import org.gratitude.data.model.projects.Project;
-import org.gratitude.data.model.projects.Projects;
-import org.gratitude.databinding.FragmentProjectListBinding;
+import org.gratitude.data.model.organization.Organization;
+import org.gratitude.data.model.organization.Organizations;
+import org.gratitude.databinding.FragmentOrganizationListBinding;
 import org.gratitude.main.MainActivity;
 import org.gratitude.main.interfaces.ResponseInterface;
-import org.gratitude.ui.adapter.ProjectsAdapter;
+import org.gratitude.ui.adapter.OrganizationsAdapter;
 import org.gratitude.utils.EndlessRecyclerViewScrollListener;
 import org.gratitude.utils.ItemClickSupport;
 
@@ -28,22 +28,22 @@ import timber.log.Timber;
 
 public class OrganizationsFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
-    private ProjectsAdapter mAdapter;
-    FragmentProjectListBinding mBinding;
+    private OrganizationsAdapter mAdapter;
+    FragmentOrganizationListBinding mBinding;
     private String typeCode;
 
-    private ArrayList<Project> mProjectList = new ArrayList<>();
+    private ArrayList<Organization> mOrgList = new ArrayList<>();
     private LinearLayoutManager mLinearLayoutManager;
 
     private boolean hasNext;
-    private long mNextProjectId;
+    private long mNextOrganizationId;
 
     private EndlessRecyclerViewScrollListener endlessScroll;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_project_list, container, false);
+        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_organization_list, container, false);
         return mBinding.getRoot();
     }
 
@@ -67,12 +67,12 @@ public class OrganizationsFragment extends Fragment implements SwipeRefreshLayou
                 if(hasNext) {
                     mBinding.itemProgressBar.setVisibility(View.VISIBLE);
 
-                    callProjects(mNextProjectId);
+                    callOrganizations(mNextOrganizationId);
                 }
             }
         };
 
-        handleCall();
+        callOrganizations();
 
         mBinding.recyclerview.addOnScrollListener(endlessScroll);
 
@@ -85,61 +85,36 @@ public class OrganizationsFragment extends Fragment implements SwipeRefreshLayou
         });
     }
 
-    private void handleCall(){
-        if(typeCode.equals(getString(R.string.menu_home))){
-            callFeatured();
-        } else if(typeCode.equals(getString(R.string.menu_prj))){
-            callProjects();
-        }
-
-    }
-
     @Override
     public void onRefresh() {
-        handleCall();
+        callOrganizations();
     }
 
-    private void callFeatured(){
-        Project.getFeaturedProjects(getContext(), new ResponseInterface<Projects>() {
-            @Override
-            public void onResponseLoaded(Projects object) {
-                mAdapter = new ProjectsAdapter(getActivity(), object.getProject());
-                mBinding.recyclerview.setAdapter(mAdapter);
-                mBinding.swipeRefreshLayout.setRefreshing(false);
-                mBinding.progressBar.indeterminateBar.setVisibility(View.GONE);
-            }
 
-            @Override
-            public void onResponseFailed() {
-                Timber.e("Error retriving data");
-            }
-        });
-    }
-
-    private void callProjects(){
+    private void callOrganizations(){
         resetData();
-        callProjects(null);
+        callOrganizations(null);
     }
 
-    private void callProjects(Long nexProjectId){
-        Project.getProjects(getContext(), nexProjectId, new ResponseInterface<Projects>() {
+    private void callOrganizations(Long nextOrganizationId){
+        Organization.getOrganizations(getContext(), nextOrganizationId, new ResponseInterface<Organizations>() {
             @Override
-            public void onResponseLoaded(Projects object) {
+            public void onResponseLoaded(Organizations object) {
                 hasNext = object.getHasNext();
-                mNextProjectId = object.getNextProjectId();
+                mNextOrganizationId = object.getNextOrgId();
 
-                mProjectList.clear();
-                mProjectList.addAll(object.getProject());
+                mOrgList.clear();
+                mOrgList.addAll(object.getOrganization());
 
                 if(mBinding.itemProgressBar.getVisibility() == View.VISIBLE)
                     mBinding.itemProgressBar.setVisibility(View.GONE);
 
                 if(mAdapter == null) {
-                    mAdapter = new ProjectsAdapter(getActivity(), mProjectList);
+                    mAdapter = new OrganizationsAdapter(getActivity(), mOrgList);
                     mBinding.recyclerview.setAdapter(mAdapter);
                 } else {
-                    mAdapter.setProjectList(mProjectList);
-                    mAdapter.notifyItemRangeChanged(endlessScroll.getPreviousTotal()+1, mProjectList.size());
+                    mAdapter.setOrganizationList(mOrgList);
+                    mAdapter.notifyItemRangeChanged(endlessScroll.getPreviousTotal()+1, mOrgList.size());
                 }
 
                 mBinding.swipeRefreshLayout.setRefreshing(false);
@@ -154,7 +129,7 @@ public class OrganizationsFragment extends Fragment implements SwipeRefreshLayou
     }
 
     private void resetData(){
-        mProjectList.clear();
+        mOrgList.clear();
         endlessScroll.resetPreviousTotal();
         mAdapter = null;
     }

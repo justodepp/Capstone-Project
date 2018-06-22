@@ -12,12 +12,14 @@
     <string name="menu_about">Info</string>
     <string name="menu_settings">Settings</string>
 
-    <!-- CardView -->
+    <!-- Project CardView -->
     <string name="project_image_contentDescritpion">Project Image</string>
     <string name="project_share_contentDescritpion">Share</string>
     <string name="money_raised_text"><![CDATA[<font color="#3C8787">$%1$s</font> raised of <font color="#3C8787">$%2$s</font> goal]]></string>
     <string name="money_raised_text_tool">$236,557 raised of $300,000 goal</string>
 
-    <!-- Menu -->
+    <!-- Org CardView -->
+    <string name="project_active_text"><![CDATA[active project: <b>%1$s</b>]]></string>
+    <string name="project_active_text_tool">active project: 8</string>
     <!-- Menu -->
 </resources>

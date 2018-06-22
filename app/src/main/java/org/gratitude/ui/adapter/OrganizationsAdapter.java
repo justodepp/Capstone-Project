@@ -2,7 +2,6 @@ package org.gratitude.ui.adapter;
 
 import android.content.Context;
 import android.databinding.DataBindingUtil;
-import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
@@ -13,45 +12,45 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
 import org.gratitude.R;
-import org.gratitude.data.model.projects.Project;
-import org.gratitude.databinding.ProjectItemBinding;
+import org.gratitude.data.model.organization.Organization;
+import org.gratitude.databinding.OrganizationItemBinding;
 import org.gratitude.utils.ImageHandler;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class OrganizationsAdapter extends RecyclerView.Adapter<OrganizationsAdapter.ProjectHolder>{
+public class OrganizationsAdapter extends RecyclerView.Adapter<OrganizationsAdapter.OrganizationHolder>{
 
     private Context mContext;
-    private ArrayList<Project> mProject;
+    private ArrayList<Organization> mOrganization;
 
     // Allows to remember the last item shown on screen
     private int lastPosition = -1;
 
-    public OrganizationsAdapter(Context context, List<Project> projectList) {
+    public OrganizationsAdapter(Context context, List<Organization> orgList) {
         mContext = context;
-        mProject = new ArrayList<>(projectList);
+        mOrganization = new ArrayList<>(orgList);
     }
 
     @NonNull
     @Override
-    public ProjectHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public OrganizationHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        ProjectItemBinding mBinding = DataBindingUtil.inflate(inflater,
-                R.layout.project_item, parent, false);
+        OrganizationItemBinding mBinding = DataBindingUtil.inflate(inflater,
+                R.layout.organization_item, parent, false);
 
-        return new ProjectHolder(mBinding);
+        return new OrganizationHolder(mBinding);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ProjectHolder holder, int position) {
+    public void onBindViewHolder(@NonNull OrganizationHolder holder, int position) {
         holder.bind(position);
 
         setAnimation(holder.itemView, position);
     }
 
-    public void setProjectList(List<Project> projectList){
-        mProject.addAll(projectList);
+    public void setOrganizationList(List<Organization> orgList){
+        mOrganization.addAll(orgList);
     }
 
     /**
@@ -69,64 +68,40 @@ public class OrganizationsAdapter extends RecyclerView.Adapter<OrganizationsAdap
     }
 
     @Override
+    public String toString() {
+        return super.toString();
+    }
+
+    @Override
     public int getItemCount() {
-        return mProject != null ? mProject.size() :  0;
+        return mOrganization != null ? mOrganization.size() :  0;
     }
 
-    public Project getItem(int position) {
-        return mProject.get(position);
+    public Organization getItem(int position) {
+        return mOrganization.get(position);
     }
 
-    public class ProjectHolder extends RecyclerView.ViewHolder{
+    public class OrganizationHolder extends RecyclerView.ViewHolder{
 
-        private final ProjectItemBinding mBinding;
+        private final OrganizationItemBinding mBinding;
 
-        private ProjectHolder(ProjectItemBinding binding) {
+        private OrganizationHolder(OrganizationItemBinding binding) {
             super(binding.getRoot());
             this.mBinding = binding;
         }
 
         public void bind(int position){
-            Project project = mProject.get(position);
+            Organization org = mOrganization.get(position);
 
-            double result = ((project.getFunding() / project.getGoal()) * 100);
-            int progress;
-            if(result > 0 && result < 1) {
-                progress = 1;
-            } else {
-                progress = (int) result;
-            }
+            ImageHandler.orgImageHandler(mContext, mBinding.imageView, org);
 
-            mBinding.includeHeader.projectTitle.setText(project.getTitle());
+            mBinding.nameText.setText(org.getName());
+            mBinding.missionText.setText(org.getMission());
 
-            if (progress < 100) {
-                String text = String.format(mContext.getString(R.string.money_raised_text),
-                        String.valueOf(project.getFunding()),
-                        String.valueOf(project.getGoal()));
-                mBinding.includeRaised.moneyRaised.setText(Html.fromHtml(text));
-            } else {
-                String text = String.format(mContext.getString(R.string.money_raised_text),
-                        String.valueOf(project.getFunding()),
-                        String.valueOf(project.getGoal()));
-                mBinding.includeRaised.moneyRaised.setText(Html.fromHtml(text));
-                //goalReached();
-            }
-
-            ImageHandler.imageHandler(mContext, mBinding.includeHeader.projectImageview, project);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                mBinding.includeRaised.moneyProgressBar.setProgress(progress, true);
-            } else {
-                mBinding.includeRaised.moneyProgressBar.setProgress(progress);
-            }
+            String text = String.format(mContext.getString(R.string.project_active_text),
+                    String.valueOf(org.getActiveProjects()));
+            mBinding.numberText.setText(Html.fromHtml(text));
         }
 
-        @Override
-        public String toString() {
-            return super.toString();
-        }
-
-        private void goalReached(){
-            mBinding.projectCard.setBackgroundResource(R.color.colorPrimary);
-        }
     }
 }

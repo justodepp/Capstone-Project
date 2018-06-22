@@ -16,6 +16,7 @@ import com.bumptech.glide.request.transition.DrawableCrossFadeTransition;
 
 import org.gratitude.R;
 import org.gratitude.data.model.image.Imagelink;
+import org.gratitude.data.model.organization.Organization;
 import org.gratitude.data.model.projects.Project;
 
 import java.util.ArrayList;
@@ -55,8 +56,7 @@ public class ImageHandler {
         }
     }
 
-
-    public static void imageHandler(Context context, ImageView imageView, Project project) {
+    public static void projectImageHandler(Context context, ImageView imageView, Project project) {
 
         RequestOptions requestOptionsThumbnail =  new RequestOptions()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
@@ -81,6 +81,37 @@ public class ImageHandler {
                                 .load(getImageUrl(project, IMAGE_THUMBNAIL))
                                 .apply(requestOptionsThumbnail)
                 )
+                .listener(new RequestListener<Drawable>() {
+                    @Override
+                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                        target.onResourceReady(resource, new DrawableCrossFadeTransition(600, isFirstResource));
+                        return true;
+                    }
+                })
+                .into(imageView).clearOnDetach();
+    }
+
+    public static void orgImageHandler(Context context, ImageView imageView, Organization org) {
+
+        RequestOptions requestOptions =  new RequestOptions()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .placeholder(R.drawable.gg_logo_color)
+                .error(R.drawable.gg_logo_color)
+                .fitCenter();
+
+        Glide.with(context)
+                .load(org.getLogoUrl())
+                .apply(requestOptions)
+                .preload();
+
+        Glide.with(context)
+                .load(org.getLogoUrl())
+                .apply(requestOptions)
                 .listener(new RequestListener<Drawable>() {
                     @Override
                     public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
