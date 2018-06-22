@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,12 +19,13 @@ import org.gratitude.databinding.FragmentProjectListBinding;
 import org.gratitude.main.interfaces.ResponseInterface;
 import org.gratitude.ui.adapter.ProjectsAdapter;
 import org.gratitude.utils.EndlessRecyclerViewScrollListener;
+import org.gratitude.utils.ItemClickSupport;
 
 import java.util.ArrayList;
 
 import timber.log.Timber;
 
-public class ProjectsFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, ProjectsAdapter.ProjectClickListener{
+public class ProjectsFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
     private ProjectsAdapter mAdapter;
     FragmentProjectListBinding mBinding;
@@ -72,6 +74,14 @@ public class ProjectsFragment extends Fragment implements SwipeRefreshLayout.OnR
         handleCall();
 
         mBinding.recyclerview.addOnScrollListener(endlessScroll);
+
+        ItemClickSupport.addTo(mBinding.recyclerview).setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
+            @Override
+            public void onItemClicked(RecyclerView recyclerView, int position, View v) {
+                // TODO: test click element
+                mAdapter.getItem(position);
+            }
+        });
     }
 
     private void handleCall(){
@@ -92,7 +102,7 @@ public class ProjectsFragment extends Fragment implements SwipeRefreshLayout.OnR
         Project.getFeaturedProjects(getContext(), new ResponseInterface<Projects>() {
             @Override
             public void onResponseLoaded(Projects object) {
-                mAdapter = new ProjectsAdapter(getActivity(), object.getProject(),ProjectsFragment.this);
+                mAdapter = new ProjectsAdapter(getActivity(), object.getProject());
                 mBinding.recyclerview.setAdapter(mAdapter);
                 mBinding.swipeRefreshLayout.setRefreshing(false);
                 mBinding.progressBar.indeterminateBar.setVisibility(View.GONE);
@@ -124,7 +134,7 @@ public class ProjectsFragment extends Fragment implements SwipeRefreshLayout.OnR
                     mBinding.itemProgressBar.setVisibility(View.GONE);
 
                 if(mAdapter == null) {
-                    mAdapter = new ProjectsAdapter(getActivity(), mProjectList, ProjectsFragment.this);
+                    mAdapter = new ProjectsAdapter(getActivity(), mProjectList);
                     mBinding.recyclerview.setAdapter(mAdapter);
                 } else {
                     mAdapter.setProjectList(mProjectList);
@@ -146,10 +156,5 @@ public class ProjectsFragment extends Fragment implements SwipeRefreshLayout.OnR
         mProjectList.clear();
         endlessScroll.resetPreviousTotal();
         mAdapter = null;
-    }
-
-    @Override
-    public void onClickProjectItem(Project project) {
-
     }
 }

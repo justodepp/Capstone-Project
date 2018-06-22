@@ -1,14 +1,9 @@
 package org.gratitude.utils;
 
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
-
-import timber.log.Timber;
 
     public abstract class EndlessRecyclerViewScrollListener extends RecyclerView.OnScrollListener {
-//    public static String TAG = EndlessRecyclerOnScrollListener.class.getSimpleName();
 
         /**
          * The total number of items in the dataset after the last load

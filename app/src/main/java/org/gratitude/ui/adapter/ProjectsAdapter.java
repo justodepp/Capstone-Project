@@ -25,8 +25,6 @@ public class ProjectsAdapter extends RecyclerView.Adapter<ProjectsAdapter.Projec
     private Context mContext;
     private ArrayList<Project> mProject;
 
-    private final ProjectClickListener mProjectClickListener;
-
     // Allows to remember the last item shown on screen
     private int lastPosition = -1;
 
@@ -34,10 +32,9 @@ public class ProjectsAdapter extends RecyclerView.Adapter<ProjectsAdapter.Projec
         void onClickProjectItem(Project project);
     }
 
-    public ProjectsAdapter(Context context, List<Project> projectList, ProjectClickListener projectClickListener) {
+    public ProjectsAdapter(Context context, List<Project> projectList) {
         mContext = context;
         mProject = new ArrayList<>(projectList);
-        mProjectClickListener = projectClickListener;
     }
 
     @NonNull
@@ -80,16 +77,17 @@ public class ProjectsAdapter extends RecyclerView.Adapter<ProjectsAdapter.Projec
         return mProject != null ? mProject.size() :  0;
     }
 
-    public class ProjectHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public Project getItem(int position) {
+        return mProject.get(position);
+    }
+
+    public class ProjectHolder extends RecyclerView.ViewHolder{
 
         private final ProjectItemBinding mBinding;
 
         private ProjectHolder(ProjectItemBinding binding) {
             super(binding.getRoot());
-            binding.getRoot().setOnClickListener(this);
             this.mBinding = binding;
-
-            mBinding.projectCard.setOnClickListener(this);
         }
 
         public void bind(int position){
@@ -129,12 +127,6 @@ public class ProjectsAdapter extends RecyclerView.Adapter<ProjectsAdapter.Projec
         @Override
         public String toString() {
             return super.toString();
-        }
-
-        @Override
-        public void onClick(View view) {
-            int clickPosition = getAdapterPosition();
-            mProjectClickListener.onClickProjectItem(mProject.get(clickPosition));
         }
 
         private void goalReached(){
