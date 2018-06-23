@@ -70,8 +70,10 @@ public class MainActivity extends AppCompatActivity {
     //region Fragment
     public void selectDrawerItem(MenuItem menuItem) {
         // Create a new fragment and specify the fragment to show based on nav item clicked
-//        Fragment fragment = null;
-//        Bundle bundle;
+
+        // clear stack every time click on drawer menu
+        getSupportFragmentManager().popBackStackImmediate();
+
         Class fragmentClass;
         switch(menuItem.getItemId()) {
             case R.id.menu_home:

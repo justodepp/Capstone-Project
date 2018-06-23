@@ -38,6 +38,9 @@ public class ProjectsFragment extends Fragment implements SwipeRefreshLayout.OnR
     private boolean hasNext;
     private long mNextProjectId;
 
+    private Bundle mBundle;
+    private String mTheme = null;
+
     private EndlessRecyclerViewScrollListener endlessScroll;
 
     @Nullable
@@ -51,9 +54,9 @@ public class ProjectsFragment extends Fragment implements SwipeRefreshLayout.OnR
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        Bundle bundle = this.getArguments();
-        if(bundle != null){
-            typeCode = bundle.getString(MainActivity.ARGUMENT_TYPE_CODE);
+        mBundle = this.getArguments();
+        if(mBundle != null){
+            typeCode = mBundle.getString(MainActivity.ARGUMENT_TYPE_CODE);
         }
 
         mLinearLayoutManager = new LinearLayoutManager(getContext());
@@ -67,7 +70,7 @@ public class ProjectsFragment extends Fragment implements SwipeRefreshLayout.OnR
                 if(hasNext) {
                     mBinding.itemProgressBar.setVisibility(View.VISIBLE);
 
-                    callProjects(mNextProjectId);
+                    handleEndlessCall(mNextProjectId, mTheme);
                 }
             }
         };
@@ -86,12 +89,24 @@ public class ProjectsFragment extends Fragment implements SwipeRefreshLayout.OnR
     }
 
     private void handleCall(){
-        if(typeCode.equals(getString(R.string.menu_home))){
-            callFeatured();
-        } else if(typeCode.equals(getString(R.string.menu_prj))){
-            callProjects();
+        if(typeCode != null) {
+            if (typeCode.equals(getString(R.string.menu_home))) {
+                callFeatured();
+            } else if (typeCode.equals(getString(R.string.menu_prj))) {
+                callProjects();
+            } else if (typeCode.equals(getString(R.string.menu_cat))) {
+                mTheme = mBundle.getString(ThemesFragment.THEME_CLICKED);
+                callPrjCat(mTheme);
+            }
         }
+    }
 
+    private void handleEndlessCall(Long nextProjectId, String category){
+        if (typeCode.equals(getString(R.string.menu_prj))) {
+            callProjects(nextProjectId);
+        } else if (typeCode.equals(getString(R.string.menu_cat))) {
+            callPrjCat(category, nextProjectId);
+        }
     }
 
     @Override
@@ -123,6 +138,43 @@ public class ProjectsFragment extends Fragment implements SwipeRefreshLayout.OnR
 
     private void callProjects(Long nexProjectId){
         Project.getProjects(getContext(), nexProjectId, new ResponseInterface<Projects>() {
+            @Override
+            public void onResponseLoaded(Projects object) {
+                hasNext = object.getHasNext();
+                mNextProjectId = object.getNextProjectId();
+
+                mProjectList.clear();
+                mProjectList.addAll(object.getProject());
+
+                if(mBinding.itemProgressBar.getVisibility() == View.VISIBLE)
+                    mBinding.itemProgressBar.setVisibility(View.GONE);
+
+                if(mAdapter == null) {
+                    mAdapter = new ProjectsAdapter(getActivity(), mProjectList);
+                    mBinding.recyclerview.setAdapter(mAdapter);
+                } else {
+                    mAdapter.setProjectList(mProjectList);
+                    mAdapter.notifyItemRangeChanged(endlessScroll.getPreviousTotal()+1, mProjectList.size());
+                }
+
+                mBinding.swipeRefreshLayout.setRefreshing(false);
+                mBinding.progressBar.indeterminateBar.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onResponseFailed() {
+                Timber.e("Error retriving data");
+            }
+        });
+    }
+
+    private void callPrjCat(String theme){
+        resetData();
+        callPrjCat(theme, null);
+    }
+
+    private void callPrjCat(String theme, Long nexProjectId) {
+        Project.getThemeProject(getContext(), theme, nexProjectId, new ResponseInterface<Projects>() {
             @Override
             public void onResponseLoaded(Projects object) {
                 hasNext = object.getHasNext();

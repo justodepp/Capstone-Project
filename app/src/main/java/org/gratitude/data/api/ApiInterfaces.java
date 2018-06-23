@@ -25,7 +25,7 @@ public interface ApiInterfaces {
     @GET("projectservice/themes")
     Call<AllThemes> getThemes();
 
-    @GET("projectservice/themes/{theme}/projects")
+    @GET("projectservice/themes/{theme}/projects/active")
     Call<ProjectByTheme> getAllProjectsForTheme(@Path("theme") String theme, @Query("nextProjectId") Long nextProjectId);
 
     @GET("orgservice/all/organizations/active")

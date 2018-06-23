@@ -15,6 +15,7 @@ import org.gratitude.data.model.image.Image;
 import org.gratitude.data.model.organization.Organization;
 import org.gratitude.data.model.response.AllProjects;
 import org.gratitude.data.model.response.FeaturedProjects;
+import org.gratitude.data.model.response.ProjectByTheme;
 import org.gratitude.data.model.video.Videos;
 import org.gratitude.main.interfaces.ResponseInterface;
 
@@ -632,6 +633,28 @@ public class Project implements Parcelable {
             return new Project[size];
         }
     };
+
+    public static void getThemeProject(Context context, String theme, Long nextProjectId, final ResponseInterface<Projects> responseInterface) {
+        ApiInterfaces apiService = ApiHandler.getApiService(context, false);
+        Call<ProjectByTheme> responsePrjTheme = apiService.getAllProjectsForTheme(theme, nextProjectId);
+
+        responsePrjTheme.enqueue(new Callback<ProjectByTheme>() {
+            @Override
+            public void onResponse(@NonNull Call<ProjectByTheme> call, @NonNull Response<ProjectByTheme> response) {
+                Timber.d(response.toString());
+                Projects projects = new FeaturedProjects.Builder()
+                        .withProjects(response.body().getProjects())
+                        .build()
+                        .getProjects();
+                responseInterface.onResponseLoaded(projects);
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<ProjectByTheme> call, @NonNull Throwable t) {
+                Timber.e(t);
+            }
+        });
+    }
 
     public static void getProjects(Context context, Long nextProjectId, final ResponseInterface<Projects> responseInterface) {
         ApiInterfaces apiService = ApiHandler.getApiService(context, false);
