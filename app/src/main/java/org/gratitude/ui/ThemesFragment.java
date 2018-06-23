@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,10 +18,11 @@ import org.gratitude.data.model.themes.Themes;
 import org.gratitude.databinding.FragmentThemeListBinding;
 import org.gratitude.main.interfaces.ResponseInterface;
 import org.gratitude.ui.adapter.ThemesAdapter;
+import org.gratitude.utils.ItemClickSupport;
 
 import timber.log.Timber;
 
-public class ThemesFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, ThemesAdapter.ThemeClickListener{
+public class ThemesFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
     private ThemesAdapter mAdapter;
     FragmentThemeListBinding mBinding;
@@ -42,6 +44,14 @@ public class ThemesFragment extends Fragment implements SwipeRefreshLayout.OnRef
         mBinding.swipeRefreshLayout.setOnRefreshListener(this);
 
         callTheme();
+
+        ItemClickSupport.addTo(mBinding.recyclerview).setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
+            @Override
+            public void onItemClicked(RecyclerView recyclerView, int position, View v) {
+                // TODO: test click element
+                mAdapter.getItem(position);
+            }
+        });
     }
 
     @Override
@@ -53,7 +63,7 @@ public class ThemesFragment extends Fragment implements SwipeRefreshLayout.OnRef
         Theme.getThemes(getContext(), new ResponseInterface<Themes>() {
             @Override
             public void onResponseLoaded(Themes object) {
-                mAdapter = new ThemesAdapter(getActivity(), object.getTheme(),ThemesFragment.this);
+                mAdapter = new ThemesAdapter(getActivity(), object.getTheme());
                 mBinding.recyclerview.setAdapter(mAdapter);
 
                 mBinding.progressBar.indeterminateBar.setVisibility(View.GONE);
@@ -65,10 +75,5 @@ public class ThemesFragment extends Fragment implements SwipeRefreshLayout.OnRef
                 Timber.e("Error retriving data");
             }
         });
-    }
-
-    @Override
-    public void onClickThemeItem(Theme theme) {
-
     }
 }

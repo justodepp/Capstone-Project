@@ -22,19 +22,12 @@ public class ThemesAdapter extends RecyclerView.Adapter<ThemesAdapter.ThemeHolde
     private Context mContext;
     private ArrayList<Theme> mTheme;
 
-    private final ThemeClickListener mThemeClickListener;
-
     // Allows to remember the last item shown on screen
     private int lastPosition = -1;
 
-    public interface ThemeClickListener {
-        void onClickThemeItem(Theme theme);
-    }
-
-    public ThemesAdapter(Context context, List<Theme> themeList, ThemeClickListener themeClickListener) {
+    public ThemesAdapter(Context context, List<Theme> themeList) {
         mContext = context;
         mTheme = new ArrayList<>(themeList);
-        mThemeClickListener = themeClickListener;
     }
 
     @NonNull
@@ -73,16 +66,17 @@ public class ThemesAdapter extends RecyclerView.Adapter<ThemesAdapter.ThemeHolde
         return mTheme != null ? mTheme.size() :  0;
     }
 
-    public class ThemeHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public Theme getItem(int position) {
+        return mTheme.get(position);
+    }
+
+    public class ThemeHolder extends RecyclerView.ViewHolder {
 
         private final ThemeItemBinding mBinding;
 
         private ThemeHolder(ThemeItemBinding binding) {
             super(binding.getRoot());
-            binding.getRoot().setOnClickListener(this);
             this.mBinding = binding;
-
-            mBinding.themeCard.setOnClickListener(this);
         }
 
         private void bind(int position){
@@ -92,12 +86,6 @@ public class ThemesAdapter extends RecyclerView.Adapter<ThemesAdapter.ThemeHolde
         @Override
         public String toString() {
             return super.toString();
-        }
-
-        @Override
-        public void onClick(View view) {
-            int clickPosition = getAdapterPosition();
-            mThemeClickListener.onClickThemeItem(mTheme.get(clickPosition));
         }
     }
 }
