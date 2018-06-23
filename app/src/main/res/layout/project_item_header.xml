@@ -36,7 +36,9 @@
             android:textSize="@dimen/title_text_size"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            tools:text="Title of Project" />
+            tools:text="Title of Project"
+            android:maxLines="2"
+            android:ellipsize="end"/>
 
     </android.support.constraint.ConstraintLayout>
 </layout>
