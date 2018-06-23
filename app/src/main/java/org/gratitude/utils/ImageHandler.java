@@ -101,6 +101,7 @@ public class ImageHandler {
         
         GlideApp.with(context)
                 .load(org.getLogoUrl())
+                .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL))
                 .placeholder(new ColorDrawable(context.getResources().getColor(R.color.colorAccent)))
                 .listener(new RequestListener<Drawable>() {
                     @Override
