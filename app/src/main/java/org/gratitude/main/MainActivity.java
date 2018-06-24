@@ -165,6 +165,7 @@ public class MainActivity extends AppCompatActivity {
             public void onBackStackChanged() {
                 if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
                     // show back button
+                    mDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
                     mDrawerToggle.setDrawerIndicatorEnabled(false);
                     getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back);
                     mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -175,6 +176,7 @@ public class MainActivity extends AppCompatActivity {
                     });
                 } else {
                     // show hamburger
+                    mDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
                     mDrawerToggle.setDrawerIndicatorEnabled(true);
                     mDrawerToggle.syncState();
                     mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
