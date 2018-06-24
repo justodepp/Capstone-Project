@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -129,7 +130,8 @@ public class MainActivity extends AppCompatActivity {
                     .beginTransaction()
                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                     .replace(R.id.content_frame, fragment)
-                    .commitNow();
+                    .addToBackStack(null)
+                    .commit();
         }
     }
 
@@ -152,6 +154,38 @@ public class MainActivity extends AppCompatActivity {
             actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+
+        handleBackButton();
+    }
+
+    private void handleBackButton() {
+        getSupportFragmentManager().addOnBackStackChangedListener(
+                new FragmentManager.OnBackStackChangedListener() {
+            @Override
+            public void onBackStackChanged() {
+                if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
+                    // show back button
+                    mDrawerToggle.setDrawerIndicatorEnabled(false);
+                    getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back);
+                    mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            onBackPressed();
+                        }
+                    });
+                } else {
+                    // show hamburger
+                    mDrawerToggle.setDrawerIndicatorEnabled(true);
+                    mDrawerToggle.syncState();
+                    mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            mDrawer.openDrawer(GravityCompat.START);
+                        }
+                    });
+                }
+            }
+        });
     }
     //endregion
 
@@ -240,9 +274,10 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
         if (mDrawer.isDrawerOpen(GravityCompat.START)) {
             mDrawer.closeDrawer(GravityCompat.START);
-        } else {
+        } else if (getSupportFragmentManager().getBackStackEntryCount() > 1)
+            getSupportFragmentManager().popBackStack();
+        else
             super.onBackPressed();
-        }
     }
     //endregion
 }

@@ -1,5 +1,6 @@
 package org.gratitude.ui;
 
+import android.app.Activity;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -30,6 +31,8 @@ public class ThemesFragment extends Fragment implements SwipeRefreshLayout.OnRef
 
     public static final String THEME_CLICKED = "category";
 
+    Activity activity;
+
     private ThemesAdapter mAdapter;
     FragmentThemeListBinding mBinding;
 
@@ -47,7 +50,7 @@ public class ThemesFragment extends Fragment implements SwipeRefreshLayout.OnRef
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        activity = (MainActivity) getActivity();
         bundle = this.getArguments();
 
         mBinding.recyclerview.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -70,8 +73,9 @@ public class ThemesFragment extends Fragment implements SwipeRefreshLayout.OnRef
                         .beginTransaction()
                         .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                         .replace(R.id.content_frame, fragment)
-                        .commitNow();
-            }
+                        .addToBackStack(null)
+                        .commit();
+                }
         });
     }
 
