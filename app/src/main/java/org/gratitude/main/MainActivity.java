@@ -278,6 +278,8 @@ public class MainActivity extends AppCompatActivity {
             mDrawer.closeDrawer(GravityCompat.START);
         } else if (getSupportFragmentManager().getBackStackEntryCount() > 1)
             getSupportFragmentManager().popBackStack();
+        else if (getSupportFragmentManager().getBackStackEntryCount() == 1)
+            finish();
         else
             super.onBackPressed();
     }
