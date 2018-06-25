@@ -117,4 +117,25 @@ public class ImageHandler {
                 })
                 .into(imageView).clearOnDetach();
     }
+
+    public static void detailOrgImageHandler(Context context, ImageView imageView, String url) {
+
+        GlideApp.with(context)
+                .load(url)
+                .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL))
+                .placeholder(new ColorDrawable(context.getResources().getColor(R.color.colorAccent)))
+                .listener(new RequestListener<Drawable>() {
+                    @Override
+                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                        target.onResourceReady(resource, new DrawableCrossFadeTransition(600, isFirstResource));
+                        return true;
+                    }
+                })
+                .into(imageView).clearOnDetach();
+    }
 }

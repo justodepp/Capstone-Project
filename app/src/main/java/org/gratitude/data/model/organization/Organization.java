@@ -12,6 +12,7 @@ import org.gratitude.data.api.ApiHandler;
 import org.gratitude.data.api.ApiInterfaces;
 import org.gratitude.data.model.countries.Countries;
 import org.gratitude.data.model.response.AllOrganizations;
+import org.gratitude.data.model.response.OrganizationByBridgeId;
 import org.gratitude.data.model.themes.Themes;
 import org.gratitude.main.interfaces.ResponseInterface;
 
@@ -347,6 +348,28 @@ public class Organization implements Parcelable {
 
             @Override
             public void onFailure(@NonNull Call<AllOrganizations> call, @NonNull Throwable t) {
+                Timber.e(t);
+            }
+        });
+    }
+
+    public static void getOrganizationByBridgeId(Context context, String bridgeId, final ResponseInterface<Organization> responseInterface) {
+        ApiInterfaces apiService = ApiHandler.getApiService(context, false);
+        Call<OrganizationByBridgeId> responseOrg = apiService.getOrganizationByBridgeId(bridgeId);
+
+        responseOrg.enqueue(new Callback<OrganizationByBridgeId>() {
+            @Override
+            public void onResponse(@NonNull Call<OrganizationByBridgeId> call, @NonNull Response<OrganizationByBridgeId> response) {
+                Timber.d(response.toString());
+                Organization organization = new OrganizationByBridgeId.Builder()
+                        .withOrganization(response.body().getOrganization())
+                        .build()
+                        .getOrganization();
+                responseInterface.onResponseLoaded(organization);
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<OrganizationByBridgeId> call, @NonNull Throwable t) {
                 Timber.e(t);
             }
         });

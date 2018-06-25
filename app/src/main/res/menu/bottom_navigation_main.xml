@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/org_menu_about"
+        android:enabled="true"
+        android:icon="@drawable/ic_projects"
+        android:title="Info"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/org_menu_theme"
+        android:enabled="true"
+        android:icon="@drawable/ic_projects"
+        android:title="Themes"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/org_menu_prj"
+        android:enabled="true"
+        android:icon="@drawable/ic_projects"
+        android:title="Project"
+        app:showAsAction="ifRoom" />
+</menu>

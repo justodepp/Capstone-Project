@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -19,14 +20,18 @@ import org.gratitude.databinding.FragmentOrganizationListBinding;
 import org.gratitude.main.MainActivity;
 import org.gratitude.main.interfaces.ResponseInterface;
 import org.gratitude.ui.adapter.OrganizationsAdapter;
+import org.gratitude.ui.detailOrganization.DetailsOrganizationFragment;
 import org.gratitude.utils.EndlessRecyclerViewScrollListener;
 import org.gratitude.utils.ItemClickSupport;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import timber.log.Timber;
 
 public class OrganizationsFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
+
+    public static final String ORG_CLICKED = "org_clicked";
 
     private OrganizationsAdapter mAdapter;
     FragmentOrganizationListBinding mBinding;
@@ -40,6 +45,8 @@ public class OrganizationsFragment extends Fragment implements SwipeRefreshLayou
 
     private EndlessRecyclerViewScrollListener endlessScroll;
 
+    private Bundle bundle;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -51,7 +58,7 @@ public class OrganizationsFragment extends Fragment implements SwipeRefreshLayou
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        Bundle bundle = this.getArguments();
+        bundle = this.getArguments();
         if(bundle != null){
             typeCode = bundle.getString(MainActivity.ARGUMENT_TYPE_CODE);
         }
@@ -79,8 +86,17 @@ public class OrganizationsFragment extends Fragment implements SwipeRefreshLayou
         ItemClickSupport.addTo(mBinding.recyclerview).setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
             @Override
             public void onItemClicked(RecyclerView recyclerView, int position, View v) {
-                // TODO: test click element
-                mAdapter.getItem(position);
+                Fragment fragment = new DetailsOrganizationFragment();
+
+                bundle.putString(ORG_CLICKED, String.valueOf(mAdapter.getItem(position).getBridgeId()));
+                fragment.setArguments(bundle);
+
+                Objects.requireNonNull(getActivity()).getSupportFragmentManager()
+                        .beginTransaction()
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                        .replace(R.id.content_frame, fragment)
+                        .addToBackStack(null)
+                        .commit();
             }
         });
     }

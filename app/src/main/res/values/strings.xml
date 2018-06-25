@@ -21,5 +21,12 @@
     <!-- Org CardView -->
     <string name="project_active_text"><![CDATA[active project: <b>%1$s</b>]]></string>
     <string name="project_active_text_tool">active project: 8</string>
+
+    <!-- Org Detail About -->
+    <string name="org_detail_total_prj_text"><![CDATA[Total project: <b>%1$s</b>]]></string>
+    <string name="org_detail_total_prj_text_tool">Total project: 8</string>
+    <string name="org_detail_active_prj_text"><![CDATA[Active project: <b>%1$s</b>]]></string>
+    <string name="org_detail_active_prj_text_tool">Active project: 8</string>
+
     <!-- Menu -->
 </resources>
