@@ -20,4 +20,7 @@
     <dimen name="org_name_text_size">20sp</dimen>
     <dimen name="org_mission_text_size">16sp</dimen>
     <dimen name="org_num_text_size">14sp</dimen>
+
+    <!-- Detail Organization -->
+    <dimen name="detail_icon_size">36dp</dimen>
 </resources>

@@ -12,6 +12,11 @@
     <string name="menu_about">Info</string>
     <string name="menu_settings">Settings</string>
 
+    <!-- Menu Bottom Navigation View-->
+    <string name="menu_detail_about">About</string>
+    <string name="menu_detail_themes">Themes</string>
+    <string name="menu_detail_prj">Projects</string>
+
     <!-- Project CardView -->
     <string name="project_image_contentDescritpion">Project Image</string>
     <string name="project_share_contentDescritpion">Share</string>
