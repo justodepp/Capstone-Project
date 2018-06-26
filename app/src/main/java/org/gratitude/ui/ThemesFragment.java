@@ -30,6 +30,7 @@ import timber.log.Timber;
 public class ThemesFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
     public static final String THEME_CLICKED = "category";
+    public static final String THEME_PARCELABLE = "theme_parcelable";
 
     Activity activity;
 
@@ -57,7 +58,11 @@ public class ThemesFragment extends Fragment implements SwipeRefreshLayout.OnRef
         mBinding.swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorAccent));
         mBinding.swipeRefreshLayout.setOnRefreshListener(this);
 
-        callTheme();
+        if(bundle.getParcelable(THEME_PARCELABLE) != null){
+            showThemesFromOrganization();
+        } else {
+            callTheme();
+        }
 
         ItemClickSupport.addTo(mBinding.recyclerview).setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
             @Override
@@ -100,5 +105,14 @@ public class ThemesFragment extends Fragment implements SwipeRefreshLayout.OnRef
                 Timber.e("Error retriving data");
             }
         });
+    }
+
+    private void showThemesFromOrganization(){
+        Themes themes = bundle.getParcelable(THEME_PARCELABLE);
+        mAdapter = new ThemesAdapter(getActivity(), themes.getTheme());
+        mBinding.recyclerview.setAdapter(mAdapter);
+
+        mBinding.progressBar.indeterminateBar.setVisibility(View.GONE);
+        mBinding.swipeRefreshLayout.setRefreshing(false);
     }
 }
