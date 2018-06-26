@@ -32,7 +32,7 @@ public interface ApiInterfaces {
     Call<AllOrganizations> getOrganizations(@Query("nextOrgId") Long nextOrgId);
 
     @GET("projectservice/organizations/{orgId}/projects")
-    Call<ProjectByOrganization> getAllProjectsForOrganization(@Path("orgId") String theme, @Query("nextProjectId") Long nextProjectId);
+    Call<ProjectByOrganization> getAllProjectsForOrganization(@Path("orgId") String orgId, @Query("nextProjectId") Long nextProjectId);
 
     @GET("orgservice/organization/bridge/{bridgeId}")
     Call<OrganizationByBridgeId> getOrganizationByBridgeId(@Path("bridgeId") String bridgeId);

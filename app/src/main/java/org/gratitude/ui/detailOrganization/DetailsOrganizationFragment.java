@@ -16,6 +16,7 @@ import org.gratitude.data.model.organization.Organization;
 import org.gratitude.databinding.FragmentDetailOrganizationBinding;
 import org.gratitude.main.interfaces.ResponseInterface;
 import org.gratitude.ui.OrganizationsFragment;
+import org.gratitude.ui.ProjectsFragment;
 import org.gratitude.ui.ThemesFragment;
 
 import timber.log.Timber;
@@ -68,6 +69,14 @@ public class DetailsOrganizationFragment extends Fragment {
     }
 
     private void showPrj() {
+        Fragment prjFragment = new ProjectsFragment();
+        if( prjBundle != null) {
+            prjFragment.setArguments(prjBundle);
+            getChildFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.org_content_frame, prjFragment)
+                    .commit();
+        }
     }
 
     private void showThemes() {
@@ -108,7 +117,7 @@ public class DetailsOrganizationFragment extends Fragment {
 
                 themesBundle.putParcelable(ThemesFragment.THEME_PARCELABLE, object.getThemes());
 
-                prjBundle.putString("", String.valueOf(object.getId()));
+                prjBundle.putString(ProjectsFragment.PRJ_ORG_ID, String.valueOf(object.getId()));
 
                 mBinding.progressBar.indeterminateBar.setVisibility(View.GONE);
                 showAbout();

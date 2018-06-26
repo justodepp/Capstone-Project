@@ -28,6 +28,8 @@ import timber.log.Timber;
 
 public class ProjectsFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
+    public static final String PRJ_ORG_ID = "prj_org_id";
+
     private ProjectsAdapter mAdapter;
     FragmentProjectListBinding mBinding;
     private String typeCode;
@@ -40,6 +42,7 @@ public class ProjectsFragment extends Fragment implements SwipeRefreshLayout.OnR
 
     private Bundle mBundle;
     private String mTheme = null;
+    private String mOrgId = null;
 
     private EndlessRecyclerViewScrollListener endlessScroll;
 
@@ -70,12 +73,17 @@ public class ProjectsFragment extends Fragment implements SwipeRefreshLayout.OnR
                 if(hasNext) {
                     mBinding.itemProgressBar.setVisibility(View.VISIBLE);
 
-                    handleEndlessCall(mNextProjectId, mTheme);
+                    handleEndlessCall(mNextProjectId, mTheme, mOrgId);
                 }
             }
         };
 
-        handleCall();
+        if(mBundle.getString(PRJ_ORG_ID) != null){
+            mOrgId = mBundle.getString(PRJ_ORG_ID);
+            callPrjByOrg(mOrgId);
+        } else {
+            handleCall();
+        }
 
         mBinding.recyclerview.addOnScrollListener(endlessScroll);
 
@@ -101,17 +109,56 @@ public class ProjectsFragment extends Fragment implements SwipeRefreshLayout.OnR
         }
     }
 
-    private void handleEndlessCall(Long nextProjectId, String category){
+    private void handleEndlessCall(Long nextProjectId, String category, String mOrgId){
         if (typeCode.equals(getString(R.string.menu_prj))) {
             callProjects(nextProjectId);
         } else if (typeCode.equals(getString(R.string.menu_cat))) {
             callPrjCat(category, nextProjectId);
+        } else if (mOrgId != null){
+            callPrjByOrg(mOrgId, nextProjectId);
         }
     }
 
     @Override
     public void onRefresh() {
         handleCall();
+    }
+
+    private void callPrjByOrg(String orgId) {
+        resetData();
+        callPrjByOrg(orgId, null);
+    }
+
+    private void callPrjByOrg(String orgId, Long nexProjectId) {
+        Project.getProjectsByOrgId(getContext(), orgId, nexProjectId, new ResponseInterface<Projects>() {
+            @Override
+            public void onResponseLoaded(Projects object) {
+                hasNext = object.getHasNext();
+                mNextProjectId = object.getNextProjectId();
+
+                mProjectList.clear();
+                mProjectList.addAll(object.getProject());
+
+                if(mBinding.itemProgressBar.getVisibility() == View.VISIBLE)
+                    mBinding.itemProgressBar.setVisibility(View.GONE);
+
+                if(mAdapter == null) {
+                    mAdapter = new ProjectsAdapter(getActivity(), mProjectList);
+                    mBinding.recyclerview.setAdapter(mAdapter);
+                } else {
+                    mAdapter.setProjectList(mProjectList);
+                    mAdapter.notifyItemRangeChanged(endlessScroll.getPreviousTotal()+1, mProjectList.size());
+                }
+
+                mBinding.swipeRefreshLayout.setRefreshing(false);
+                mBinding.progressBar.indeterminateBar.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onResponseFailed() {
+                Timber.e("Error retriving data");
+            }
+        });
     }
 
     private void callFeatured(){
