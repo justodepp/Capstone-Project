@@ -59,6 +59,9 @@ public class ProjectsFragment extends Fragment implements SwipeRefreshLayout.OnR
 
         mBundle = this.getArguments();
         if(mBundle != null){
+            if(mBundle.getString(PRJ_ORG_ID) != null){
+                mOrgId = mBundle.getString(PRJ_ORG_ID);
+            }
             typeCode = mBundle.getString(MainActivity.ARGUMENT_TYPE_CODE);
         }
 
@@ -78,19 +81,13 @@ public class ProjectsFragment extends Fragment implements SwipeRefreshLayout.OnR
             }
         };
 
-        if(mBundle.getString(PRJ_ORG_ID) != null){
-            mOrgId = mBundle.getString(PRJ_ORG_ID);
-            callPrjByOrg(mOrgId);
-        } else {
-            handleCall();
-        }
+        handleCall();
 
         mBinding.recyclerview.addOnScrollListener(endlessScroll);
 
         ItemClickSupport.addTo(mBinding.recyclerview).setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
             @Override
             public void onItemClicked(RecyclerView recyclerView, int position, View v) {
-                // TODO: test click element
                 mAdapter.getItem(position);
             }
         });
@@ -106,15 +103,19 @@ public class ProjectsFragment extends Fragment implements SwipeRefreshLayout.OnR
                 mTheme = mBundle.getString(ThemesFragment.THEME_CLICKED);
                 callPrjCat(mTheme);
             }
+        } else {
+            callPrjByOrg(mOrgId);
         }
     }
 
     private void handleEndlessCall(Long nextProjectId, String category, String mOrgId){
-        if (typeCode.equals(getString(R.string.menu_prj))) {
-            callProjects(nextProjectId);
-        } else if (typeCode.equals(getString(R.string.menu_cat))) {
-            callPrjCat(category, nextProjectId);
-        } else if (mOrgId != null){
+        if(typeCode != null) {
+            if (typeCode.equals(getString(R.string.menu_prj))) {
+                callProjects(nextProjectId);
+            } else if (typeCode.equals(getString(R.string.menu_cat))) {
+                callPrjCat(category, nextProjectId);
+            }
+        } else if (mOrgId != null) {
             callPrjByOrg(mOrgId, nextProjectId);
         }
     }
@@ -133,8 +134,13 @@ public class ProjectsFragment extends Fragment implements SwipeRefreshLayout.OnR
         Project.getProjectsByOrgId(getContext(), orgId, nexProjectId, new ResponseInterface<Projects>() {
             @Override
             public void onResponseLoaded(Projects object) {
-                hasNext = object.getHasNext();
-                mNextProjectId = object.getNextProjectId();
+                if (object.getHasNext() != null) {
+                    hasNext = object.getHasNext();
+                } else {
+                    hasNext = false;
+                }
+                if (object.getNextProjectId() != null)
+                    mNextProjectId = object.getNextProjectId();
 
                 mProjectList.clear();
                 mProjectList.addAll(object.getProject());

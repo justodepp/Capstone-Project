@@ -49,7 +49,7 @@ public class AboutFragment extends Fragment {
         mBinding.includeHeader.orgMissionText.setText(mBundle.getString(DETAIL_ORG_ABOUT_MISSION));
 
         String total = String.format(getContext().getString(R.string.org_detail_total_prj_text),
-                String.valueOf(mBundle.getString(DETAIL_ORG_ABOUT_ACTIVE)));
+                String.valueOf(mBundle.getString(DETAIL_ORG_ABOUT_TOTAL)));
         mBinding.includeFooter.orgTotalPrjText.setText(Html.fromHtml(total));
         String active = String.format(getContext().getString(R.string.org_detail_active_prj_text),
                 String.valueOf(mBundle.getString(DETAIL_ORG_ABOUT_ACTIVE)));
