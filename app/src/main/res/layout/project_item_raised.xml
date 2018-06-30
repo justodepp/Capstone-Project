@@ -52,7 +52,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:tint="@color/colorPrimaryDark"
             android:src="@drawable/ic_share"
             android:contentDescription="@string/project_share_contentDescritpion" />
 

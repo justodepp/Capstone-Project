@@ -22,6 +22,8 @@
     <string name="project_share_contentDescritpion">Share</string>
     <string name="money_raised_text"><![CDATA[<font color="#3C8787">$%1$s</font> raised of <font color="#3C8787">$%2$s</font> goal]]></string>
     <string name="money_raised_text_tool">$236,557 raised of $300,000 goal</string>
+    <string name="share_to">To share with:</string>
+
 
     <!-- Org CardView -->
     <string name="project_active_text"><![CDATA[active project: <b>%1$s</b>]]></string>

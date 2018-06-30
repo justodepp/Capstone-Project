@@ -1,6 +1,7 @@
 package org.gratitude.ui.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Build;
 import android.support.annotation.NonNull;
@@ -87,7 +88,7 @@ public class ProjectsAdapter extends RecyclerView.Adapter<ProjectsAdapter.Projec
         }
 
         public void bind(int position){
-            Project project = mProject.get(position);
+            final Project project = mProject.get(position);
 
             double result = ((project.getFunding() / project.getGoal()) * 100);
             int progress;
@@ -118,15 +119,24 @@ public class ProjectsAdapter extends RecyclerView.Adapter<ProjectsAdapter.Projec
             } else {
                 mBinding.includeRaised.moneyProgressBar.setProgress(progress);
             }
+
+            mBinding.includeRaised.share.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent sendIntent = new Intent();
+                    sendIntent.setAction(Intent.ACTION_SEND);
+                    sendIntent.putExtra(Intent.EXTRA_TEXT, project.getProjectLink());
+                    sendIntent.setType("text/plain");
+                    mContext.startActivity(
+                            Intent.createChooser(
+                                    sendIntent, mContext.getString(R.string.share_to)));
+                }
+            });
         }
 
         @Override
         public String toString() {
             return super.toString();
-        }
-
-        private void goalReached(){
-            mBinding.projectCard.setBackgroundResource(R.color.colorPrimary);
         }
     }
 }
