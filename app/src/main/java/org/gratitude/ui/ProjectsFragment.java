@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -19,16 +20,19 @@ import org.gratitude.databinding.FragmentProjectListBinding;
 import org.gratitude.main.MainActivity;
 import org.gratitude.main.interfaces.ResponseInterface;
 import org.gratitude.ui.adapter.ProjectsAdapter;
+import org.gratitude.ui.detailOrganization.DetailsOrganizationFragment;
 import org.gratitude.utils.EndlessRecyclerViewScrollListener;
 import org.gratitude.utils.ItemClickSupport;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import timber.log.Timber;
 
 public class ProjectsFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
     public static final String PRJ_ORG_ID = "prj_org_id";
+    public static final String PRJ_CLICKED = "prj_clicked";
 
     private ProjectsAdapter mAdapter;
     FragmentProjectListBinding mBinding;
@@ -88,7 +92,18 @@ public class ProjectsFragment extends Fragment implements SwipeRefreshLayout.OnR
         ItemClickSupport.addTo(mBinding.recyclerview).setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
             @Override
             public void onItemClicked(RecyclerView recyclerView, int position, View v) {
-                mAdapter.getItem(position);
+                Fragment fragment = new DetailsOrganizationFragment();
+
+                Bundle bundle = new Bundle();
+                bundle.putParcelable(PRJ_CLICKED, mAdapter.getItem(position));
+                fragment.setArguments(bundle);
+
+                Objects.requireNonNull(getActivity()).getSupportFragmentManager()
+                        .beginTransaction()
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                        .replace(R.id.content_frame, fragment)
+                        .addToBackStack(null)
+                        .commit();
             }
         });
     }
