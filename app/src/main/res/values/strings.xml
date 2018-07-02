@@ -34,6 +34,7 @@
     <string name="org_detail_total_prj_text_tool">Total project: 8</string>
     <string name="org_detail_active_prj_text"><![CDATA[Active project: <b>%1$s</b>]]></string>
     <string name="org_detail_active_prj_text_tool">Active project: 8</string>
+    <string name="org_detail_no_url_provided">No URL provided</string>
 
     <!-- Menu -->
 </resources>

@@ -59,7 +59,8 @@ public class DetailsOrganizationFragment extends Fragment {
                         showPrj();
                         break;
                     default:
-                        return false;
+                        showAbout();
+                        break;
                 }
                 return true;
             }
@@ -91,6 +92,7 @@ public class DetailsOrganizationFragment extends Fragment {
     }
 
     private void showAbout() {
+        mBinding.bottomNavigation.getMenu().findItem(R.id.org_menu_about).setChecked(true);
         Fragment aboutFragment = new AboutFragment();
         if( aboutBundle != null) {
             aboutFragment.setArguments(aboutBundle);

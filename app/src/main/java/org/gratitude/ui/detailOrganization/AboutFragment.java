@@ -63,6 +63,10 @@ public class AboutFragment extends Fragment {
         mBinding.includeBody.aboutSecondimage.setImageDrawable(getActivity().getDrawable(R.drawable.ic_projects));
         ImageViewCompat.setImageTintList(mBinding.includeBody.aboutSecondimage, ColorStateList.valueOf(ContextCompat.getColor(getContext(), R.color.colorPrimary)));
 
-        mBinding.includeBody.aboutSecondtext.setText(mBundle.getString(DETAIL_ORG_ABOUT_URL));
+        if (mBundle.getString(DETAIL_ORG_ABOUT_URL) != null && !mBundle.getString(DETAIL_ORG_ABOUT_URL).equals(""))
+            mBinding.includeBody.aboutSecondtext.setText(mBundle.getString(DETAIL_ORG_ABOUT_URL));
+        else {
+            mBinding.includeBody.aboutSecondtext.setText(R.string.org_detail_no_url_provided);
+        }
     }
 }

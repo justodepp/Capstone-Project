@@ -67,20 +67,22 @@ public class ThemesFragment extends Fragment implements SwipeRefreshLayout.OnRef
         ItemClickSupport.addTo(mBinding.recyclerview).setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
             @Override
             public void onItemClicked(RecyclerView recyclerView, int position, View v) {
-                Fragment fragment = new ProjectsFragment();
+                if (bundle.getParcelable(THEME_PARCELABLE) == null) {
+                    Fragment fragment = new ProjectsFragment();
 
-                bundle.putString(THEME_CLICKED, mAdapter.getItem(position).getId());
-                fragment.setArguments(bundle);
+                    bundle.putString(THEME_CLICKED, mAdapter.getItem(position).getId());
+                    fragment.setArguments(bundle);
 
-                Objects.requireNonNull(getActivity()).setTitle(mAdapter.getItem(position).getName());
+                    Objects.requireNonNull(getActivity()).setTitle(mAdapter.getItem(position).getName());
 
-                Objects.requireNonNull(getActivity()).getSupportFragmentManager()
-                        .beginTransaction()
-                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                        .replace(R.id.content_frame, fragment)
-                        .addToBackStack(null)
-                        .commit();
+                    Objects.requireNonNull(getActivity()).getSupportFragmentManager()
+                            .beginTransaction()
+                            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                            .replace(R.id.content_frame, fragment)
+                            .addToBackStack(null)
+                            .commit();
                 }
+            }
         });
     }
 
