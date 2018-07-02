@@ -1,9 +1,12 @@
 
 package org.gratitude.data.model.image;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 
-public class Imagelink {
+public class Imagelink implements Parcelable {
 
     @Expose
     private String size;
@@ -42,4 +45,34 @@ public class Imagelink {
 
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.size);
+        dest.writeString(this.url);
+    }
+
+    public Imagelink() {
+    }
+
+    protected Imagelink(Parcel in) {
+        this.size = in.readString();
+        this.url = in.readString();
+    }
+
+    public static final Parcelable.Creator<Imagelink> CREATOR = new Parcelable.Creator<Imagelink>() {
+        @Override
+        public Imagelink createFromParcel(Parcel source) {
+            return new Imagelink(source);
+        }
+
+        @Override
+        public Imagelink[] newArray(int size) {
+            return new Imagelink[size];
+        }
+    };
 }

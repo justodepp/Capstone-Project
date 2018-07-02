@@ -1,9 +1,12 @@
 
 package org.gratitude.data.model.countries;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 
-public class Country {
+public class Country implements Parcelable {
 
     @Expose
     private String iso3166CountryCode;
@@ -42,4 +45,34 @@ public class Country {
 
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.iso3166CountryCode);
+        dest.writeString(this.name);
+    }
+
+    public Country() {
+    }
+
+    protected Country(Parcel in) {
+        this.iso3166CountryCode = in.readString();
+        this.name = in.readString();
+    }
+
+    public static final Parcelable.Creator<Country> CREATOR = new Parcelable.Creator<Country>() {
+        @Override
+        public Country createFromParcel(Parcel source) {
+            return new Country(source);
+        }
+
+        @Override
+        public Country[] newArray(int size) {
+            return new Country[size];
+        }
+    };
 }

@@ -1,5 +1,6 @@
 package org.gratitude.ui.detailProject;
 
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -15,7 +16,7 @@ import org.gratitude.databinding.FragmentDetailProjectBinding;
 import org.gratitude.ui.ProjectsFragment;
 import org.gratitude.utils.ImageHandler;
 
-public class DetailsProjectFragment extends Fragment{
+public class DetailsProjectFragment extends Fragment implements View.OnClickListener{
 
     FragmentDetailProjectBinding mBinding;
     private Project mProject;
@@ -35,6 +36,10 @@ public class DetailsProjectFragment extends Fragment{
         assert bundle != null;
         mProject = bundle.getParcelable(ProjectsFragment.PRJ_CLICKED);
 
+        mBinding.favoriteButton.setOnClickListener(this);
+        mBinding.reportButton.setOnClickListener(this);
+        mBinding.shareButton.setOnClickListener(this);
+
         mBinding.projectTitle.setText(mProject.getTitle());
         ImageHandler.projectImageHandler(getContext(), mBinding.projectImageview, mProject);
 
@@ -49,5 +54,22 @@ public class DetailsProjectFragment extends Fragment{
 
         mBinding.projectActivitiesTitle.setText("Activities");
         mBinding.projectActivitiesText.setText(mProject.getActivities());
+    }
+
+    @Override
+    public void onClick(View view) {
+        if(view == mBinding.shareButton){
+            Intent sendIntent = new Intent();
+            sendIntent.setAction(Intent.ACTION_SEND);
+            sendIntent.putExtra(Intent.EXTRA_TEXT, mProject.getProjectLink());
+            sendIntent.setType("text/plain");
+            getContext().startActivity(
+                    Intent.createChooser(
+                            sendIntent, getContext().getString(R.string.share_to)));
+        } else if(view == mBinding.reportButton){
+
+        } else if(view == mBinding.favoriteButton){
+
+        }
     }
 }

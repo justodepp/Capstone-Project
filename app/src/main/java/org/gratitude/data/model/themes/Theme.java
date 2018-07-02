@@ -2,6 +2,8 @@
 package org.gratitude.data.model.themes;
 
 import android.content.Context;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
 import com.google.gson.annotations.Expose;
@@ -16,7 +18,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import timber.log.Timber;
 
-public class Theme {
+public class Theme implements Parcelable {
 
     @Expose
     private String id;
@@ -77,4 +79,34 @@ public class Theme {
         });
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.id);
+        dest.writeString(this.name);
+    }
+
+    public Theme() {
+    }
+
+    protected Theme(Parcel in) {
+        this.id = in.readString();
+        this.name = in.readString();
+    }
+
+    public static final Parcelable.Creator<Theme> CREATOR = new Parcelable.Creator<Theme>() {
+        @Override
+        public Theme createFromParcel(Parcel source) {
+            return new Theme(source);
+        }
+
+        @Override
+        public Theme[] newArray(int size) {
+            return new Theme[size];
+        }
+    };
 }
