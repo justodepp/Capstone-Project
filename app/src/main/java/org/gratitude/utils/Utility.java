@@ -281,7 +281,7 @@ public class Utility {
     }
 
     public static String reformatDate(String releaseDate) {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-DD");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
         Date newDate = null;
         try {
             newDate = format.parse(releaseDate);
@@ -289,7 +289,8 @@ public class Utility {
             e.printStackTrace();
         }
 
-        format = new SimpleDateFormat("EEE, d MMM yyyy");
+        //format = new SimpleDateFormat("EEE, d MMM yyyy");
+        format = new SimpleDateFormat("MMM yyyy", Locale.US);
         return format.format(newDate);
     }
 

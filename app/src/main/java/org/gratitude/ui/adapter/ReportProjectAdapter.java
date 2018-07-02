@@ -14,6 +14,7 @@ import android.view.animation.AnimationUtils;
 import org.gratitude.R;
 import org.gratitude.data.model.report.Entry;
 import org.gratitude.databinding.ProjectReportItemBinding;
+import org.gratitude.utils.Utility;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,8 +81,9 @@ public class ReportProjectAdapter extends RecyclerView.Adapter<ReportProjectAdap
         }
 
         public void bind(int position){
-            mBinding.reportAuthor.setText(mEntry.get(position).getTitle());
-            mBinding.reportAuthor.setText(mEntry.get(position).getStringListAuthor());
+            mBinding.reportTitle.setText(mEntry.get(position).getTitle());
+            String text = Utility.reformatDate(mEntry.get(position).getPublished()) + " - " + mEntry.get(position).getStringListAuthor();
+            mBinding.reportAuthor.setText(text);
             mBinding.reportContent.setText(Html.fromHtml(mEntry.get(position).getContent()));
         }
 
