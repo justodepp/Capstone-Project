@@ -1,13 +1,24 @@
 
 package org.gratitude.data.model.report;
 
+import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
 import com.google.gson.annotations.Expose;
 
+import org.gratitude.data.api.ApiHandler;
+import org.gratitude.data.api.ApiInterfaces;
+import org.gratitude.main.interfaces.ResponseInterface;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import timber.log.Timber;
 
 public class Report implements Parcelable {
 
@@ -141,4 +152,32 @@ public class Report implements Parcelable {
             return new Report[size];
         }
     };
+
+    public static void getReport(Context context, Long projectId, final ResponseInterface<Report> responseInterface) {
+        ApiInterfaces apiService = ApiHandler.getApiService(context, false);
+        Call<Report> responseReport = apiService.getProjectReport(projectId);
+
+        responseReport.enqueue(new Callback<Report>() {
+            @Override
+            public void onResponse(@NonNull Call<Report> call, @NonNull Response<Report> response) {
+                Timber.d(response.toString());
+
+                Report report = new Report.Builder()
+                        .withAttributes(response.body().getAttributes())
+                        .withAuthors(response.body().getAuthors())
+                        .withEntries(response.body().getEntries())
+                        .withId(response.body().getId())
+                        .withLinks(response.body().getLinks())
+                        .withTitle(response.body().getTitle())
+                        .build();
+
+                responseInterface.onResponseLoaded(report);
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<Report> call, @NonNull Throwable t) {
+                Timber.e(t);
+            }
+        });
+    }
 }

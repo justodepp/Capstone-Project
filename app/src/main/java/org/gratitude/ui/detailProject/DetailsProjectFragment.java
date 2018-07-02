@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +15,10 @@ import org.gratitude.R;
 import org.gratitude.data.model.projects.Project;
 import org.gratitude.databinding.FragmentDetailProjectBinding;
 import org.gratitude.ui.ProjectsFragment;
+import org.gratitude.ui.ReportProjectFragment;
 import org.gratitude.utils.ImageHandler;
+
+import java.util.Objects;
 
 public class DetailsProjectFragment extends Fragment implements View.OnClickListener{
 
@@ -67,6 +71,20 @@ public class DetailsProjectFragment extends Fragment implements View.OnClickList
                     Intent.createChooser(
                             sendIntent, getContext().getString(R.string.share_to)));
         } else if(view == mBinding.reportButton){
+            Fragment fragment = new ReportProjectFragment();
+
+            Bundle bundle = new Bundle();
+            bundle.putLong(ReportProjectFragment.REPORT_PRJ_ID, mProject.getId());
+            fragment.setArguments(bundle);
+
+            Objects.requireNonNull(getActivity()).setTitle("Report");
+
+            Objects.requireNonNull(getActivity()).getSupportFragmentManager()
+                    .beginTransaction()
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                    .replace(R.id.content_frame, fragment)
+                    .addToBackStack(null)
+                    .commit();
 
         } else if(view == mBinding.favoriteButton){
 

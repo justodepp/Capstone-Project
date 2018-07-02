@@ -1,6 +1,8 @@
 
 package org.gratitude.data.model.report;
 
+import android.os.Build;
+
 import com.google.gson.annotations.Expose;
 
 import java.util.List;
@@ -96,4 +98,20 @@ public class Entry {
 
     }
 
+    public String getStringListAuthor(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            return String.join(",", (CharSequence) getAuthors());
+        } else {
+            StringBuilder authorBuilder = new StringBuilder();
+
+            for(Author author : getAuthors()){
+                authorBuilder.append(author.getName());
+                authorBuilder.append(",");
+            }
+            String forReturn = authorBuilder.toString();
+
+            //Remove last comma
+            return forReturn.substring(0, forReturn.length() - 1);
+        }
+    }
 }

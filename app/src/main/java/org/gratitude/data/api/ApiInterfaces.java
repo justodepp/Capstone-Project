@@ -41,8 +41,8 @@ public interface ApiInterfaces {
     Call<AllProjects> getAllProjects(@Query("nextProjectId") Long nextProjectId);
 
     @GET("projectservice/projects/{projectId}")
-    Call<ProjectById> getProject(@Path("projectId") int projectId);
+    Call<ProjectById> getProject(@Path("projectId") Long projectId);
 
     @GET("projectservice/projects/{projectId}/reports")
-    Call<Report> getProjectReport(@Path("projectId") int projectId);
+    Call<Report> getProjectReport(@Path("projectId") Long projectId);
 }
