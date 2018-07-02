@@ -20,7 +20,7 @@ import org.gratitude.databinding.FragmentProjectListBinding;
 import org.gratitude.main.MainActivity;
 import org.gratitude.main.interfaces.ResponseInterface;
 import org.gratitude.ui.adapter.ProjectsAdapter;
-import org.gratitude.ui.detailOrganization.DetailsOrganizationFragment;
+import org.gratitude.ui.detailProject.DetailsProjectFragment;
 import org.gratitude.utils.EndlessRecyclerViewScrollListener;
 import org.gratitude.utils.ItemClickSupport;
 
@@ -92,7 +92,7 @@ public class ProjectsFragment extends Fragment implements SwipeRefreshLayout.OnR
         ItemClickSupport.addTo(mBinding.recyclerview).setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
             @Override
             public void onItemClicked(RecyclerView recyclerView, int position, View v) {
-                Fragment fragment = new DetailsOrganizationFragment();
+                Fragment fragment = new DetailsProjectFragment();
 
                 Bundle bundle = new Bundle();
                 bundle.putParcelable(PRJ_CLICKED, mAdapter.getItem(position));

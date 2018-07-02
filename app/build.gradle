@@ -53,6 +53,8 @@ dependencies {
 
     // Intro
     implementation 'com.github.apl-devs:appintro:v4.2.3'
+    // Expandable TextView
+    implementation 'com.ms-square:expandableTextView:0.1.4'
     // Attribution
     implementation 'com.github.franmontiel:AttributionPresenter:1.0'
     // Room
