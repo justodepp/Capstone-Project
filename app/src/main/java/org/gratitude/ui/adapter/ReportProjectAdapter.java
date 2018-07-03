@@ -13,7 +13,7 @@ import android.view.animation.AnimationUtils;
 
 import org.gratitude.R;
 import org.gratitude.data.model.report.Entry;
-import org.gratitude.databinding.ProjectReportItemBinding;
+import org.gratitude.databinding.ProjectItemReportBinding;
 import org.gratitude.utils.Utility;
 
 import java.util.ArrayList;
@@ -35,8 +35,8 @@ public class ReportProjectAdapter extends RecyclerView.Adapter<ReportProjectAdap
     @Override
     public ReportProjectAdapter.ReportHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        ProjectReportItemBinding mBinding = DataBindingUtil.inflate(inflater,
-                R.layout.project_report_item, parent, false);
+        ProjectItemReportBinding mBinding = DataBindingUtil.inflate(inflater,
+                R.layout.project_item_report, parent, false);
 
         return new ReportProjectAdapter.ReportHolder(mBinding);
     }
@@ -73,9 +73,9 @@ public class ReportProjectAdapter extends RecyclerView.Adapter<ReportProjectAdap
 
     public class ReportHolder extends RecyclerView.ViewHolder{
 
-        private final ProjectReportItemBinding mBinding;
+        private final ProjectItemReportBinding mBinding;
 
-        private ReportHolder(ProjectReportItemBinding binding) {
+        private ReportHolder(ProjectItemReportBinding binding) {
             super(binding.getRoot());
             this.mBinding = binding;
         }

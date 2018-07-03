@@ -19,7 +19,7 @@
                 android:clipToPadding="false"
                 android:paddingBottom="@dimen/general_padding_16dp"
                 android:paddingTop="@dimen/general_padding_16dp"
-                tools:listitem="@layout/project_report_item" />
+                tools:listitem="@layout/project_item_report" />
 
         </android.support.v4.widget.SwipeRefreshLayout>
 
