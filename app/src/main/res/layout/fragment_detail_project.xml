@@ -111,7 +111,8 @@
 
                     <android.support.constraint.ConstraintLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/general_padding_8dp">
 
                         <TextView
                             android:id="@+id/project_summary_title"
@@ -154,7 +155,8 @@
 
                     <android.support.constraint.ConstraintLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/general_padding_8dp">
 
                         <TextView
                             android:id="@+id/project_need_title"
@@ -197,7 +199,8 @@
 
                     <android.support.constraint.ConstraintLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/general_padding_8dp">
 
                         <TextView
                             android:id="@+id/project_longTermImpact_title"
@@ -238,7 +241,8 @@
 
                     <android.support.constraint.ConstraintLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/general_padding_8dp">
 
                         <TextView
                             android:id="@+id/project_activities_title"

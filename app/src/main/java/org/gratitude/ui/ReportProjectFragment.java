@@ -51,6 +51,9 @@ public class ReportProjectFragment extends Fragment implements SwipeRefreshLayou
         mLinearLayoutManager = new LinearLayoutManager(getContext());
         mBinding.recyclerview.setLayoutManager(mLinearLayoutManager);
 
+        mBinding.swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorAccent));
+        mBinding.swipeRefreshLayout.setOnRefreshListener(this);
+
         callReport(projectId);
     }
 

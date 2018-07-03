@@ -77,8 +77,6 @@ public class DetailsProjectFragment extends Fragment implements View.OnClickList
             bundle.putLong(ReportProjectFragment.REPORT_PRJ_ID, mProject.getId());
             fragment.setArguments(bundle);
 
-            Objects.requireNonNull(getActivity()).setTitle("Report");
-
             Objects.requireNonNull(getActivity()).getSupportFragmentManager()
                     .beginTransaction()
                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)

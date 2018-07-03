@@ -5,6 +5,7 @@ import android.os.Build;
 
 import com.google.gson.annotations.Expose;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Entry {
@@ -100,7 +101,11 @@ public class Entry {
 
     public String getStringListAuthor(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            return String.join(",", (CharSequence) getAuthors());
+            List<String> authors = new ArrayList<>();
+            for(Author author : getAuthors()){
+                authors.add(author.getName());
+            }
+            return String.join(",", authors);
         } else {
             StringBuilder authorBuilder = new StringBuilder();
 
