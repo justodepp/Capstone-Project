@@ -138,4 +138,35 @@ public class ImageHandler {
                 })
                 .into(imageView).clearOnDetach();
     }
+
+    public static void reportImageHandler(Context context, ImageView imageView, String url) {
+
+        RequestOptions requestOptions =  new RequestOptions()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .placeholder(R.drawable.gg_logo_color)
+                .error(R.drawable.gg_logo_color)
+                .centerCrop();
+
+        GlideApp.with(context)
+                .load(url)
+                .apply(requestOptions)
+                .preload();
+
+        GlideApp.with(context)
+                .load(url)
+                .apply(requestOptions)
+                .listener(new RequestListener<Drawable>() {
+                    @Override
+                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                        target.onResourceReady(resource, new DrawableCrossFadeTransition(600, isFirstResource));
+                        return true;
+                    }
+                })
+                .into(imageView).clearOnDetach();
+    }
 }

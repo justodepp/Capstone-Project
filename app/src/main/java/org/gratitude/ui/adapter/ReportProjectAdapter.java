@@ -3,6 +3,7 @@ package org.gratitude.ui.adapter;
 import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.LayoutInflater;
@@ -20,8 +21,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ReportProjectAdapter extends RecyclerView.Adapter<ReportProjectAdapter.ReportHolder>{
+
     private Context mContext;
     private ArrayList<Entry> mEntry;
+
+    private ImageReportProjectAdapter mImageAdapter;
 
     // Allows to remember the last item shown on screen
     private int lastPosition = -1;
@@ -78,6 +82,10 @@ public class ReportProjectAdapter extends RecyclerView.Adapter<ReportProjectAdap
         private ReportHolder(ProjectItemReportBinding binding) {
             super(binding.getRoot());
             this.mBinding = binding;
+
+            mBinding.layoutImage.rvImage.setLayoutManager(new LinearLayoutManager(mContext,
+                    LinearLayoutManager.HORIZONTAL,
+                    false));
         }
 
         public void bind(int position){
@@ -85,6 +93,10 @@ public class ReportProjectAdapter extends RecyclerView.Adapter<ReportProjectAdap
             String text = Utility.reformatDate(mEntry.get(position).getPublished()) + " - " + mEntry.get(position).getStringListAuthor();
             mBinding.reportAuthor.setText(text);
             mBinding.reportContent.setText(Html.fromHtml(mEntry.get(position).getContent()));
+
+            mBinding.layoutImage.rvImage.hasFixedSize();
+            mImageAdapter = new ImageReportProjectAdapter(mContext, mEntry.get(position).getLinks());
+            mBinding.layoutImage.rvImage.setAdapter(mImageAdapter);
         }
 
         @Override

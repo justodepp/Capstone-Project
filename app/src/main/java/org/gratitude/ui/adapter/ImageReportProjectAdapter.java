@@ -1,64 +1,63 @@
 package org.gratitude.ui.adapter;
 
-/**
- * Created by justo on 24/02/18.
- */
-/*
-public class ImageReportProjectAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewHolder>{
-    private ArrayList<ReviewResult> reviews;
 
-    private final ReviewAdapter.ReviewClickListener mReviewClickListener;
+import android.content.Context;
+import android.databinding.DataBindingUtil;
+import android.support.annotation.NonNull;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.ViewGroup;
 
-    public interface ReviewClickListener {
-        void onClickReview(ReviewResult review);
+import org.gratitude.R;
+import org.gratitude.data.model.report.Link;
+import org.gratitude.databinding.SingleImageReportItemBinding;
+import org.gratitude.utils.ImageHandler;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class ImageReportProjectAdapter extends RecyclerView.Adapter<ImageReportProjectAdapter.ImageHolder>{
+
+    private ArrayList<Link> mList;
+    private Context mContext;
+
+    public ImageReportProjectAdapter(Context context, List<Link> imageList){
+        this.mContext = context;
+        this.mList = new ArrayList<>(imageList);
     }
 
-    public ImageReportProjectAdapter(ArrayList<ReviewResult> reviews, ReviewAdapter.ReviewClickListener reviewClickListener){
-        this.reviews = reviews;
-        mReviewClickListener = reviewClickListener;
-    }
-
+    @NonNull
     @Override
-    public ReviewAdapter.ReviewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ImageReportProjectAdapter.ImageHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        View view = inflater.inflate(R.layout.review_item_list, parent, false);
+        SingleImageReportItemBinding mBinding = DataBindingUtil.inflate(inflater,
+                R.layout.single_image_report_item, parent, false);
 
-        return new ReviewAdapter.ReviewHolder(view);
+        return new ImageHolder(mBinding);
     }
 
     @Override
-    public void onBindViewHolder(ReviewAdapter.ReviewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ImageHolder holder, int position) {
         holder.bind(position);
     }
 
     @Override
     public int getItemCount() {
-        return reviews != null ? reviews.size() :  0;
+        return mList != null ? mList.size() :  0;
     }
 
-    class ReviewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class ImageHolder extends RecyclerView.ViewHolder {
 
-        final TextView tvAuthor;
-        final TextView tvContent;
+        private final SingleImageReportItemBinding mBinding;
 
-        ReviewHolder(View itemView) {
-            super(itemView);
-
-            itemView.setOnClickListener(this);
-            itemView.setFocusable(true);
-
-            tvAuthor = itemView.findViewById(R.id.reviewAuthor);
-            tvContent = itemView.findViewById(R.id.reviewContent);
+        ImageHolder(SingleImageReportItemBinding binding) {
+            super(binding.getRoot());
+            this.mBinding = binding;
         }
 
         public void bind(int position){
-            tvAuthor.setText(reviews.get(position).getAuthor());
-            tvContent.setText(reviews.get(position).getContent());
-        }
-
-        @Override
-        public void onClick(View view) {
-            mReviewClickListener.onClickReview(reviews.get(getAdapterPosition()));
+            // TODO: associate image list
+            ImageHandler.reportImageHandler(mContext, mBinding.singleImage, mList.get(position).getHref());
         }
     }
-}*/
+}
