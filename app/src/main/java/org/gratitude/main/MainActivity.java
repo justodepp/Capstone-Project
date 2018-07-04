@@ -70,9 +70,23 @@ public class MainActivity extends AppCompatActivity {
         FirebaseAuth auth = FirebaseAuth.getInstance();
         if (auth.getCurrentUser() != null) {
             // already signed in
-            setHeader(auth.getCurrentUser().getDisplayName(),
-                    auth.getCurrentUser().getEmail(),
-                    auth.getCurrentUser().getPhotoUrl());
+            String name, email;
+            if(auth.getCurrentUser().getDisplayName() == null
+                    || auth.getCurrentUser().getDisplayName().equals("")
+                    && (auth.getCurrentUser().getPhoneNumber() != null
+                    || !auth.getCurrentUser().getPhoneNumber().equals(""))) {
+                name = auth.getCurrentUser().getPhoneNumber();
+            } else {
+                name = auth.getCurrentUser().getDisplayName();
+            }
+            if(auth.getCurrentUser().getEmail() == null
+                    || auth.getCurrentUser().getEmail().equals("")) {
+                email = name;
+                name = "";
+            } else {
+                email = auth.getCurrentUser().getEmail();
+            }
+            setHeader(name, email, auth.getCurrentUser().getPhotoUrl());
         } else {
             // not signed in
             startActivityForResult(new Intent(this, LoginActivity.class), RC_SIGN_IN);

@@ -25,13 +25,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:text="My header name"
-        android:textAppearance="@style/TextAppearance.AppCompat.Headline"/>
+        android:textAppearance="@style/TextAppearance.AppCompat.Menu"/>
 
     <TextView
         android:id="@+id/nav_header_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:text="My header email"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
+        android:textAppearance="@style/TextAppearance.AppCompat.Caption"/>
 
 </LinearLayout>
