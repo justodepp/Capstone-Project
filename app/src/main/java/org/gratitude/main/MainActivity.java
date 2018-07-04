@@ -2,6 +2,8 @@ package org.gratitude.main;
 
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.databinding.DataBindingUtil;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -16,15 +18,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 
 import org.gratitude.R;
+import org.gratitude.databinding.ActivityMainBinding;
 import org.gratitude.ui.LoginActivity;
 import org.gratitude.ui.OrganizationsFragment;
 import org.gratitude.ui.ProjectsFragment;
 import org.gratitude.ui.ThemesFragment;
+import org.gratitude.utils.GlideApp;
 
 import timber.log.Timber;
 
@@ -41,17 +46,21 @@ public class MainActivity extends AppCompatActivity {
     private Fragment fragment = null;
     private Bundle bundle;
 
-    private TextView mHeaderText;
+    private TextView mHeaderEmailText;
+    private TextView mHeaderNameText;
+    private ImageView mHeaderImage;
 
     // Make sure to be using android.support.v7.app.ActionBarDrawerToggle version.
     // The android.support.v4.app.ActionBarDrawerToggle has been deprecated.
     private ActionBarDrawerToggle mDrawerToggle;
 
+    ActivityMainBinding mBinding;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
         init();
         checkSignedIn();
@@ -61,17 +70,30 @@ public class MainActivity extends AppCompatActivity {
         FirebaseAuth auth = FirebaseAuth.getInstance();
         if (auth.getCurrentUser() != null) {
             // already signed in
-            setHeader(auth.getCurrentUser().getEmail());
+            setHeader(auth.getCurrentUser().getDisplayName(),
+                    auth.getCurrentUser().getEmail(),
+                    auth.getCurrentUser().getPhotoUrl());
         } else {
             // not signed in
             startActivityForResult(new Intent(this, LoginActivity.class), RC_SIGN_IN);
         }
     }
 
-    private void setHeader(String email) {
+    private void setHeader(String name, String email, Uri img_path) {
         View header = mNavigationView.getHeaderView(0);
-        mHeaderText = header.findViewById(R.id.nav_header_text);
-        mHeaderText.setText(email);
+
+        mHeaderNameText = header.findViewById(R.id.nav_header_text_name);
+        mHeaderNameText.setText(name);
+
+        mHeaderEmailText = header.findViewById(R.id.nav_header_text);
+        mHeaderEmailText.setText(email);
+
+        mHeaderImage = header.findViewById(R.id.profile_image);
+        GlideApp.with(this)
+                .load(img_path)
+                .error(R.drawable.g)
+                .dontAnimate()
+                .into(mHeaderImage);
     }
 
     private void init() {
@@ -254,7 +276,7 @@ public class MainActivity extends AppCompatActivity {
         // Setup drawer view
         setupDrawerContent(mNavigationView);
 
-        setHeader("Guest");
+        setHeader(getString(R.string.guest_name), getString(R.string.guest_email), null);
     }
     private ActionBarDrawerToggle setupDrawerToggle() {
         // NOTE: Make sure you pass in a valid toolbar reference.  ActionBarDrawToggle() does not require it

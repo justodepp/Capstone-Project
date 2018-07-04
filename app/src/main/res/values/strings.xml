@@ -1,6 +1,10 @@
 <resources>
     <string name="app_name">Gratitude</string>
 
+    <!-- Menu Header -->
+    <string name="guest_name">Guest Name</string>
+    <string name="guest_email">guestemail@email.com</string>
+
     <!-- Menu -->
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
@@ -17,13 +21,17 @@
     <string name="menu_detail_themes">Themes</string>
     <string name="menu_detail_prj">Projects</string>
 
+    <!-- Login -->
+    <string name="btn_login">login</string>
+    <string name="btn_skip">skip</string>
+    <string name="login_powered">Powered by</string>
+
     <!-- Project CardView -->
     <string name="project_image_contentDescritpion">Project Image</string>
     <string name="project_share_contentDescritpion">Share</string>
     <string name="money_raised_text"><![CDATA[<font color="#3C8787">$%1$s</font> raised of <font color="#3C8787">$%2$s</font> goal]]></string>
     <string name="money_raised_text_tool">$236,557 raised of $300,000 goal</string>
     <string name="share_to">To share with:</string>
-
 
     <!-- Org CardView -->
     <string name="project_active_text"><![CDATA[active project: <b>%1$s</b>]]></string>

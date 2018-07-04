@@ -39,9 +39,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         mBinding.skipLogin.setOnClickListener(this);
         mBinding.makeLogin.setOnClickListener(this);
 
-        mBinding.makeLogin.setText("login");
-        mBinding.skipLogin.setText("skip");
-        mBinding.textPowered.setText("Powered by");
+        mBinding.makeLogin.setText(R.string.btn_login);
+        mBinding.skipLogin.setText(R.string.btn_skip);
+        mBinding.textPowered.setText(R.string.login_powered);
     }
 
     public void signOut(Context context) {
