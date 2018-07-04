@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
         mHeaderImage = header.findViewById(R.id.profile_image);
         GlideApp.with(this)
                 .load(img_path)
-                .error(R.drawable.g)
+                .error(R.mipmap.ic_launcher_foreground)
                 .dontAnimate()
                 .into(mHeaderImage);
     }
