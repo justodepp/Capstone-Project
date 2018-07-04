@@ -16,6 +16,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -42,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar mToolbar;
     private DrawerLayout mDrawer;
     private NavigationView mNavigationView;
+    private Menu mNavMenu;
 
     private Fragment fragment = null;
     private Bundle bundle;
@@ -66,9 +68,20 @@ public class MainActivity extends AppCompatActivity {
         checkSignedIn();
     }
 
+    private void hideLogin(){
+        mNavMenu.findItem(R.id.menu_login).setVisible(false);
+        mNavMenu.findItem(R.id.menu_logout).setVisible(true);
+    }
+
+    private void hideLogout(){
+        mNavMenu.findItem(R.id.menu_login).setVisible(true);
+        mNavMenu.findItem(R.id.menu_logout).setVisible(false);
+    }
+
     private void checkSignedIn() {
         FirebaseAuth auth = FirebaseAuth.getInstance();
         if (auth.getCurrentUser() != null) {
+            hideLogin();
             // already signed in
             String name, email;
             if(auth.getCurrentUser().getDisplayName() == null
@@ -88,6 +101,7 @@ public class MainActivity extends AppCompatActivity {
             }
             setHeader(name, email, auth.getCurrentUser().getPhotoUrl());
         } else {
+            hideLogout();
             // not signed in
             startActivityForResult(new Intent(this, LoginActivity.class), RC_SIGN_IN);
         }
@@ -97,17 +111,22 @@ public class MainActivity extends AppCompatActivity {
         View header = mNavigationView.getHeaderView(0);
 
         mHeaderNameText = header.findViewById(R.id.nav_header_text_name);
-        mHeaderNameText.setText(name);
-
         mHeaderEmailText = header.findViewById(R.id.nav_header_text);
-        mHeaderEmailText.setText(email);
-
         mHeaderImage = header.findViewById(R.id.profile_image);
-        GlideApp.with(this)
-                .load(img_path)
-                .error(R.mipmap.ic_launcher_foreground)
-                .dontAnimate()
-                .into(mHeaderImage);
+
+        if(name != null || email != null) {
+            mHeaderNameText.setText(name);
+            mHeaderEmailText.setText(email);
+            GlideApp.with(this)
+                    .load(img_path)
+                    .error(R.mipmap.ic_launcher_foreground)
+                    .dontAnimate()
+                    .into(mHeaderImage);
+        } else {
+            mHeaderNameText.setVisibility(View.INVISIBLE);
+            mHeaderEmailText.setVisibility(View.INVISIBLE);
+            mHeaderImage.setVisibility(View.INVISIBLE);
+        }
     }
 
     private void init() {
@@ -162,6 +181,17 @@ public class MainActivity extends AppCompatActivity {
             case R.id.menu_settings:
                 fragmentClass = null;
                 bundle = getFragmentBundleType(menuItem.getTitle().toString());
+                break;
+            case R.id.menu_login:
+                fragmentClass = null;
+                showHomeFragment();
+                startActivityForResult(new Intent(this, LoginActivity.class), RC_SIGN_IN);
+                break;
+            case R.id.menu_logout:
+                fragmentClass = null;
+                showHomeFragment();
+                LoginActivity.signOut(this);
+                hideLogout();
                 break;
             default:
                 // Home
@@ -290,7 +320,9 @@ public class MainActivity extends AppCompatActivity {
         // Setup drawer view
         setupDrawerContent(mNavigationView);
 
-        setHeader(getString(R.string.guest_name), getString(R.string.guest_email), null);
+        setHeader(null, null, null);
+
+        mNavMenu = mNavigationView.getMenu();
     }
     private ActionBarDrawerToggle setupDrawerToggle() {
         // NOTE: Make sure you pass in a valid toolbar reference.  ActionBarDrawToggle() does not require it

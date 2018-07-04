@@ -44,7 +44,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         mBinding.textPowered.setText(R.string.login_powered);
     }
 
-    public void signOut(Context context) {
+    public static void signOut(Context context) {
         AuthUI.getInstance()
                 .signOut(context)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
