@@ -1,50 +1,59 @@
 package org.gratitude.ui;
 
+import android.content.Context;
 import android.content.Intent;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.IdpResponse;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 import org.gratitude.R;
+import org.gratitude.databinding.ActivityLoginBinding;
 
 import java.util.Arrays;
 
-import timber.log.Timber;
-
-public class LoginActivity extends AppCompatActivity{
+public class LoginActivity extends AppCompatActivity implements View.OnClickListener{
 
     private static final String GOOGLE_TOS_URL = "https://www.google.com/policies/terms/";
     private static final String FIREBASE_TOS_URL = "https://firebase.google.com/terms/";
     private static final String GOOGLE_PRIVACY_POLICY_URL = "https://www.google.com/policies/privacy/";
     private static final String FIREBASE_PRIVACY_POLICY_URL = "https://firebase.google.com/terms/analytics/#7_privacy";
+
+    public static final String SKIPPED = "SKIPPED";
     private static final int RC_SIGN_IN = 343;
+
+    ActivityLoginBinding mBinding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_login);
 
-        showSignInScreen();
+        mBinding.skipLogin.setOnClickListener(this);
+        mBinding.makeLogin.setOnClickListener(this);
+
+        mBinding.makeLogin.setText("login");
+        mBinding.skipLogin.setText("skip");
+        mBinding.textPowered.setText("Powered by");
     }
 
-    public void signOut() {
+    public void signOut(Context context) {
         AuthUI.getInstance()
-                .signOut(this)
+                .signOut(context)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
                             // TODO: SIGN-OUT
                         } else {
-                            Timber.w("signOut:failure", task.getException());
+                            //Timber.w("signOut:failure", task.getException());
                         }
                     }
                 });
@@ -91,8 +100,6 @@ public class LoginActivity extends AppCompatActivity{
             IdpResponse response = IdpResponse.fromResultIntent(data);
 
             if (resultCode == RESULT_OK) {
-                // Successfully signed in
-                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                 finish();
                 // ...
             } else {
@@ -110,6 +117,18 @@ public class LoginActivity extends AppCompatActivity{
                     return;
                 }
             }
+        }
+    }
+
+    @Override
+    public void onClick(View view) {
+        if(view.getId() == R.id.make_login){
+            showSignInScreen();
+        } else if(view.getId() == R.id.skip_login){
+            Intent data = new Intent();
+            data.putExtra(SKIPPED, SKIPPED);
+            setResult(RESULT_OK, data);
+            finish();
         }
     }
 }

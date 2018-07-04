@@ -31,6 +31,7 @@ import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final int RC_SIGN_IN = 343;
     public static final String ARGUMENT_TYPE_CODE = "typeCode";
 
     private Toolbar mToolbar;
@@ -39,6 +40,8 @@ public class MainActivity extends AppCompatActivity {
 
     private Fragment fragment = null;
     private Bundle bundle;
+
+    private TextView mHeaderText;
 
     // Make sure to be using android.support.v7.app.ActionBarDrawerToggle version.
     // The android.support.v4.app.ActionBarDrawerToggle has been deprecated.
@@ -50,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        init();
         checkSignedIn();
     }
 
@@ -57,18 +61,17 @@ public class MainActivity extends AppCompatActivity {
         FirebaseAuth auth = FirebaseAuth.getInstance();
         if (auth.getCurrentUser() != null) {
             // already signed in
-            init();
             setHeader(auth.getCurrentUser().getEmail());
         } else {
             // not signed in
-            startActivity(new Intent(this, LoginActivity.class));
+            startActivityForResult(new Intent(this, LoginActivity.class), RC_SIGN_IN);
         }
     }
 
     private void setHeader(String email) {
         View header = mNavigationView.getHeaderView(0);
-        TextView headerText = header.findViewById(R.id.nav_header_text);
-        headerText.setText(email);
+        mHeaderText = header.findViewById(R.id.nav_header_text);
+        mHeaderText.setText(email);
     }
 
     private void init() {
@@ -250,6 +253,8 @@ public class MainActivity extends AppCompatActivity {
         mNavigationView = findViewById(R.id.nav_view);
         // Setup drawer view
         setupDrawerContent(mNavigationView);
+
+        setHeader("Guest");
     }
     private ActionBarDrawerToggle setupDrawerToggle() {
         // NOTE: Make sure you pass in a valid toolbar reference.  ActionBarDrawToggle() does not require it
@@ -305,6 +310,17 @@ public class MainActivity extends AppCompatActivity {
             finish();
         else
             super.onBackPressed();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == RC_SIGN_IN) {
+            if (resultCode == RESULT_OK) {
+                if(!data.getExtras().getString(LoginActivity.SKIPPED).equals(LoginActivity.SKIPPED))
+                    checkSignedIn();
+            }
+        }
     }
     //endregion
 }
