@@ -18,6 +18,8 @@ android {
         // Please ensure you have a valid API KEY for globalgiving to use this app
         // A valid key will need to be entered
         buildConfigField 'String', 'GlobalGivingApiKey', GLOBALGIVING_API_KEY
+
+        resConfigs "en"
     }
 
     signingConfigs {
@@ -49,6 +51,7 @@ dependencies {
     implementation "com.android.support:appcompat-v7:$rootProject.supportLibVersion"
     implementation "com.android.support:recyclerview-v7:$rootProject.supportLibVersion"
     implementation "com.android.support:cardview-v7:$rootProject.supportLibVersion"
+    implementation "com.android.support:customtabs:$rootProject.supportLibVersion"
     implementation 'com.android.support.constraint:constraint-layout:1.1.2'
 
     // Intro
@@ -73,6 +76,8 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
     // Firebase
     implementation 'com.google.firebase:firebase-core:16.0.1'
+    // FirebaseUI for Firebase Auth
+    implementation 'com.firebaseui:firebase-ui-auth:4.1.0'
     // Firebase/Google Sign-in
     implementation 'com.google.firebase:firebase-auth:16.0.2'
     implementation 'com.google.android.gms:play-services-auth:15.0.1'

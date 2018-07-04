@@ -1,5 +1,6 @@
 package org.gratitude.main;
 
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -15,8 +16,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
+
+import com.google.firebase.auth.FirebaseAuth;
 
 import org.gratitude.R;
+import org.gratitude.ui.LoginActivity;
 import org.gratitude.ui.OrganizationsFragment;
 import org.gratitude.ui.ProjectsFragment;
 import org.gratitude.ui.ThemesFragment;
@@ -45,7 +50,25 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        init();
+        checkSignedIn();
+    }
+
+    private void checkSignedIn() {
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        if (auth.getCurrentUser() != null) {
+            // already signed in
+            init();
+            setHeader(auth.getCurrentUser().getEmail());
+        } else {
+            // not signed in
+            startActivity(new Intent(this, LoginActivity.class));
+        }
+    }
+
+    private void setHeader(String email) {
+        View header = mNavigationView.getHeaderView(0);
+        TextView headerText = header.findViewById(R.id.nav_header_text);
+        headerText.setText(email);
     }
 
     private void init() {

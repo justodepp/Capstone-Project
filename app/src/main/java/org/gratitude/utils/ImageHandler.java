@@ -65,8 +65,8 @@ public class ImageHandler {
 
         RequestOptions requestOptions =  new RequestOptions()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .placeholder(R.drawable.gg_logo_color)
-                .error(R.drawable.gg_logo_color)
+                .placeholder(R.drawable.global_logo_color)
+                .error(R.drawable.global_logo_color)
                 .centerCrop();
 
         Glide.with(context)
@@ -143,8 +143,8 @@ public class ImageHandler {
 
         RequestOptions requestOptions =  new RequestOptions()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .placeholder(R.drawable.gg_logo_color)
-                .error(R.drawable.gg_logo_color)
+                .placeholder(R.drawable.global_logo_color)
+                .error(R.drawable.global_logo_color)
                 .centerCrop();
 
         GlideApp.with(context)
