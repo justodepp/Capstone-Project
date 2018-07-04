@@ -41,12 +41,29 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/material_green_a200</item>
 
-        <item name="android:textColor">#FFFFFF</item>
-        <item name="android:editTextColor">#FFFFFF</item>
+        <item name="colorButtonNormal">@color/colorAccent</item>
 
-        <item name="colorControlNormal">@color/colorPrimary</item>
-        <item name="colorControlActivated">#FFFFFF</item>
-        <item name="colorControlHighlight">@color/material_green_a200</item>
+        <!-- change text color Policy ... -->
+        <item name="android:textColorTertiary">@android:color/white</item>
+        <item name="android:editTextColor">@android:color/white</item>
+
+        <item name="colorControlNormal">@android:color/white</item>
+        <item name="colorControlActivated">@android:color/white</item>
+        <item name="colorControlHighlight">@android:color/white</item>
         <item name="android:windowBackground">@drawable/gradient_main</item>
+    </style>
+
+    <style name="FirebaseUI.Button" parent="@style/Widget.AppCompat.Button">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@color/colorAccent</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <style name="FirebaseUI.CountrySpinner">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="colorControlNormal">@android:color/white</item>
     </style>
 </resources>
