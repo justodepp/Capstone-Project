@@ -12,10 +12,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.gratitude.R;
+import org.gratitude.data.db.GratitudeDatabase;
 import org.gratitude.data.model.projects.Project;
 import org.gratitude.databinding.FragmentDetailProjectBinding;
 import org.gratitude.ui.ProjectsFragment;
 import org.gratitude.ui.ReportProjectFragment;
+import org.gratitude.utils.AppExecutors;
 import org.gratitude.utils.ImageHandler;
 
 import java.util.Objects;
@@ -24,6 +26,9 @@ public class DetailsProjectFragment extends Fragment implements View.OnClickList
 
     FragmentDetailProjectBinding mBinding;
     private Project mProject;
+
+    // Member variable for the Database
+    private GratitudeDatabase mDb;
 
     @Nullable
     @Override
@@ -39,6 +44,8 @@ public class DetailsProjectFragment extends Fragment implements View.OnClickList
         Bundle bundle = this.getArguments();
         assert bundle != null;
         mProject = bundle.getParcelable(ProjectsFragment.PRJ_CLICKED);
+
+        mDb = GratitudeDatabase.getInstance(getContext());
 
         mBinding.favoriteButton.setOnClickListener(this);
         mBinding.reportButton.setOnClickListener(this);
@@ -85,7 +92,31 @@ public class DetailsProjectFragment extends Fragment implements View.OnClickList
                     .commit();
 
         } else if(view == mBinding.favoriteButton){
-
+            // TODO: DATABASE
+            //onFavButtonClicked();
         }
+    }
+
+    /**
+     * onFavButtonClicked is called when the "fav" button is clicked.
+     * It retrieves Project fav into the underlying database.
+     */
+    private void onFavButtonClicked() {
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                // insert new task
+                mDb.projectDao().insertProject(mProject);
+            }
+        });
+    }
+
+    private void onFavButtonClicked2() {
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mDb.projectDao().deleteProject(mProject);
+            }
+        });
     }
 }
