@@ -82,6 +82,10 @@ public class MainActivity extends AppCompatActivity {
     private void hideLogout(){
         mNavMenu.findItem(R.id.menu_login).setVisible(true);
         mNavMenu.findItem(R.id.menu_logout).setVisible(false);
+
+        mHeaderNameText.setVisibility(View.INVISIBLE);
+        mHeaderEmailText.setVisibility(View.INVISIBLE);
+        mHeaderImage.setVisibility(View.INVISIBLE);
     }
 
     private void checkSignedIn() {
@@ -128,6 +132,10 @@ public class MainActivity extends AppCompatActivity {
                     .error(R.mipmap.ic_launcher_foreground)
                     .dontAnimate()
                     .into(mHeaderImage);
+
+            mHeaderNameText.setVisibility(View.VISIBLE);
+            mHeaderEmailText.setVisibility(View.VISIBLE);
+            mHeaderImage.setVisibility(View.VISIBLE);
         } else {
             mHeaderNameText.setVisibility(View.INVISIBLE);
             mHeaderEmailText.setVisibility(View.INVISIBLE);
@@ -414,7 +422,8 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == RC_SIGN_IN) {
             if (resultCode == RESULT_OK) {
-                if(!data.getExtras().getString(LoginActivity.SKIPPED).equals(LoginActivity.SKIPPED)) {
+                if(data == null
+                        || !data.getExtras().getString(LoginActivity.SKIPPED).equals(LoginActivity.SKIPPED)) {
                     checkSignedIn();
                 }
             }
