@@ -1,17 +1,47 @@
 
 package org.gratitude.data.model.image;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.ForeignKey;
+import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.google.gson.annotations.Expose;
 
+import org.gratitude.data.model.projects.Project;
+
+@Entity(tableName = "image_link",
+        foreignKeys = @ForeignKey(
+                entity = Project.class,
+                parentColumns = "id",
+                childColumns = "prjId",
+                onDelete = ForeignKey.CASCADE))
 public class Imagelink implements Parcelable {
+
+    @Expose
+    @PrimaryKey(autoGenerate = true)
+    private int id;
+
+    private int prjId;
+
+    public int getPrjId() {
+        return prjId;
+    }
+
+    public void setPrjId(int prjId) {
+        this.prjId = prjId;
+    }
 
     @Expose
     private String size;
     @Expose
     private String url;
+
+    public int getId() {
+        return id;
+    }
 
     public String getSize() {
         return size;
@@ -20,6 +50,20 @@ public class Imagelink implements Parcelable {
     public String getUrl() {
         return url;
     }
+
+    //region Setter
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setSize(String size) {
+        this.size = size;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+    //endregion Setter
 
     public static class Builder {
 
@@ -57,6 +101,11 @@ public class Imagelink implements Parcelable {
     }
 
     public Imagelink() {
+    }
+
+    @Ignore
+    public Imagelink(String url) {
+        setUrl(url);
     }
 
     protected Imagelink(Parcel in) {

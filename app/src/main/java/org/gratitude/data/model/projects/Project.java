@@ -1,6 +1,10 @@
 
 package org.gratitude.data.model.projects;
 
+import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.PrimaryKey;
 import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -25,83 +29,113 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import timber.log.Timber;
 
+@Entity(tableName = "project")
 public class Project implements Parcelable {
-
     @Expose
+    @Ignore
     private Boolean active;
     @Expose
     private String activities;
     @Expose
+    @Ignore
     private String additionalDocumentation;
     @Expose
+    @Ignore
     private String approvedDate;
     @Expose
+    @Ignore
     private String contactAddress;
     @Expose
+    @Ignore
     private String contactAddress2;
     @Expose
+    @Ignore
     private String contactCity;
     @Expose
+    @Ignore
     private String contactCountry;
     @Expose
+    @Ignore
     private String contactName;
     @Expose
+    @Ignore
     private String contactPostal;
     @Expose
+    @Ignore
     private String contactState;
     @Expose
+    @Ignore
     private String contactTitle;
     @Expose
+    @Ignore
     private String contactUrl;
     @Expose
+    @Ignore
     private String country;
     @Expose
+    @Ignore
     private DonationOptions donationOptions;
     @Expose
     private Double funding;
     @Expose
     private Long goal;
     @Expose
+    @PrimaryKey
+    @ColumnInfo(index = true)
     private Long id;
     @Expose
+    @Ignore
     private Image image;
     @Expose
+    @Ignore
     private Long imageGallerySize;
     @Expose
+    @Ignore
     private String imageLink;
     @Expose
+    @Ignore
     private String iso3166CountryCode;
     @Expose
+    @Ignore
     private Double latitude;
     @Expose
     private String longTermImpact;
     @Expose
+    @Ignore
     private Double longitude;
     @Expose
     private String need;
     @Expose
+    @Ignore
     private Long numberOfDonations;
     @Expose
+    @Ignore
     private Organization organization;
     @Expose
     private String progressReportLink;
     @Expose
     private String projectLink;
     @Expose
+    @Ignore
     private String region;
     @Expose
+    @Ignore
     private Double remaining;
     @Expose
+    @Ignore
     private String status;
     @Expose
     private String summary;
     @Expose
+    @Ignore
     private String themeName;
     @Expose
     private String title;
     @Expose
+    @Ignore
     private String type;
     @Expose
+    @Ignore
     private Videos videos;
 
     public Boolean getActive() {
@@ -255,6 +289,160 @@ public class Project implements Parcelable {
     public Videos getVideos() {
         return videos;
     }
+
+    //region Setter
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
+
+    public void setActivities(String activities) {
+        this.activities = activities;
+    }
+
+    public void setAdditionalDocumentation(String additionalDocumentation) {
+        this.additionalDocumentation = additionalDocumentation;
+    }
+
+    public void setApprovedDate(String approvedDate) {
+        this.approvedDate = approvedDate;
+    }
+
+    public void setContactAddress(String contactAddress) {
+        this.contactAddress = contactAddress;
+    }
+
+    public void setContactAddress2(String contactAddress2) {
+        this.contactAddress2 = contactAddress2;
+    }
+
+    public void setContactCity(String contactCity) {
+        this.contactCity = contactCity;
+    }
+
+    public void setContactCountry(String contactCountry) {
+        this.contactCountry = contactCountry;
+    }
+
+    public void setContactName(String contactName) {
+        this.contactName = contactName;
+    }
+
+    public void setContactPostal(String contactPostal) {
+        this.contactPostal = contactPostal;
+    }
+
+    public void setContactState(String contactState) {
+        this.contactState = contactState;
+    }
+
+    public void setContactTitle(String contactTitle) {
+        this.contactTitle = contactTitle;
+    }
+
+    public void setContactUrl(String contactUrl) {
+        this.contactUrl = contactUrl;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public void setDonationOptions(DonationOptions donationOptions) {
+        this.donationOptions = donationOptions;
+    }
+
+    public void setFunding(Double funding) {
+        this.funding = funding;
+    }
+
+    public void setGoal(Long goal) {
+        this.goal = goal;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setImage(Image image) {
+        this.image = image;
+    }
+
+    public void setImageGallerySize(Long imageGallerySize) {
+        this.imageGallerySize = imageGallerySize;
+    }
+
+    public void setImageLink(String imageLink) {
+        this.imageLink = imageLink;
+    }
+
+    public void setIso3166CountryCode(String iso3166CountryCode) {
+        this.iso3166CountryCode = iso3166CountryCode;
+    }
+
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+
+    public void setLongTermImpact(String longTermImpact) {
+        this.longTermImpact = longTermImpact;
+    }
+
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
+    }
+
+    public void setNeed(String need) {
+        this.need = need;
+    }
+
+    public void setNumberOfDonations(Long numberOfDonations) {
+        this.numberOfDonations = numberOfDonations;
+    }
+
+    public void setOrganization(Organization organization) {
+        this.organization = organization;
+    }
+
+    public void setProgressReportLink(String progressReportLink) {
+        this.progressReportLink = progressReportLink;
+    }
+
+    public void setProjectLink(String projectLink) {
+        this.projectLink = projectLink;
+    }
+
+    public void setRegion(String region) {
+        this.region = region;
+    }
+
+    public void setRemaining(Double remaining) {
+        this.remaining = remaining;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public void setSummary(String summary) {
+        this.summary = summary;
+    }
+
+    public void setThemeName(String themeName) {
+        this.themeName = themeName;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public void setVideos(Videos videos) {
+        this.videos = videos;
+    }
+    //endregion Setter
 
     public static class Builder {
 
@@ -580,6 +768,20 @@ public class Project implements Parcelable {
     }
 
     public Project() {
+    }
+
+    @Ignore
+    public Project(String activities, Double funding, Long goal, Long id, String need,
+                   String progressReportLink, String projectLink, String summary, String title) {
+        setActivities(activities);
+        setFunding(funding);
+        setGoal(goal);
+        setId(id);
+        setNeed(need);
+        setProgressReportLink(progressReportLink);
+        setProjectLink(projectLink);
+        setSummary(summary);
+        setTitle(title);
     }
 
     protected Project(Parcel in) {
