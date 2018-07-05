@@ -216,12 +216,14 @@ public class MainActivity extends AppCompatActivity {
         }
 
         mDrawer.closeDrawer(GravityCompat.START);
-        // Highlight the selected item has been done by NavigationView
-        menuItem.setChecked(true);
-        // Set action bar title
         if (!menuItem.getTitle().equals(getString(R.string.menu_login))
-                && !menuItem.getTitle().equals(getString(R.string.menu_logout)))
+                && !menuItem.getTitle().equals(getString(R.string.menu_logout))) {
+            // Highlight the selected item has been done by NavigationView
+            // menuItem.setChecked(true);
+            // Set action bar title
             setTitle(menuItem.getTitle());
+        }
+
         // Close the navigation drawer
         mDrawer.closeDrawers();
     }
