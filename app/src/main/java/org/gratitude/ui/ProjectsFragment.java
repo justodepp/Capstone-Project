@@ -113,7 +113,11 @@ public class ProjectsFragment extends Fragment implements SwipeRefreshLayout.OnR
             if (typeCode.equals(getString(R.string.menu_home))) {
                 callFeatured();
             } else if (typeCode.equals(getString(R.string.menu_prj))) {
-                callProjects();
+                if(!mBundle.getBoolean(MainActivity.ARGUMENT_FAVORITE)) {
+                    callProjects();
+                } else {
+                    //TODO: from DB
+                }
             } else if (typeCode.equals(getString(R.string.menu_cat))) {
                 mTheme = mBundle.getString(ThemesFragment.THEME_CLICKED);
                 callPrjCat(mTheme);

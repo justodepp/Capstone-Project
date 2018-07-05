@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static final int RC_SIGN_IN = 343;
     public static final String ARGUMENT_TYPE_CODE = "typeCode";
+    public static final String ARGUMENT_FAVORITE = "favorite";
 
     private Toolbar mToolbar;
     private DrawerLayout mDrawer;
@@ -183,6 +184,11 @@ public class MainActivity extends AppCompatActivity {
                 fragmentClass = ProjectsFragment.class;
                 mFragmentClass = fragmentClass;
                 mBundle = getFragmentBundleType(menuItem.getTitle().toString());
+                break;
+            case R.id.menu_fav:
+                fragmentClass = null;
+                mBundle = getFragmentBundleType(menuItem.getTitle().toString());
+                mBundle.putBoolean(ARGUMENT_FAVORITE, true);
                 break;
             case R.id.menu_about:
                 fragmentClass = null;
