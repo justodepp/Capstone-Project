@@ -45,8 +45,13 @@ public class MainActivity extends AppCompatActivity {
     private NavigationView mNavigationView;
     private Menu mNavMenu;
 
-    private Fragment fragment = null;
-    private Bundle bundle;
+    private boolean fromLogin = false;
+    private boolean forceLoad = false;
+
+    private Fragment mPreviousFragment = null;
+    private Fragment mFragment;
+    private Class mFragmentClass;
+    private Bundle mBundle;
 
     private TextView mHeaderEmailText;
     private TextView mHeaderNameText;
@@ -136,13 +141,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showHomeFragment() {
-        Fragment fragment;
-        Class fragmentClass = ProjectsFragment.class;
+        mFragmentClass = ProjectsFragment.class;
         try {
-            fragment = (Fragment) fragmentClass.newInstance();
-            replaceFragmentWithTransition(getFragmentBundleType(
-                    mNavigationView.getMenu().findItem(R.id.menu_home).getTitle().toString()),
-                    fragment);
+            mFragment = (Fragment) mFragmentClass.newInstance();
+            mBundle = getFragmentBundleType(
+                    mNavigationView.getMenu().findItem(R.id.menu_home).getTitle().toString());
+            replaceFragmentWithTransition(mBundle, mFragment);
             setTitle(getString(R.string.menu_home));
         } catch (Exception e) {
             Timber.e(e);
@@ -156,52 +160,57 @@ public class MainActivity extends AppCompatActivity {
         // clear stack every time click on drawer menu
         getSupportFragmentManager().popBackStackImmediate();
 
-        Class fragmentClass;
+        Class fragmentClass = null;
         switch(menuItem.getItemId()) {
             case R.id.menu_home:
+                forceLoad = true;
                 fragmentClass = ProjectsFragment.class;
-                bundle = getFragmentBundleType(menuItem.getTitle().toString());
+                mFragmentClass = fragmentClass;
+                mBundle = getFragmentBundleType(menuItem.getTitle().toString());
                 break;
             case R.id.menu_cat:
                 fragmentClass = ThemesFragment.class;
-                bundle = getFragmentBundleType(menuItem.getTitle().toString());
+                mFragmentClass = fragmentClass;
+                mBundle = getFragmentBundleType(menuItem.getTitle().toString());
                 break;
             case R.id.menu_org:
                 fragmentClass = OrganizationsFragment.class;
-                bundle = getFragmentBundleType(menuItem.getTitle().toString());
+                mFragmentClass = fragmentClass;
+                mBundle = getFragmentBundleType(menuItem.getTitle().toString());
                 break;
             case R.id.menu_prj:
+                forceLoad = true;
                 fragmentClass = ProjectsFragment.class;
-                bundle = getFragmentBundleType(menuItem.getTitle().toString());
+                mFragmentClass = fragmentClass;
+                mBundle = getFragmentBundleType(menuItem.getTitle().toString());
                 break;
             case R.id.menu_about:
                 fragmentClass = null;
-                bundle = getFragmentBundleType(menuItem.getTitle().toString());
+                mBundle = getFragmentBundleType(menuItem.getTitle().toString());
                 break;
             case R.id.menu_settings:
                 fragmentClass = null;
-                bundle = getFragmentBundleType(menuItem.getTitle().toString());
+                mBundle = getFragmentBundleType(menuItem.getTitle().toString());
                 break;
             case R.id.menu_login:
-                fragmentClass = null;
-                showHomeFragment();
+                fromLogin = forceLoad = true;
                 startActivityForResult(new Intent(this, LoginActivity.class), RC_SIGN_IN);
+                replaceFragmentWithTransition(mBundle, mFragment);
                 break;
             case R.id.menu_logout:
-                fragmentClass = null;
-                showHomeFragment();
+                fragmentClass = mFragmentClass;
                 LoginActivity.signOut(this);
                 hideLogout();
                 break;
             default:
                 // Home
                 fragmentClass = ProjectsFragment.class;
-                bundle = getFragmentBundleType(menuItem.getTitle().toString());
+                mBundle = getFragmentBundleType(menuItem.getTitle().toString());
         }
 
         try {
             assert fragmentClass != null;
-            fragment = (Fragment) fragmentClass.newInstance();
+            mFragment = (Fragment) fragmentClass.newInstance();
         } catch (Exception e) {
             Timber.e(e);
         }
@@ -210,13 +219,16 @@ public class MainActivity extends AppCompatActivity {
         // Highlight the selected item has been done by NavigationView
         menuItem.setChecked(true);
         // Set action bar title
-        setTitle(menuItem.getTitle());
+        if (!menuItem.getTitle().equals(getString(R.string.menu_login))
+                && !menuItem.getTitle().equals(getString(R.string.menu_logout)))
+            setTitle(menuItem.getTitle());
         // Close the navigation drawer
         mDrawer.closeDrawers();
     }
 
     private void replaceFragmentWithTransition(final Bundle bundle, final Fragment fragment) {
-        if( bundle != null && fragment != null) {
+        if(bundle != null && fragment != null
+                && (mPreviousFragment != fragment || forceLoad)) {
             fragment.setArguments(bundle);
             getSupportFragmentManager()
                     .beginTransaction()
@@ -224,6 +236,9 @@ public class MainActivity extends AppCompatActivity {
                     .replace(R.id.content_frame, fragment)
                     .addToBackStack(null)
                     .commit();
+
+            mPreviousFragment = fragment;
+            forceLoad = false;
         }
     }
 
@@ -255,6 +270,12 @@ public class MainActivity extends AppCompatActivity {
                 new FragmentManager.OnBackStackChangedListener() {
             @Override
             public void onBackStackChanged() {
+                if(fromLogin && getSupportFragmentManager().getBackStackEntryCount() > 1) {
+                    getSupportFragmentManager().popBackStack();
+                    fromLogin = false;
+                } else if(fromLogin && !forceLoad){
+                    fromLogin = false;
+                }
                 if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
                     // show back button
                     mDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
@@ -306,7 +327,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onDrawerClosed(View drawerView) {
                         // Respond when the drawer is closed
-                        replaceFragmentWithTransition(bundle, fragment);
+                        replaceFragmentWithTransition(mBundle, mFragment);
                     }
 
                     @Override
@@ -385,8 +406,9 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == RC_SIGN_IN) {
             if (resultCode == RESULT_OK) {
-                if(!data.getExtras().getString(LoginActivity.SKIPPED).equals(LoginActivity.SKIPPED))
+                if(!data.getExtras().getString(LoginActivity.SKIPPED).equals(LoginActivity.SKIPPED)) {
                     checkSignedIn();
+                }
             }
         }
     }
