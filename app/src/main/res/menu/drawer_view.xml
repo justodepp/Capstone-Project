@@ -17,6 +17,10 @@
             android:id="@+id/menu_prj"
             android:icon="@drawable/ic_projects"
             android:title="@string/menu_prj" />
+        <item
+            android:id="@+id/menu_fav"
+            android:icon="@drawable/ic_favorite_on"
+            android:title="@string/menu_fav" />
     </group>
     <item android:title="">
         <menu>
