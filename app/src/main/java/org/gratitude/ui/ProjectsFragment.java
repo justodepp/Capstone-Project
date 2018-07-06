@@ -1,5 +1,7 @@
 package org.gratitude.ui;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -25,6 +27,7 @@ import org.gratitude.utils.EndlessRecyclerViewScrollListener;
 import org.gratitude.utils.ItemClickSupport;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import timber.log.Timber;
@@ -50,6 +53,8 @@ public class ProjectsFragment extends Fragment implements SwipeRefreshLayout.OnR
 
     private EndlessRecyclerViewScrollListener endlessScroll;
 
+    private boolean isFavorite = false;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -66,6 +71,7 @@ public class ProjectsFragment extends Fragment implements SwipeRefreshLayout.OnR
             if(mBundle.getString(PRJ_ORG_ID) != null){
                 mOrgId = mBundle.getString(PRJ_ORG_ID);
             }
+            isFavorite = mBundle.getBoolean(MainActivity.ARGUMENT_FAVORITE, false);
             typeCode = mBundle.getString(MainActivity.ARGUMENT_TYPE_CODE);
         }
 
@@ -108,16 +114,30 @@ public class ProjectsFragment extends Fragment implements SwipeRefreshLayout.OnR
         });
     }
 
+    private void setupViewModel() {
+        ProjectViewModel viewModel = ViewModelProviders.of(this).get(ProjectViewModel.class);
+        viewModel.getProjects().observe(this, new Observer<List<Project>>() {
+            @Override
+            public void onChanged(@Nullable List<Project> projects) {
+                Timber.d("Updating list of tasks from LiveData in ViewModel");
+                if(mAdapter == null) {
+                    mAdapter = new ProjectsAdapter(getActivity(), projects);
+                    mBinding.recyclerview.setAdapter(mAdapter);
+                } else {
+                    mAdapter.setProjectList(projects);
+                }
+            }
+        });
+    }
+
     private void handleCall(){
         if(typeCode != null) {
             if (typeCode.equals(getString(R.string.menu_home))) {
                 callFeatured();
             } else if (typeCode.equals(getString(R.string.menu_prj))) {
-                if(!mBundle.getBoolean(MainActivity.ARGUMENT_FAVORITE)) {
-                    callProjects();
-                } else {
-                    //TODO: from DB
-                }
+                callProjects();
+            }  else if (typeCode.equals(getString(R.string.menu_fav))) {
+                    setupViewModel();
             } else if (typeCode.equals(getString(R.string.menu_cat))) {
                 mTheme = mBundle.getString(ThemesFragment.THEME_CLICKED);
                 callPrjCat(mTheme);

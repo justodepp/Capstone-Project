@@ -1,7 +1,6 @@
 
 package org.gratitude.data.model.projects;
 
-import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
@@ -81,7 +80,6 @@ public class Project implements Parcelable {
     private Long goal;
     @Expose
     @PrimaryKey
-    @ColumnInfo(index = true)
     private Long id;
     @Expose
     @Ignore

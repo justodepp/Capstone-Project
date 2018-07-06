@@ -194,7 +194,7 @@ public class MainActivity extends AppCompatActivity {
                 mBundle = getFragmentBundleType(menuItem.getTitle().toString());
                 break;
             case R.id.menu_fav:
-                fragmentClass = null;
+                fragmentClass = ProjectsFragment.class;
                 mBundle = getFragmentBundleType(menuItem.getTitle().toString());
                 mBundle.putBoolean(ARGUMENT_FAVORITE, true);
                 break;
