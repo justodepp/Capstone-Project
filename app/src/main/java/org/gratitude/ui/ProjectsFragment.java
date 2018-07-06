@@ -137,6 +137,7 @@ public class ProjectsFragment extends Fragment implements SwipeRefreshLayout.OnR
         });
     }
 
+    // TODO: aggiungere TypeConverter per oggetto Image e List<ImageLink>
     private void setPrjImage(final List<Project> projects) {
         AppExecutors.getInstance().diskIO().execute(new Runnable() {
             @Override
