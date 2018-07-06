@@ -13,13 +13,13 @@ import java.util.List;
 public interface ImageLinkDao {
 
     @Query("SELECT * FROM image_link")
-    LiveData<List<Imagelink>> loadAllImages();
+    LiveData<List<Imagelink>> loadAllImageLinks();
 
     @Insert
     void insertImagelink(List<Imagelink> imagelinks);
 
-    @Query("DELETE FROM image_link WHERE prjId = :imgId")
-    void deleteImagelink(Long imgId);
+    @Query("DELETE FROM image_link WHERE prjId = :prjId")
+    void deleteImagelink(Long prjId);
 
     @Query("SELECT * FROM image_link WHERE id = :id")
     LiveData<Imagelink> loadImagelinkById(Long id);
