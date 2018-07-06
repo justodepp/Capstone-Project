@@ -47,5 +47,12 @@
     <string name="org_detail_active_prj_text_tool">Active project: 8</string>
     <string name="org_detail_no_url_provided">No URL provided</string>
 
-    <!-- Menu -->
+    <!-- Detail Project -->
+    <string name="prj_detail_need">Need</string>
+    <string name="prj_detail_summary">Summary</string>
+    <string name="prj_detail_activities">Activities</string>
+    <string name="prj_detail_longterm">Long term impact</string>
+    <string name="label_fav_added">Project added to favorites</string>
+    <string name="label_fav_deleted">Project removed from favorites</string>
+
 </resources>

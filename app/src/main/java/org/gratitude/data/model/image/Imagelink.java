@@ -1,6 +1,7 @@
 
 package org.gratitude.data.model.image;
 
+import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.Ignore;
@@ -24,13 +25,14 @@ public class Imagelink implements Parcelable {
     @PrimaryKey(autoGenerate = true)
     private int id;
 
-    private int prjId;
+    @ColumnInfo(index = true)
+    private Long prjId;
 
-    public int getPrjId() {
+    public Long getPrjId() {
         return prjId;
     }
 
-    public void setPrjId(int prjId) {
+    public void setPrjId(Long prjId) {
         this.prjId = prjId;
     }
 

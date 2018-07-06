@@ -5,6 +5,7 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
@@ -30,6 +31,8 @@ public class DetailsProjectFragment extends Fragment implements View.OnClickList
     // Member variable for the Database
     private GratitudeDatabase mDb;
 
+    private boolean favorite;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -44,6 +47,7 @@ public class DetailsProjectFragment extends Fragment implements View.OnClickList
         Bundle bundle = this.getArguments();
         assert bundle != null;
         mProject = bundle.getParcelable(ProjectsFragment.PRJ_CLICKED);
+        setImgPrjId();
 
         mDb = GratitudeDatabase.getInstance(getContext());
 
@@ -54,17 +58,46 @@ public class DetailsProjectFragment extends Fragment implements View.OnClickList
         mBinding.projectTitle.setText(mProject.getTitle());
         ImageHandler.projectImageHandler(getContext(), mBinding.projectImageview, mProject);
 
-        mBinding.projectSummaryTitle.setText("Summary");
+        mBinding.projectSummaryTitle.setText(R.string.prj_detail_summary);
         mBinding.projectSummaryText.setText(mProject.getSummary());
 
-        mBinding.projectNeedTitle.setText("Need");
+        mBinding.projectNeedTitle.setText(R.string.prj_detail_need);
         mBinding.projectNeedText.setText(mProject.getNeed());
 
-        mBinding.projectLongTermImpactTitle.setText("Long term impact");
+        mBinding.projectLongTermImpactTitle.setText(R.string.prj_detail_longterm);
         mBinding.projectLongTermImpactText.setText(mProject.getLongTermImpact());
 
-        mBinding.projectActivitiesTitle.setText("Activities");
+        mBinding.projectActivitiesTitle.setText(R.string.prj_detail_activities);
         mBinding.projectActivitiesText.setText(mProject.getActivities());
+
+        initFav();
+    }
+
+    private void setImgPrjId() {
+        for (int i = 0; i < mProject.getImage().getImagelink().size(); i++) {
+            mProject.getImage().getImagelink().get(i).setPrjId(mProject.getId());
+        }
+    }
+
+    private void initFav() {
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                if (mDb.projectDao().loadProjectById(mProject.getId()) != null)
+                    favorite = true;
+
+                updateFab(favorite);
+            }
+        });
+    }
+
+    private void updateFab(boolean favourite) {
+        if (favourite)
+            mBinding.favoriteButton.setImageDrawable(Objects.requireNonNull(getActivity()).getResources()
+                    .getDrawable(R.drawable.ic_favorite_on));
+        else
+            mBinding.favoriteButton.setImageDrawable(Objects.requireNonNull(getActivity()).getResources()
+                    .getDrawable(R.drawable.ic_favorite_off));
     }
 
     @Override
@@ -92,8 +125,7 @@ public class DetailsProjectFragment extends Fragment implements View.OnClickList
                     .commit();
 
         } else if(view == mBinding.favoriteButton){
-            // TODO: DATABASE
-            //onFavButtonClicked();
+            onFavButtonClicked();
         }
     }
 
@@ -102,21 +134,33 @@ public class DetailsProjectFragment extends Fragment implements View.OnClickList
      * It retrieves Project fav into the underlying database.
      */
     private void onFavButtonClicked() {
-        AppExecutors.getInstance().diskIO().execute(new Runnable() {
-            @Override
-            public void run() {
-                // insert new task
-                mDb.projectDao().insertProject(mProject);
-            }
-        });
-    }
+        if(favorite) {
+            AppExecutors.getInstance().diskIO().execute(new Runnable() {
+                @Override
+                public void run() {
+                    // delete project
+                    mDb.projectDao().deleteProject(mProject);
+                    mDb.imageLinkDao().deleteImagelink(mProject.getId());
+                }
+            });
 
-    private void onFavButtonClicked2() {
-        AppExecutors.getInstance().diskIO().execute(new Runnable() {
-            @Override
-            public void run() {
-                mDb.projectDao().deleteProject(mProject);
-            }
-        });
+            favorite = false;
+
+            Snackbar.make(mBinding.mainParent, R.string.label_fav_deleted, Snackbar.LENGTH_SHORT).show();
+        } else {
+            AppExecutors.getInstance().diskIO().execute(new Runnable() {
+                @Override
+                public void run() {
+                    // insert project
+                    mDb.projectDao().insertProject(mProject);
+                    mDb.imageLinkDao().insertImagelink(mProject.getImage().getImagelink());
+                }
+            });
+
+            favorite = true;
+            Snackbar.make(mBinding.mainParent, R.string.label_fav_added, Snackbar.LENGTH_SHORT).show();
+        }
+
+        updateFab(favorite);
     }
 }
