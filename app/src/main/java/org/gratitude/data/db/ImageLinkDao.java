@@ -22,5 +22,5 @@ public interface ImageLinkDao {
     void deleteImagelink(Long prjId);
 
     @Query("SELECT * FROM image_link WHERE id = :id")
-    LiveData<Imagelink> loadImagelinkById(Long id);
+    List<Imagelink> loadImagelinkById(Long id);
 }

@@ -14,6 +14,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
 import org.gratitude.R;
+import org.gratitude.data.db.GratitudeDatabase;
 import org.gratitude.data.model.projects.Project;
 import org.gratitude.databinding.ProjectItemBinding;
 import org.gratitude.utils.ImageHandler;
@@ -25,6 +26,7 @@ public class ProjectsAdapter extends RecyclerView.Adapter<ProjectsAdapter.Projec
 
     private Context mContext;
     private ArrayList<Project> mProject;
+    private GratitudeDatabase mDb;
 
     // Allows to remember the last item shown on screen
     private int lastPosition = -1;
@@ -32,6 +34,12 @@ public class ProjectsAdapter extends RecyclerView.Adapter<ProjectsAdapter.Projec
     public ProjectsAdapter(Context context, List<Project> projectList) {
         mContext = context;
         mProject = new ArrayList<>(projectList);
+    }
+
+    public ProjectsAdapter(Context context, List<Project> projectList, GratitudeDatabase db) {
+        mContext = context;
+        mProject = new ArrayList<>(projectList);
+        mDb = db;
     }
 
     @NonNull
@@ -113,7 +121,11 @@ public class ProjectsAdapter extends RecyclerView.Adapter<ProjectsAdapter.Projec
                 //goalReached();
             }
 
-            ImageHandler.projectImageHandler(mContext, mBinding.includeHeader.projectImageview, project);
+            if(mDb != null){
+
+            } else {
+                ImageHandler.projectImageHandler(mContext, mBinding.includeHeader.projectImageview, project);
+            }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 mBinding.includeRaised.moneyProgressBar.setProgress(progress, true);
             } else {

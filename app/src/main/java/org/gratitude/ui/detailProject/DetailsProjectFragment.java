@@ -74,6 +74,7 @@ public class DetailsProjectFragment extends Fragment implements View.OnClickList
     }
 
     private void setImgPrjId() {
+        mProject.getImage().setPrjId(mProject.getId());
         for (int i = 0; i < mProject.getImage().getImagelink().size(); i++) {
             mProject.getImage().getImagelink().get(i).setPrjId(mProject.getId());
         }
@@ -140,6 +141,7 @@ public class DetailsProjectFragment extends Fragment implements View.OnClickList
                 public void run() {
                     // delete project
                     mDb.projectDao().deleteProject(mProject);
+                    mDb.imageDao().deleteImage(mProject.getId());
                     mDb.imageLinkDao().deleteImagelink(mProject.getId());
                 }
             });
@@ -153,6 +155,7 @@ public class DetailsProjectFragment extends Fragment implements View.OnClickList
                 public void run() {
                     // insert project
                     mDb.projectDao().insertProject(mProject);
+                    mDb.imageDao().insertImage(mProject.getImage());
                     mDb.imageLinkDao().insertImagelink(mProject.getImage().getImagelink());
                 }
             });

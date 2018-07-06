@@ -770,7 +770,7 @@ public class Project implements Parcelable {
 
     @Ignore
     public Project(String activities, Double funding, Long goal, Long id, String need,
-                   String progressReportLink, String projectLink, String summary, String title) {
+                   String progressReportLink, String projectLink, String summary, String title, Image image) {
         setActivities(activities);
         setFunding(funding);
         setGoal(goal);
@@ -780,6 +780,7 @@ public class Project implements Parcelable {
         setProjectLink(projectLink);
         setSummary(summary);
         setTitle(title);
+        setImage(image);
     }
 
     protected Project(Parcel in) {

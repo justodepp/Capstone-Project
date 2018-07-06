@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.gratitude.R;
+import org.gratitude.data.db.GratitudeDatabase;
 import org.gratitude.data.model.projects.Project;
 import org.gratitude.data.model.projects.Projects;
 import org.gratitude.databinding.FragmentProjectListBinding;
@@ -23,6 +24,7 @@ import org.gratitude.main.MainActivity;
 import org.gratitude.main.interfaces.ResponseInterface;
 import org.gratitude.ui.adapter.ProjectsAdapter;
 import org.gratitude.ui.detailProject.DetailsProjectFragment;
+import org.gratitude.utils.AppExecutors;
 import org.gratitude.utils.EndlessRecyclerViewScrollListener;
 import org.gratitude.utils.ItemClickSupport;
 
@@ -53,6 +55,8 @@ public class ProjectsFragment extends Fragment implements SwipeRefreshLayout.OnR
 
     private EndlessRecyclerViewScrollListener endlessScroll;
 
+    // Member variable for the Database
+    private GratitudeDatabase mDb;
     private boolean isFavorite = false;
 
     @Nullable
@@ -65,6 +69,8 @@ public class ProjectsFragment extends Fragment implements SwipeRefreshLayout.OnR
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        mDb = GratitudeDatabase.getInstance(getContext());
 
         mBundle = this.getArguments();
         if(mBundle != null){
@@ -120,11 +126,26 @@ public class ProjectsFragment extends Fragment implements SwipeRefreshLayout.OnR
             @Override
             public void onChanged(@Nullable List<Project> projects) {
                 Timber.d("Updating list of tasks from LiveData in ViewModel");
+
                 if(mAdapter == null) {
-                    mAdapter = new ProjectsAdapter(getActivity(), projects);
+                    mAdapter = new ProjectsAdapter(getActivity(), projects, mDb);
                     mBinding.recyclerview.setAdapter(mAdapter);
                 } else {
                     mAdapter.setProjectList(projects);
+                }
+            }
+        });
+    }
+
+    private void setPrjImage(final List<Project> projects) {
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                for (int i = 0; i < projects.size(); i++) {
+                    projects.get(i).setImage(mDb.imageDao().loadImageById(projects.get(i).getId()));
+                    projects.get(i).getImage().setImagelink(
+                            mDb.imageLinkDao().loadImagelinkById(projects.get(i).getId())
+                    );
                 }
             }
         });

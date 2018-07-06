@@ -5,12 +5,13 @@ import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 
+import org.gratitude.data.model.image.Image;
 import org.gratitude.data.model.image.Imagelink;
 import org.gratitude.data.model.projects.Project;
 
 import timber.log.Timber;
 
-@Database(entities = {Project.class, Imagelink.class}, version = 1, exportSchema = false)
+@Database(entities = {Project.class, Image.class, Imagelink.class}, version = 1, exportSchema = false)
 public abstract class GratitudeDatabase extends RoomDatabase{
 
     private static final Object LOCK = new Object();
@@ -31,5 +32,6 @@ public abstract class GratitudeDatabase extends RoomDatabase{
     }
 
     public abstract ProjectDao projectDao();
+    public abstract ImageDao imageDao();
     public abstract ImageLinkDao imageLinkDao();
 }
