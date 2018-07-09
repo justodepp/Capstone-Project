@@ -17,6 +17,8 @@ import android.view.ViewGroup;
 
 import org.gratitude.R;
 import org.gratitude.data.db.GratitudeDatabase;
+import org.gratitude.data.model.image.Image;
+import org.gratitude.data.model.image.Imagelink;
 import org.gratitude.data.model.projects.Project;
 import org.gratitude.data.model.projects.Projects;
 import org.gratitude.databinding.FragmentProjectListBinding;
@@ -24,7 +26,6 @@ import org.gratitude.main.MainActivity;
 import org.gratitude.main.interfaces.ResponseInterface;
 import org.gratitude.ui.adapter.ProjectsAdapter;
 import org.gratitude.ui.detailProject.DetailsProjectFragment;
-import org.gratitude.utils.AppExecutors;
 import org.gratitude.utils.EndlessRecyclerViewScrollListener;
 import org.gratitude.utils.ItemClickSupport;
 
@@ -119,47 +120,129 @@ public class ProjectsFragment extends Fragment implements SwipeRefreshLayout.OnR
             }
         });
     }
+    private void setupViewModel2() {
+        final List<Imagelink> _Imagelinks = new ArrayList<>();
+        final List<Image> _Image = new ArrayList<>();
+        final List<Project> _Prj= new ArrayList<>();
 
-    private void setupViewModel() {
-        ProjectViewModel viewModel = ViewModelProviders.of(this).get(ProjectViewModel.class);
-        viewModel.getProjects().observe(this, new Observer<List<Project>>() {
+        final ProjectViewModel viewModel = ViewModelProviders.of(this).get(ProjectViewModel.class);
+        viewModel.getImageLinks().observe(this, new Observer<List<Imagelink>>() {
             @Override
-            public void onChanged(@Nullable List<Project> projects) {
-                Timber.d("Updating list of tasks from LiveData in ViewModel");
+            public void onChanged(@Nullable final List<Imagelink> imagelinks) {
+                viewModel.getImageLinks().removeObserver(this);
 
-                if(mAdapter == null) {
-                    mAdapter = new ProjectsAdapter(getActivity(), projects, mDb);
-                    mBinding.recyclerview.setAdapter(mAdapter);
-                } else {
-                    mAdapter.setProjectList(projects);
-                }
+                viewModel.getImages().observe(ProjectsFragment.this, new Observer<List<Image>>() {
+                    @Override
+                    public void onChanged(@Nullable final List<Image> images) {
+                        viewModel.getImages().removeObserver(this);
+                        for (int i = 0; i < images.size(); i++) {
+                            for (int j = 0; j < imagelinks.size(); j++) {
+                                if (images.get(i).getPrjId().equals(imagelinks.get(j).getPrjId())){
+                                    _Imagelinks.add(imagelinks.get(j));
+                                }
+                            }
+                            images.get(i).setImagelink(_Imagelinks);
+                            _Imagelinks.clear();
+                        }
+
+                        _Image.addAll(images);
+
+                        viewModel.getProjects().observe(ProjectsFragment.this, new Observer<List<Project>>() {
+                            @Override
+                            public void onChanged(@Nullable List<Project> projects) {
+                                viewModel.getProjects().removeObserver(this);
+                                for (int i = 0; i < projects.size(); i++) {
+                                    for (int j = 0; j < _Image.size(); j++) {
+                                        if(projects.get(i).getId().equals(_Image.get(j).getPrjId())){
+                                            projects.get(i).setImage(_Image.get(j));
+                                        }
+                                    }
+                                }
+
+                                _Prj.addAll(projects);
+                                populateUI(_Prj);
+                            }
+                        });
+                    }
+                });
+
+                mBinding.swipeRefreshLayout.setRefreshing(false);
+                mBinding.progressBar.indeterminateBar.setVisibility(View.GONE);
             }
         });
     }
 
-    // TODO: aggiungere TypeConverter per oggetto Image e List<ImageLink>
-    private void setPrjImage(final List<Project> projects) {
-        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+    private void setupViewModel() {
+        //ProjectViewModelFactory projectViewModelFactory = new ProjectViewModelFactory(mDb, prjId);
+        final ProjectViewModel viewModel = ViewModelProviders.of(this).get(ProjectViewModel.class);
+        viewModel.getProjects().observe(this, new Observer<List<Project>>() {
             @Override
-            public void run() {
-                for (int i = 0; i < projects.size(); i++) {
-                    projects.get(i).setImage(mDb.imageDao().loadImageById(projects.get(i).getId()));
-                    projects.get(i).getImage().setImagelink(
-                            mDb.imageLinkDao().loadImagelinkById(projects.get(i).getId())
-                    );
+            public void onChanged(@Nullable final List<Project> projects) {
+                Timber.d("Updating list of tasks from LiveData in ViewModel");
+
+                if(projects != null && projects.size() > 0) {
+                    for (int i = 0; i < projects.size(); i++) {
+
+                        final Image[] mImage = {new Image()};
+
+                        //Retrieve the current image from ViewModel
+                        final int finalI = i;
+                        viewModel.getImages().observe(ProjectsFragment.this, new Observer<List<Image>>() {
+                            @Override
+                            public void onChanged(@Nullable List<Image> images) {
+                                viewModel.getImages().removeObserver(this);
+
+                                assert images != null;
+                                for (int j = 0; j < images.size(); j++) {
+                                    if(images.get(j).getPrjId().equals(projects.get(finalI).getId())) {
+                                        mImage[0] = images.get(j);
+                                    }
+                                }
+
+                                //Retrieve the current order from ViewModel
+                                viewModel.getImageLinks().observe(ProjectsFragment.this, new Observer<List<Imagelink>>() {
+                                    @Override
+                                    public void onChanged(@Nullable List<Imagelink> imagelinks) {
+                                        viewModel.getImageLinks().removeObserver(this);
+
+                                        mImage[0].setImagelink(imagelinks);
+                                        projects.get(finalI).setImage(mImage[0]);
+                                    }
+                                });
+                            }
+                        });
+                    }
+                    populateUI(projects);
                 }
+
+                mBinding.swipeRefreshLayout.setRefreshing(false);
+                mBinding.progressBar.indeterminateBar.setVisibility(View.GONE);
             }
         });
+    }
+
+    private void populateUI(List<Project> projects) {
+        mProjectList.clear();
+        mProjectList.addAll(projects);
+        if (mAdapter == null) {
+            mAdapter = new ProjectsAdapter(getActivity(), mProjectList);
+            mBinding.recyclerview.setAdapter(mAdapter);
+        } else {
+            mAdapter.setProjectList(mProjectList);
+            mAdapter.notifyDataSetChanged();
+        }
     }
 
     private void handleCall(){
         if(typeCode != null) {
+            //mBinding.swipeRefreshLayout.setEnabled(true);
             if (typeCode.equals(getString(R.string.menu_home))) {
                 callFeatured();
             } else if (typeCode.equals(getString(R.string.menu_prj))) {
                 callProjects();
             }  else if (typeCode.equals(getString(R.string.menu_fav))) {
-                    setupViewModel();
+                //mBinding.swipeRefreshLayout.setEnabled(false);
+                setupViewModel2();
             } else if (typeCode.equals(getString(R.string.menu_cat))) {
                 mTheme = mBundle.getString(ThemesFragment.THEME_CLICKED);
                 callPrjCat(mTheme);
