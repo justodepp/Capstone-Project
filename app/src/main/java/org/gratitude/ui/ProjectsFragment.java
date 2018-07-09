@@ -167,6 +167,8 @@ public class ProjectsFragment extends Fragment implements SwipeRefreshLayout.OnR
                 mBinding.progressBar.indeterminateBar.setVisibility(View.GONE);
             }
         });
+
+        viewModel.onCleared();
     }
 
     private void setupViewModel() {

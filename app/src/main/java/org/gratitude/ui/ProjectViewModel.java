@@ -30,6 +30,15 @@ public class ProjectViewModel extends AndroidViewModel {
         imageLinks = database.imageLinkDao().loadAllImageLinks();
     }
 
+    public void reset(){
+        onCleared();
+    }
+
+    @Override
+    protected void onCleared() {
+        super.onCleared();
+    }
+
     public LiveData<List<Project>> getProjects() {
         return projects;
     }
