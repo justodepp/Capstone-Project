@@ -121,7 +121,6 @@ public class ProjectsFragment extends Fragment implements SwipeRefreshLayout.OnR
         });
     }
     private void setupViewModel2() {
-        final List<Imagelink> _Imagelinks = new ArrayList<>();
         final List<Image> _Image = new ArrayList<>();
         final List<Project> _Prj= new ArrayList<>();
 
@@ -130,22 +129,20 @@ public class ProjectsFragment extends Fragment implements SwipeRefreshLayout.OnR
             @Override
             public void onChanged(@Nullable final List<Imagelink> imagelinks) {
                 viewModel.getImageLinks().removeObserver(this);
-
                 viewModel.getImages().observe(ProjectsFragment.this, new Observer<List<Image>>() {
                     @Override
                     public void onChanged(@Nullable final List<Image> images) {
                         viewModel.getImages().removeObserver(this);
                         for (int i = 0; i < images.size(); i++) {
+                            List<Imagelink> _Imagelinks = new ArrayList<>();
                             for (int j = 0; j < imagelinks.size(); j++) {
                                 if (images.get(i).getPrjId().equals(imagelinks.get(j).getPrjId())){
                                     _Imagelinks.add(imagelinks.get(j));
                                 }
                             }
                             images.get(i).setImagelink(_Imagelinks);
-                            _Imagelinks.clear();
+                            _Image.add(images.get(i));
                         }
-
-                        _Image.addAll(images);
 
                         viewModel.getProjects().observe(ProjectsFragment.this, new Observer<List<Project>>() {
                             @Override
@@ -222,7 +219,7 @@ public class ProjectsFragment extends Fragment implements SwipeRefreshLayout.OnR
     }
 
     private void populateUI(List<Project> projects) {
-        mProjectList.clear();
+        resetData();
         mProjectList.addAll(projects);
         if (mAdapter == null) {
             mAdapter = new ProjectsAdapter(getActivity(), mProjectList);
