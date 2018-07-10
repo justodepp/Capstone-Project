@@ -11,6 +11,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +27,7 @@ import org.gratitude.main.MainActivity;
 import org.gratitude.main.interfaces.ResponseInterface;
 import org.gratitude.ui.adapter.ProjectsAdapter;
 import org.gratitude.ui.detailProject.DetailsProjectFragment;
+import org.gratitude.utils.AppExecutors;
 import org.gratitude.utils.EndlessRecyclerViewScrollListener;
 import org.gratitude.utils.ItemClickSupport;
 
@@ -100,8 +102,6 @@ public class ProjectsFragment extends Fragment implements SwipeRefreshLayout.OnR
             }
         };
 
-        handleCall();
-
         mBinding.recyclerview.addOnScrollListener(endlessScroll);
 
         ItemClickSupport.addTo(mBinding.recyclerview).setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
@@ -121,6 +121,35 @@ public class ProjectsFragment extends Fragment implements SwipeRefreshLayout.OnR
                         .commit();
             }
         });
+
+        /*
+         Add a touch helper to the RecyclerView to recognize when a user swipes to delete an item.
+         An ItemTouchHelper enables touch behavior (like swipe and move) on each ViewHolder,
+         and uses callbacks to signal when a user is performing these actions.
+         */
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            // Called when a user swipes left or right on a ViewHolder
+            @Override
+            public void onSwiped(final RecyclerView.ViewHolder viewHolder, int swipeDir) {
+                // Here is where you'll implement swipe to delete
+                AppExecutors.getInstance().diskIO().execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        int position = viewHolder.getAdapterPosition();
+                        mDb.projectDao().deleteProject(mAdapter.getItem(position));
+                        mDb.imageDao().deleteImage(mAdapter.getItem(position).getId());
+                        mDb.imageLinkDao().deleteImagelink(mAdapter.getItem(position).getId());
+                    }
+                });
+            }
+        }).attachToRecyclerView(mBinding.recyclerview);
+
+        handleCall();
     }
     private void setupViewModel2() {
         final List<Image> _Image = new ArrayList<>();
@@ -220,14 +249,11 @@ public class ProjectsFragment extends Fragment implements SwipeRefreshLayout.OnR
     }
 
     private void populateUI(List<Project> projects) {
-        resetData();
-        mProjectList.addAll(projects);
         if (mAdapter == null) {
-            mAdapter = new ProjectsAdapter(getActivity(), mProjectList);
+            mAdapter = new ProjectsAdapter(getActivity(), projects);
             mBinding.recyclerview.setAdapter(mAdapter);
         } else {
-            mAdapter.setProjectList(mProjectList);
-            mAdapter.notifyDataSetChanged();
+            mAdapter.setNewProjectList(projects);
         }
     }
 

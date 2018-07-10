@@ -55,6 +55,11 @@ public class ProjectsAdapter extends RecyclerView.Adapter<ProjectsAdapter.Projec
         mProject.addAll(projectList);
     }
 
+    public void setNewProjectList(List<Project> projectList){
+        mProject = new ArrayList<>(projectList);
+        notifyDataSetChanged();
+    }
+
     /**
      * Here is the key method to apply the animation
      */
