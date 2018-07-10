@@ -4,6 +4,7 @@ import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 
+import org.gratitude.data.db.ProjectPojo;
 import org.gratitude.data.model.image.Image;
 import org.gratitude.data.model.image.Imagelink;
 import org.gratitude.data.model.projects.Project;
@@ -16,7 +17,7 @@ public class ProjectViewModel extends AndroidViewModel {
 
     private ProjectRepository projectRepository;
 
-    private LiveData<List<Project>> projects;
+    private LiveData<List<ProjectPojo>> projects;
     private LiveData<List<Image>> image;
     private LiveData<List<Imagelink>> imageLinks;
 
@@ -29,16 +30,7 @@ public class ProjectViewModel extends AndroidViewModel {
         imageLinks = projectRepository.getImageLinks();
     }
 
-    public void reset(){
-        onCleared();
-    }
-
-    @Override
-    protected void onCleared() {
-        super.onCleared();
-    }
-
-    public LiveData<List<Project>> getProjects() {
+    public LiveData<List<ProjectPojo>> getProjects() {
         return projects;
     }
 

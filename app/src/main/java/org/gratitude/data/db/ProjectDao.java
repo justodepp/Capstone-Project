@@ -13,11 +13,11 @@ import java.util.List;
 @Dao
 public interface ProjectDao {
 
-    /*@Query("SELECT * FROM project "
+    @Query("SELECT * FROM project "
             + "INNER JOIN image ON image.prjId = project.id "
-            + "INNER JOIN image_link ON image_link.prjId = image.prjId ")*/
-    @Query("SELECT * FROM project ")
-    LiveData<List<Project>> loadAllProjects();
+            + "INNER JOIN image_link ON image_link.prjId = image.prjId ")
+//    @Query("SELECT * FROM project ")
+    LiveData<List<ProjectPojo>> loadAllProjects();
 
     @Insert
     void insertProject(Project project);

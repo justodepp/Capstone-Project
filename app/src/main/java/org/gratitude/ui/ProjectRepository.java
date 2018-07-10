@@ -8,6 +8,7 @@ import org.gratitude.data.db.GratitudeDatabase;
 import org.gratitude.data.db.ImageDao;
 import org.gratitude.data.db.ImageLinkDao;
 import org.gratitude.data.db.ProjectDao;
+import org.gratitude.data.db.ProjectPojo;
 import org.gratitude.data.model.image.Image;
 import org.gratitude.data.model.image.Imagelink;
 import org.gratitude.data.model.projects.Project;
@@ -17,7 +18,7 @@ import java.util.List;
 public class ProjectRepository {
 
     private ProjectDao mPrjDao;
-    private LiveData<List<Project>> mAllPrj;
+    private LiveData<List<ProjectPojo>> mAllPrj;
 
     private ImageDao mImgDao;
     private LiveData<List<Image>> mAllImg;
@@ -35,7 +36,7 @@ public class ProjectRepository {
         mAllImgLink = mImgLinkDao.loadAllImageLinks();
     }
 
-    LiveData<List<Project>> getProjects() {
+    LiveData<List<ProjectPojo>> getProjects() {
         return mAllPrj;
     }
 

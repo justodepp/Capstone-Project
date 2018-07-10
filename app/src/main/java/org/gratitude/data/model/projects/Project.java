@@ -13,8 +13,10 @@ import com.google.gson.annotations.Expose;
 
 import org.gratitude.data.api.ApiHandler;
 import org.gratitude.data.api.ApiInterfaces;
+import org.gratitude.data.db.ProjectPojo;
 import org.gratitude.data.model.donation.DonationOptions;
 import org.gratitude.data.model.image.Image;
+import org.gratitude.data.model.image.Imagelink;
 import org.gratitude.data.model.organization.Organization;
 import org.gratitude.data.model.response.AllProjects;
 import org.gratitude.data.model.response.FeaturedProjects;
@@ -22,6 +24,9 @@ import org.gratitude.data.model.response.ProjectByOrganization;
 import org.gratitude.data.model.response.ProjectByTheme;
 import org.gratitude.data.model.video.Videos;
 import org.gratitude.main.interfaces.ResponseInterface;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -922,5 +927,77 @@ public class Project implements Parcelable {
                 Timber.e(t);
             }
         });
+    }
+
+    public static List<Project> getProjectsFromDB(List<ProjectPojo> projectPojosList) {
+        ProjectPojo currentPojo = null;
+        List<Project> projectsList = new ArrayList<>();
+        List<Imagelink> imagelinkList = new ArrayList<>();
+
+        currentPojo = projectPojosList.get(0);
+        for (int i = 0; i < projectPojosList.size(); i++) {
+
+            if (currentPojo.getPrjId().equals(projectPojosList.get(i).getPrjId())) {
+                Imagelink imagelink = new Imagelink();
+                imagelink.setSize(currentPojo.getSize());
+                imagelink.setPrjId(currentPojo.getPrjId());
+                imagelink.setUrl(currentPojo.getUrl());
+                imagelinkList.add(imagelink);
+            } else {
+                List<Imagelink> list = new ArrayList<>(imagelinkList);
+                Image image = new Image();
+                Project prj = new Project();
+
+                image.setPrjId(currentPojo.getPrjId());
+                image.setTitle(currentPojo.getTitle());
+                image.setImagelink(list);
+
+                prj.setActivities(currentPojo.getActivities());
+                prj.setFunding(currentPojo.getFunding());
+                prj.setGoal(currentPojo.getGoal());
+                prj.setId(currentPojo.getPrjId());
+                prj.setNeed(currentPojo.getNeed());
+                prj.setProgressReportLink(currentPojo.getProgressReportLink());
+                prj.setProjectLink(currentPojo.getProjectLink());
+                prj.setSummary(currentPojo.getSummary());
+                prj.setTitle(currentPojo.getTitle());
+                prj.setImage(image);
+
+                projectsList.add(prj);
+
+                imagelinkList.clear();
+            }
+
+            currentPojo = projectPojosList.get(i);
+        }
+
+        /*for (ProjectPojo pojo : projectPojosList) {
+            if(currentPojo != null) {
+                if (currentPojo.getPrjId().equals(pojo.getPrjId())) {
+                    Imagelink imagelink = new Imagelink();
+                    imagelink.setSize(currentPojo.getSize());
+                    imagelink.setPrjId(currentPojo.getPrjId());
+                    imagelink.setUrl(currentPojo.getUrl());
+                    imagelinkList.add(imagelink);
+                } else {
+                    List<Imagelink> list = new ArrayList<>(imagelinkList);
+                    Image image = new Image();
+                    Project prj = new Project();
+
+                    image.setPrjId(currentPojo.getPrjId());
+                    image.setTitle(currentPojo.getTitle());
+                    image.setImagelink(list);
+
+                    prj.setImage(image);
+
+                    projectsList.add(prj);
+
+                    imagelinkList.clear();
+                }
+            }
+            currentPojo = pojo;
+        }*/
+
+        return projectsList;
     }
 }
