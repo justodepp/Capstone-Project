@@ -930,54 +930,55 @@ public class Project implements Parcelable {
     }
 
     public static List<Project> getProjectsFromDB(List<ProjectPojo> projectPojosList) {
-        ProjectPojo currentPojo = null;
-        List<Project> projectsList = new ArrayList<>();
-        List<Imagelink> imagelinkList = new ArrayList<>();
+        if(projectPojosList != null) {
+            List<Project> projectsList = new ArrayList<>();
+            List<Imagelink> imagelinkList = new ArrayList<>();
 
-        currentPojo = projectPojosList.get(0);
+            Project prj = null;
 
-        Project prj = null;
+            for (int i = 0; i < projectPojosList.size(); i++) {
 
-        for (int i = 0; i < projectPojosList.size(); i++) {
+                Imagelink imagelink = new Imagelink();
+                imagelink.setSize(projectPojosList.get(i).getSize());
+                imagelink.setPrjId(projectPojosList.get(i).getPrjId());
+                imagelink.setUrl(projectPojosList.get(i).getUrl());
 
-            Imagelink imagelink = new Imagelink();
-            imagelink.setSize(projectPojosList.get(i).getSize());
-            imagelink.setPrjId(projectPojosList.get(i).getPrjId());
-            imagelink.setUrl(projectPojosList.get(i).getUrl());
+                if (prj != null && prj.getId().equals(projectPojosList.get(i).getPrjId())) {
+                    imagelinkList.add(imagelink);
+                } else {
 
-            if (prj != null && prj.getId().equals(projectPojosList.get(i).getPrjId())) {
-                imagelinkList.add(imagelink);
-            } else {
-
-                imagelinkList = new ArrayList<>();
-                imagelinkList.add(imagelink);
+                    imagelinkList = new ArrayList<>();
+                    imagelinkList.add(imagelink);
 
 
-                prj = new Project();
+                    prj = new Project();
 
-                prj.setActivities(projectPojosList.get(i).getActivities());
-                prj.setFunding(projectPojosList.get(i).getFunding());
-                prj.setGoal(projectPojosList.get(i).getGoal());
-                prj.setId(projectPojosList.get(i).getPrjId());
-                prj.setNeed(projectPojosList.get(i).getNeed());
-                prj.setProgressReportLink(projectPojosList.get(i).getProgressReportLink());
-                prj.setProjectLink(projectPojosList.get(i).getProjectLink());
-                prj.setSummary(projectPojosList.get(i).getSummary());
-                prj.setTitle(projectPojosList.get(i).getTitle());
+                    prj.setActivities(projectPojosList.get(i).getActivities());
+                    prj.setFunding(projectPojosList.get(i).getFunding());
+                    prj.setGoal(projectPojosList.get(i).getGoal());
+                    prj.setId(projectPojosList.get(i).getPrjId());
+                    prj.setNeed(projectPojosList.get(i).getNeed());
+                    prj.setProgressReportLink(projectPojosList.get(i).getProgressReportLink());
+                    prj.setProjectLink(projectPojosList.get(i).getProjectLink());
+                    prj.setSummary(projectPojosList.get(i).getSummary());
+                    prj.setTitle(projectPojosList.get(i).getTitle());
 
-                projectsList.add(prj);
+                    projectsList.add(prj);
+                }
+
+                if (prj.getImage() == null) {
+                    Image image = new Image();
+                    image.setPrjId(projectPojosList.get(i).getPrjId());
+                    image.setTitle(projectPojosList.get(i).getTitle());
+                    image.setImagelink(imagelinkList);
+                    prj.setImage(image);
+                } else {
+                    prj.getImage().setImagelink(imagelinkList);
+                }
             }
-
-            if(prj.getImage() == null) {
-                Image image = new Image();
-                image.setPrjId(projectPojosList.get(i).getPrjId());
-                image.setTitle(projectPojosList.get(i).getTitle());
-                image.setImagelink(imagelinkList);
-                prj.setImage(image);
-            } else {
-                prj.getImage().setImagelink(imagelinkList);
-            }
+            return projectsList;
         }
+        return null;
         /*ProjectPojo currentPojo = null;
         List<Project> projectsList = new ArrayList<>();
         List<Imagelink> imagelinkList = new ArrayList<>();
@@ -1026,8 +1027,6 @@ public class Project implements Parcelable {
 
             currentPojo = projectPojosList.get(i);
         }*/
-
-        return projectsList;
     }
 
     private void testmethod(List<ProjectPojo> projectPojosList) {

@@ -55,4 +55,7 @@
     <string name="label_fav_added">Project added to favorites</string>
     <string name="label_fav_deleted">Project removed from favorites</string>
 
+    <!-- Favorites Project -->
+    <string name="no_fav">Ops, tap on heart to save your favorite project!</string>
+
 </resources>

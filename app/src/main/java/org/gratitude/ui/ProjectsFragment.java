@@ -170,7 +170,7 @@ public class ProjectsFragment extends Fragment implements SwipeRefreshLayout.OnR
             mBinding.recyclerview.setAdapter(mAdapter);
         }
 
-        if (mProjectList.size() == 0 || mProjectList == null){
+        if (mProjectList == null || mProjectList.size() == 0 ){
             mBinding.textnofavorite.setVisibility(View.VISIBLE);
         }
 

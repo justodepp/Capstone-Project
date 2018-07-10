@@ -47,6 +47,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Ops, tap on heart to save your favorite project!"
+            android:text="@string/no_fav"
             android:visibility="gone"/>
 
         <include
