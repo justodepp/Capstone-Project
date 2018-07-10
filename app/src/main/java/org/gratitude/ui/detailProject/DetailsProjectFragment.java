@@ -136,7 +136,8 @@ public class DetailsProjectFragment extends Fragment implements View.OnClickList
      */
     private void onFavButtonClicked() {
         if(favorite) {
-            AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            ProjectsFragment.deleteData(mProject);
+            /*AppExecutors.getInstance().diskIO().execute(new Runnable() {
                 @Override
                 public void run() {
                     // delete project
@@ -144,13 +145,14 @@ public class DetailsProjectFragment extends Fragment implements View.OnClickList
                     mDb.imageDao().deleteImage(mProject.getId());
                     mDb.imageLinkDao().deleteImagelink(mProject.getId());
                 }
-            });
+            });*/
 
             favorite = false;
 
             Snackbar.make(mBinding.mainParent, R.string.label_fav_deleted, Snackbar.LENGTH_SHORT).show();
         } else {
-            AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            ProjectsFragment.insertData(mProject);
+            /*AppExecutors.getInstance().diskIO().execute(new Runnable() {
                 @Override
                 public void run() {
                     // insert project
@@ -158,7 +160,7 @@ public class DetailsProjectFragment extends Fragment implements View.OnClickList
                     mDb.imageDao().insertImage(mProject.getImage());
                     mDb.imageLinkDao().insertImagelink(mProject.getImage().getImagelink());
                 }
-            });
+            });*/
 
             favorite = true;
             Snackbar.make(mBinding.mainParent, R.string.label_fav_added, Snackbar.LENGTH_SHORT).show();

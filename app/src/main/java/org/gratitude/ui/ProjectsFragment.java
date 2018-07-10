@@ -56,6 +56,7 @@ public class ProjectsFragment extends Fragment implements SwipeRefreshLayout.OnR
 
     private EndlessRecyclerViewScrollListener endlessScroll;
 
+    static ProjectViewModel mViewModel;
     // Member variable for the Database
     private GratitudeDatabase mDb;
     private boolean isFavorite = false;
@@ -72,6 +73,7 @@ public class ProjectsFragment extends Fragment implements SwipeRefreshLayout.OnR
         super.onViewCreated(view, savedInstanceState);
 
         mDb = GratitudeDatabase.getInstance(getContext());
+        mViewModel = ViewModelProviders.of(this).get(ProjectViewModel.class);
 
         mBundle = this.getArguments();
         if(mBundle != null){
@@ -124,15 +126,14 @@ public class ProjectsFragment extends Fragment implements SwipeRefreshLayout.OnR
         final List<Image> _Image = new ArrayList<>();
         final List<Project> _Prj= new ArrayList<>();
 
-        final ProjectViewModel viewModel = ViewModelProviders.of(this).get(ProjectViewModel.class);
-        viewModel.getImageLinks().observe(this, new Observer<List<Imagelink>>() {
+        mViewModel.getImageLinks().observe(this, new Observer<List<Imagelink>>() {
             @Override
             public void onChanged(@Nullable final List<Imagelink> imagelinks) {
-                viewModel.getImageLinks().removeObserver(this);
-                viewModel.getImages().observe(ProjectsFragment.this, new Observer<List<Image>>() {
+                mViewModel.getImageLinks().removeObserver(this);
+                mViewModel.getImages().observe(ProjectsFragment.this, new Observer<List<Image>>() {
                     @Override
                     public void onChanged(@Nullable final List<Image> images) {
-                        viewModel.getImages().removeObserver(this);
+                        mViewModel.getImages().removeObserver(this);
                         for (int i = 0; i < images.size(); i++) {
                             List<Imagelink> _Imagelinks = new ArrayList<>();
                             for (int j = 0; j < imagelinks.size(); j++) {
@@ -144,10 +145,10 @@ public class ProjectsFragment extends Fragment implements SwipeRefreshLayout.OnR
                             _Image.add(images.get(i));
                         }
 
-                        viewModel.getProjects().observe(ProjectsFragment.this, new Observer<List<Project>>() {
+                        mViewModel.getProjects().observe(ProjectsFragment.this, new Observer<List<Project>>() {
                             @Override
                             public void onChanged(@Nullable List<Project> projects) {
-                                viewModel.getProjects().removeObserver(this);
+                                mViewModel.getProjects().removeObserver(this);
                                 for (int i = 0; i < projects.size(); i++) {
                                     for (int j = 0; j < _Image.size(); j++) {
                                         if(projects.get(i).getId().equals(_Image.get(j).getPrjId())){
@@ -167,8 +168,6 @@ public class ProjectsFragment extends Fragment implements SwipeRefreshLayout.OnR
                 mBinding.progressBar.indeterminateBar.setVisibility(View.GONE);
             }
         });
-
-        viewModel.onCleared();
     }
 
     private void setupViewModel() {
@@ -405,5 +404,13 @@ public class ProjectsFragment extends Fragment implements SwipeRefreshLayout.OnR
         mProjectList.clear();
         endlessScroll.resetPreviousTotal();
         mAdapter = null;
+    }
+
+    public static void insertData(Project project) {
+        mViewModel.insert(project);
+    }
+
+    public static void deleteData(Project project) {
+        mViewModel.delete(project);
     }
 }

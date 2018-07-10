@@ -3,19 +3,18 @@ package org.gratitude.ui;
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
-import android.util.Log;
 
-import org.gratitude.data.db.GratitudeDatabase;
 import org.gratitude.data.model.image.Image;
 import org.gratitude.data.model.image.Imagelink;
 import org.gratitude.data.model.projects.Project;
 
 import java.util.List;
 
+import timber.log.Timber;
+
 public class ProjectViewModel extends AndroidViewModel {
 
-    // Constant for logging
-    private static final String TAG = ProjectViewModel.class.getSimpleName();
+    private ProjectRepository projectRepository;
 
     private LiveData<List<Project>> projects;
     private LiveData<List<Image>> image;
@@ -23,11 +22,11 @@ public class ProjectViewModel extends AndroidViewModel {
 
     public ProjectViewModel(Application application) {
         super(application);
-        GratitudeDatabase database = GratitudeDatabase.getInstance(this.getApplication());
-        Log.d(TAG, "Actively retrieving the tasks from the DataBase");
-        projects = database.projectDao().loadAllProjects();
-        image = database.imageDao().loadAllImage();
-        imageLinks = database.imageLinkDao().loadAllImageLinks();
+        projectRepository = new ProjectRepository(application);
+        Timber.d( "Actively retrieving the tasks from the DataBase");
+        projects = projectRepository.getProjects();
+        image = projectRepository.getImages();
+        imageLinks = projectRepository.getImageLinks();
     }
 
     public void reset(){
@@ -49,5 +48,13 @@ public class ProjectViewModel extends AndroidViewModel {
 
     public LiveData<List<Imagelink>> getImageLinks() {
         return imageLinks;
+    }
+
+    public void insert(Project project) {
+        projectRepository.insert(project);
+    }
+
+    public void delete(Project project) {
+        projectRepository.delete(project);
     }
 }
