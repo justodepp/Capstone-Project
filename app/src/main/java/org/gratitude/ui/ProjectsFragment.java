@@ -121,6 +121,10 @@ public class ProjectsFragment extends Fragment implements SwipeRefreshLayout.OnR
             }
         });
 
+        handleCall();
+    }
+
+    private void setupViewModel() {
         /*
          Add a touch helper to the RecyclerView to recognize when a user swipes to delete an item.
          An ItemTouchHelper enables touch behavior (like swipe and move) on each ViewHolder,
@@ -148,10 +152,6 @@ public class ProjectsFragment extends Fragment implements SwipeRefreshLayout.OnR
             }
         }).attachToRecyclerView(mBinding.recyclerview);
 
-        handleCall();
-    }
-
-    private void setupViewModel() {
         mViewModel.getProjects().observe(this, new Observer<List<ProjectPojo>>() {
             @Override
             public void onChanged(@Nullable List<ProjectPojo> projectPojos) {
@@ -167,6 +167,7 @@ public class ProjectsFragment extends Fragment implements SwipeRefreshLayout.OnR
             mBinding.recyclerview.setAdapter(mAdapter);
         } else {
             mAdapter.setNewProjectList(mProjectList);
+            mBinding.recyclerview.setAdapter(mAdapter);
         }
 
         if (mProjectList.size() == 0 || mProjectList == null){

@@ -56,8 +56,9 @@ public class ProjectsAdapter extends RecyclerView.Adapter<ProjectsAdapter.Projec
     }
 
     public void setNewProjectList(List<Project> projectList){
-        mProject = new ArrayList<>(projectList);
-        notifyDataSetChanged();
+        mProject.clear();
+        mProject.addAll(projectList);
+        this.notifyDataSetChanged();
     }
 
     /**
