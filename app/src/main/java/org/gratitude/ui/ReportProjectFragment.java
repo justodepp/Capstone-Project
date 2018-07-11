@@ -63,11 +63,15 @@ public class ReportProjectFragment extends Fragment implements SwipeRefreshLayou
             @Override
             public void onResponseLoaded(Report object) {
                 mEntryList.clear();
-                mEntryList.addAll(object.getEntries());
+                if(object.getEntries() != null) {
+                    mEntryList.addAll(object.getEntries());
 
-                if(mAdapter == null) {
-                    mAdapter = new ReportProjectAdapter(getActivity(), mEntryList);
-                    mBinding.recyclerview.setAdapter(mAdapter);
+                    if (mAdapter == null) {
+                        mAdapter = new ReportProjectAdapter(getActivity(), mEntryList);
+                        mBinding.recyclerview.setAdapter(mAdapter);
+                    }
+                } else {
+                    mBinding.textnoreport.setVisibility(View.VISIBLE);
                 }
 
                 mBinding.swipeRefreshLayout.setRefreshing(false);

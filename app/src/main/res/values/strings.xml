@@ -56,6 +56,9 @@
     <string name="label_fav_deleted">Project removed from favorites</string>
 
     <!-- Favorites Project -->
+    <string name="no_report">Ops, there is no update from this project yet!</string>
+
+    <!-- Favorites Project -->
     <string name="no_fav">Ops, tap on heart to save your favorite project!</string>
 
 </resources>
