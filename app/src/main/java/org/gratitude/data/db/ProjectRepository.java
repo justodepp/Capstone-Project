@@ -1,14 +1,9 @@
-package org.gratitude.ui;
+package org.gratitude.data.db;
 
 import android.app.Application;
 import android.arch.lifecycle.LiveData;
 import android.os.AsyncTask;
 
-import org.gratitude.data.db.GratitudeDatabase;
-import org.gratitude.data.db.ImageDao;
-import org.gratitude.data.db.ImageLinkDao;
-import org.gratitude.data.db.ProjectDao;
-import org.gratitude.data.db.ProjectPojo;
 import org.gratitude.data.model.image.Image;
 import org.gratitude.data.model.image.Imagelink;
 import org.gratitude.data.model.projects.Project;
@@ -26,7 +21,7 @@ public class ProjectRepository {
     private ImageLinkDao mImgLinkDao;
     private LiveData<List<Imagelink>> mAllImgLink;
 
-    ProjectRepository(Application application) {
+    public ProjectRepository(Application application) {
         GratitudeDatabase db = GratitudeDatabase.getInstance(application);
         mPrjDao = db.projectDao();
         mAllPrj = mPrjDao.loadAllProjects();
@@ -36,15 +31,15 @@ public class ProjectRepository {
         mAllImgLink = mImgLinkDao.loadAllImageLinks();
     }
 
-    LiveData<List<ProjectPojo>> getProjects() {
+    public LiveData<List<ProjectPojo>> getProjects() {
         return mAllPrj;
     }
 
-    LiveData<List<Image>> getImages() {
+    public LiveData<List<Image>> getImages() {
         return mAllImg;
     }
 
-    LiveData<List<Imagelink>> getImageLinks() {
+    public LiveData<List<Imagelink>> getImageLinks() {
         return mAllImgLink;
     }
 

@@ -16,6 +16,8 @@ public class ProjectPojo implements Parcelable {
     @Expose
     private Long id;
     @Expose
+    private String imageLink;
+    @Expose
     private String longTermImpact;
     @Expose
     private String need;
@@ -33,6 +35,14 @@ public class ProjectPojo implements Parcelable {
     private String size;
     @Expose
     private String url;
+
+    public String getImageLink() {
+        return imageLink;
+    }
+
+    public void setImageLink(String imageLink) {
+        this.imageLink = imageLink;
+    }
 
     public String getActivities() {
         return activities;
@@ -138,6 +148,9 @@ public class ProjectPojo implements Parcelable {
         this.url = url;
     }
 
+    public ProjectPojo() {
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -149,6 +162,7 @@ public class ProjectPojo implements Parcelable {
         dest.writeValue(this.funding);
         dest.writeValue(this.goal);
         dest.writeValue(this.id);
+        dest.writeString(this.imageLink);
         dest.writeString(this.longTermImpact);
         dest.writeString(this.need);
         dest.writeString(this.progressReportLink);
@@ -160,14 +174,12 @@ public class ProjectPojo implements Parcelable {
         dest.writeString(this.url);
     }
 
-    public ProjectPojo() {
-    }
-
     protected ProjectPojo(Parcel in) {
         this.activities = in.readString();
         this.funding = (Double) in.readValue(Double.class.getClassLoader());
         this.goal = (Long) in.readValue(Long.class.getClassLoader());
         this.id = (Long) in.readValue(Long.class.getClassLoader());
+        this.imageLink = in.readString();
         this.longTermImpact = in.readString();
         this.need = in.readString();
         this.progressReportLink = in.readString();
@@ -179,7 +191,7 @@ public class ProjectPojo implements Parcelable {
         this.url = in.readString();
     }
 
-    public static final Parcelable.Creator<ProjectPojo> CREATOR = new Parcelable.Creator<ProjectPojo>() {
+    public static final Creator<ProjectPojo> CREATOR = new Creator<ProjectPojo>() {
         @Override
         public ProjectPojo createFromParcel(Parcel source) {
             return new ProjectPojo(source);

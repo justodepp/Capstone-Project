@@ -5,6 +5,7 @@ import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 
 import org.gratitude.data.db.ProjectPojo;
+import org.gratitude.data.db.ProjectRepository;
 import org.gratitude.data.model.image.Image;
 import org.gratitude.data.model.image.Imagelink;
 import org.gratitude.data.model.projects.Project;

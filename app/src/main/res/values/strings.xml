@@ -60,5 +60,7 @@
 
     <!-- Favorites Project -->
     <string name="no_fav">Ops, tap on heart to save your favorite project!</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
 
 </resources>

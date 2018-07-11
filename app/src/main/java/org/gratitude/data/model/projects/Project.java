@@ -93,7 +93,6 @@ public class Project implements Parcelable {
     @Ignore
     private Long imageGallerySize;
     @Expose
-    @Ignore
     private String imageLink;
     @Expose
     @Ignore
@@ -957,6 +956,8 @@ public class Project implements Parcelable {
                     prj.setFunding(projectPojosList.get(i).getFunding());
                     prj.setGoal(projectPojosList.get(i).getGoal());
                     prj.setId(projectPojosList.get(i).getPrjId());
+                    prj.setImageLink(projectPojosList.get(i).getImageLink());
+                    prj.setLongTermImpact(projectPojosList.get(i).getLongTermImpact());
                     prj.setNeed(projectPojosList.get(i).getNeed());
                     prj.setProgressReportLink(projectPojosList.get(i).getProgressReportLink());
                     prj.setProjectLink(projectPojosList.get(i).getProjectLink());
@@ -979,57 +980,5 @@ public class Project implements Parcelable {
             return projectsList;
         }
         return null;
-        /*ProjectPojo currentPojo = null;
-        List<Project> projectsList = new ArrayList<>();
-        List<Imagelink> imagelinkList = new ArrayList<>();
-
-        currentPojo = projectPojosList.get(0);
-
-        Project prj = null;
-
-        for (int i = 0; i < projectPojosList.size(); i++) {
-
-            Imagelink imagelink = new Imagelink();
-            imagelink.setSize(currentPojo.getSize());
-            imagelink.setPrjId(currentPojo.getPrjId());
-            imagelink.setUrl(currentPojo.getUrl());
-
-            if (prj != null && prj.getId().equals(projectPojosList.get(i).getPrjId())) {
-                imagelinkList.add(imagelink);
-            } else {
-
-                imagelinkList = new ArrayList<>();
-                imagelinkList.add(imagelink);
-
-
-                prj = new Project();
-
-                prj.setActivities(currentPojo.getActivities());
-                prj.setFunding(currentPojo.getFunding());
-                prj.setGoal(currentPojo.getGoal());
-                prj.setId(currentPojo.getPrjId());
-                prj.setNeed(currentPojo.getNeed());
-                prj.setProgressReportLink(currentPojo.getProgressReportLink());
-                prj.setProjectLink(currentPojo.getProjectLink());
-                prj.setSummary(currentPojo.getSummary());
-                prj.setTitle(currentPojo.getTitle());
-
-                projectsList.add(prj);
-            }
-
-            Image image = prj.getImage() != null ? prj.getImage() : new Image();
-            //List<Imagelink> list = new ArrayList<>(imagelinkList);
-
-            image.setPrjId(currentPojo.getPrjId());
-            image.setTitle(currentPojo.getTitle());
-            image.setImagelink(imagelinkList);
-            prj.setImage(image);
-
-            currentPojo = projectPojosList.get(i);
-        }*/
-    }
-
-    private void testmethod(List<ProjectPojo> projectPojosList) {
-
     }
 }
