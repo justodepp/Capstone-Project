@@ -76,6 +76,8 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
     // CircleImageView
     implementation 'de.hdodenhof:circleimageview:2.2.0'
+    // PhotoView
+    implementation 'com.github.chrisbanes:PhotoView:2.1.4'
     // Firebase
     implementation 'com.google.firebase:firebase-core:16.0.1'
     // FirebaseUI for Firebase Auth

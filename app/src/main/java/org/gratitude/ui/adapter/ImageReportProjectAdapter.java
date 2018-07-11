@@ -13,8 +13,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
+
+import com.github.chrisbanes.photoview.PhotoView;
 
 import org.gratitude.R;
 import org.gratitude.data.model.report.Link;
@@ -69,7 +70,6 @@ public class ImageReportProjectAdapter extends RecyclerView.Adapter<ImageReportP
         }
 
         public void bind(final int position){
-            // TODO: associate image list
             ImageHandler.reportImageHandler(mContext, mBinding.singleImage, mList.get(position).getHref());
 
             mBinding.singleImage.setOnClickListener(new View.OnClickListener() {
@@ -97,9 +97,9 @@ public class ImageReportProjectAdapter extends RecyclerView.Adapter<ImageReportP
                 }
             });
 
-            ImageView imageView = new ImageView(mContext);
+            PhotoView photoView = new PhotoView(mContext);
 
-            builder.addContentView(imageView, new RelativeLayout.LayoutParams(
+            builder.addContentView(photoView, new RelativeLayout.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.MATCH_PARENT));
 
@@ -107,7 +107,7 @@ public class ImageReportProjectAdapter extends RecyclerView.Adapter<ImageReportP
                     .load(url)
                     .dontTransform()
                     .override(width - ((width/100)*30))
-                    .into(imageView);
+                    .into(photoView);
             builder.show();
         }
     }
