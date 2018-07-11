@@ -95,8 +95,10 @@ public class ReportProjectAdapter extends RecyclerView.Adapter<ReportProjectAdap
             mBinding.reportContent.setText(Html.fromHtml(mEntry.get(position).getContent()));
 
             mBinding.layoutImage.rvImage.hasFixedSize();
-            mImageAdapter = new ImageReportProjectAdapter(mContext, mEntry.get(position).getLinks());
-            mBinding.layoutImage.rvImage.setAdapter(mImageAdapter);
+            if(mEntry.get(position).getLinks() != null) {
+                mImageAdapter = new ImageReportProjectAdapter(mContext, mEntry.get(position).getLinks());
+                mBinding.layoutImage.rvImage.setAdapter(mImageAdapter);
+            }
         }
 
         @Override

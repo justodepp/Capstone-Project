@@ -178,58 +178,6 @@ public class ProjectsFragment extends Fragment implements SwipeRefreshLayout.OnR
         mBinding.progressBar.indeterminateBar.setVisibility(View.GONE);
     }
 
-    /*private void setupViewModel2() {
-        final List<Image> _Image = new ArrayList<>();
-        final List<Project> _Prj= new ArrayList<>();
-
-        mViewModel.getImageLinks().observe(this, new Observer<List<Imagelink>>() {
-            @Override
-            public void onChanged(@Nullable final List<Imagelink> imagelinks) {
-                mViewModel.getImageLinks().removeObserver(this);
-                mViewModel.getImages().observe(ProjectsFragment.this, new Observer<List<Image>>() {
-                    @Override
-                    public void onChanged(@Nullable final List<Image> images) {
-                        mViewModel.getImages().removeObserver(this);
-                        for (int i = 0; i < images.size(); i++) {
-                            List<Imagelink> _Imagelinks = new ArrayList<>();
-                            for (int j = 0; j < imagelinks.size(); j++) {
-                                if (images.get(i).getPrjId().equals(imagelinks.get(j).getPrjId())){
-                                    _Imagelinks.add(imagelinks.get(j));
-                                }
-                            }
-                            images.get(i).setImagelink(_Imagelinks);
-                            _Image.add(images.get(i));
-                        }
-
-                        mViewModel.getProjects().observe(ProjectsFragment.this, new Observer<List<Project>>() {
-                            @Override
-                            public void onChanged(@Nullable List<Project> projects) {
-                                for (int i = 0; i < projects.size(); i++) {
-                                    for (int j = 0; j < _Image.size(); j++) {
-                                        if(projects.get(i).getId().equals(_Image.get(j).getPrjId())){
-                                            projects.get(i).setImage(_Image.get(j));
-                                        }
-                                    }
-                                }
-
-                                _Prj.addAll(projects);
-                                populateUI(_Prj);
-                            }
-                        });
-                    }
-                });
-
-                mBinding.swipeRefreshLayout.setRefreshing(false);
-                mBinding.progressBar.indeterminateBar.setVisibility(View.GONE);
-            }
-        });
-    }
-
-    private void populateUI(List<Project> projects) {
-        mAdapter = new ProjectsAdapter(getActivity(), projects);
-        mBinding.recyclerview.setAdapter(mAdapter);
-    }*/
-
     private void handleCall(){
         if(typeCode != null) {
             if (typeCode.equals(getString(R.string.menu_home))) {
