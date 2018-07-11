@@ -27,4 +27,7 @@ public interface ProjectDao {
 
     @Query("SELECT * FROM project WHERE id = :id")
     Project loadProjectById(Long id);
+
+    @Query("SELECT * FROM project ")
+    List<Project> loadAllWidgetProjects();
 }
