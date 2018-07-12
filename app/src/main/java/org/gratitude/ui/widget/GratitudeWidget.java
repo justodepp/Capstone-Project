@@ -7,7 +7,6 @@ import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.support.v4.app.TaskStackBuilder;
 import android.widget.RemoteViews;
 
 import com.bumptech.glide.request.target.AppWidgetTarget;
@@ -17,7 +16,6 @@ import org.gratitude.data.db.GratitudeDatabase;
 import org.gratitude.data.model.projects.Project;
 import org.gratitude.main.MainActivity;
 import org.gratitude.ui.ProjectsFragment;
-import org.gratitude.ui.detailProject.DetailsProjectFragment;
 import org.gratitude.utils.GlideApp;
 
 import java.util.ArrayList;
@@ -57,16 +55,17 @@ public class GratitudeWidget extends AppWidgetProvider {
                     // ... and then a random building
                     Project project = projects.get(randomIndex);
                     // intent and click listener
-                    Intent intent = new Intent(context, DetailsProjectFragment.class);
+                    Intent intent = new Intent(context, MainActivity.class);
                     intent.putExtra(ProjectsFragment.PRJ_CLICKED, project);
                     // pending intent from https://developer.android.com/training/implementing-navigation/temporal.html
                     // The resulting PendingIntent specifies not only the activity to start,
                     // but also the back and up stack that should be inserted into the task
-                    PendingIntent pendingIntent = TaskStackBuilder
+                    /*PendingIntent pendingIntent = TaskStackBuilder
                             .create(context)
                             .addParentStack(MainActivity.class)
                             .addNextIntent(intent)
-                            .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+                            .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);*/
+                    PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
                     RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.gratitude_widget);
                     views.setOnClickPendingIntent(R.id.layout, pendingIntent);
 
