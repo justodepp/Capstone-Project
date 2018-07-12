@@ -26,7 +26,8 @@
                 android:padding="@dimen/general_padding_4dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:srcCompat="@drawable/googleg_standard_color_18" />
+                tools:srcCompat="@drawable/googleg_standard_color_18"
+                android:contentDescription="@string/org_img_contentDescritpion" />
 
             <TextView
                 android:id="@+id/org_name_text"

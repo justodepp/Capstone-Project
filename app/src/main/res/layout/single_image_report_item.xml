@@ -11,7 +11,8 @@
             android:layout_height="wrap_content"
             android:minHeight="@dimen/heigh_img_prj_report"
             android:padding="@dimen/general_padding_4dp"
-            tools:src="@tools:sample/avatars" />
+            tools:src="@tools:sample/avatars"
+            android:contentDescription="@string/report_img_contentDescritpion"/>
 
     </android.support.constraint.ConstraintLayout>
 </layout>

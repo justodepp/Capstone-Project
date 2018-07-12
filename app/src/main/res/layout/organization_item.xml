@@ -28,7 +28,8 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:srcCompat="@drawable/googleg_standard_color_18" />
+                tools:srcCompat="@drawable/googleg_standard_color_18"
+                android:contentDescription="@string/org_img_contentDescritpion" />
 
             <TextView
                 android:id="@+id/name_text"
