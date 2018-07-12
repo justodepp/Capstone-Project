@@ -10,4 +10,6 @@
     <!-- Project Details -->
     <color name="text_detail_prj_title">#DE000000</color>
     <color name="bkg_icon_card_action">#00FFFFFF</color>
+
+    <color name="bkg_widget">#80FFFFFF</color>
 </resources>

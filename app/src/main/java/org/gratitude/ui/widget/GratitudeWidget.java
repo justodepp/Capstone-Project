@@ -7,6 +7,8 @@ import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Build;
+import android.text.Html;
 import android.widget.RemoteViews;
 
 import com.bumptech.glide.request.target.AppWidgetTarget;
@@ -73,11 +75,37 @@ public class GratitudeWidget extends AppWidgetProvider {
 
                     views.setTextViewText(R.id.appwidget_text, project.getTitle());
 
-                        GlideApp.with(context)
-                                .asBitmap()
-                                .load(project.getImageLink())
-                                .error(R.drawable.global_logo_color)
-                                .into(appWidgetTarget);
+                    double result = ((project.getFunding() / project.getGoal()) * 100);
+                    int progress;
+                    if(result > 0 && result < 1) {
+                        progress = 1;
+                    } else {
+                        progress = (int) result;
+                    }
+
+                    if (progress < 100) {
+                        String text = String.format(context.getString(R.string.money_raised_text),
+                                String.valueOf(project.getFunding()),
+                                String.valueOf(project.getGoal()));
+                        views.setTextViewText(R.id.money_raised, Html.fromHtml(text));
+                    } else {
+                        String text = String.format(context.getString(R.string.money_raised_text),
+                                String.valueOf(project.getFunding()),
+                                String.valueOf(project.getGoal()));
+                        views.setTextViewText(R.id.money_raised, Html.fromHtml(text));
+                    }
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        views.setProgressBar(R.id.money_progressBar, 100, progress,false);
+                    } else {
+                        views.setProgressBar(R.id.money_progressBar, 100, progress,false);
+                    }
+
+                    GlideApp.with(context)
+                            .asBitmap()
+                            .load(project.getImageLink())
+                            .error(R.drawable.global_logo_color)
+                            .into(appWidgetTarget);
 
                     appWidgetManager.updateAppWidget(appWidgetId, views);
                 }
