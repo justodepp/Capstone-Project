@@ -53,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
     private Fragment mFragment;
     private Class mFragmentClass;
     private Bundle mBundle;
+    private Bundle outState;
 
     private TextView mHeaderEmailText;
     private TextView mHeaderNameText;
@@ -69,8 +70,11 @@ public class MainActivity extends AppCompatActivity {
         setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
-
+        outState = savedInstanceState;
         init();
+        if(outState == null) {
+            showHomeFragment();
+        }
         checkSignedIn();
     }
 
@@ -112,8 +116,9 @@ public class MainActivity extends AppCompatActivity {
             setHeader(name, email, auth.getCurrentUser().getPhotoUrl());
         } else {
             hideLogout();
-            // not signed in
-            startActivityForResult(new Intent(this, LoginActivity.class), RC_SIGN_IN);
+            if (outState == null)
+                // not signed in
+                startActivityForResult(new Intent(this, LoginActivity.class), RC_SIGN_IN);
         }
     }
 
@@ -146,7 +151,6 @@ public class MainActivity extends AppCompatActivity {
     private void init() {
         setupToolbar();
         setupDrawer();
-        showHomeFragment();
     }
 
     private void showHomeFragment() {

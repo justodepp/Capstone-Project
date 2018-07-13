@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -29,6 +30,7 @@ import org.gratitude.ui.detailProject.DetailsProjectFragment;
 import org.gratitude.utils.AppExecutors;
 import org.gratitude.utils.EndlessRecyclerViewScrollListener;
 import org.gratitude.utils.ItemClickSupport;
+import org.gratitude.utils.Utility;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,6 +49,7 @@ public class ProjectsFragment extends Fragment implements SwipeRefreshLayout.OnR
 
     private ArrayList<Project> mProjectList = new ArrayList<>();
     private LinearLayoutManager mLinearLayoutManager;
+    private GridLayoutManager mGridLayoutManager;
 
     private boolean hasNext;
     private long mNextProjectId;
@@ -85,8 +88,9 @@ public class ProjectsFragment extends Fragment implements SwipeRefreshLayout.OnR
             typeCode = mBundle.getString(MainActivity.ARGUMENT_TYPE_CODE);
         }
 
+        mGridLayoutManager = new GridLayoutManager(getContext(), Utility.getSpan(getContext()));
         mLinearLayoutManager = new LinearLayoutManager(getContext());
-        mBinding.recyclerview.setLayoutManager(mLinearLayoutManager);
+        mBinding.recyclerview.setLayoutManager(mGridLayoutManager);
         mBinding.swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorAccent));
         mBinding.swipeRefreshLayout.setOnRefreshListener(this);
 
