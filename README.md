@@ -12,7 +12,11 @@ In this project i've:
 
 
 #### Informations
-To use the app you need to retrive a valid API Key from [Global Giving](https://www.globalgiving.org/dy/v2/developer/get-api-key.html) and then modify your `gradle.properties` file.
+To use the app you need to retrive a valid API Key from [Global Giving](https://www.globalgiving.org/dy/v2/developer/get-api-key.html) and then modify your `gradle.properties` file in this way:
+
+```
+   GlobalGivingApiKey=YOUR_API_KEY
+```
 
 ###### Phone
 <img src="https://raw.githubusercontent.com/justodepp/Capstone-Project/master/art/img_1.png" width="250"> <img src="https://raw.githubusercontent.com/justodepp/Capstone-Project/master/art/img_2.png" width="250"> <img src="https://raw.githubusercontent.com/justodepp/Capstone-Project/master/art/img_3.png" width="250">
