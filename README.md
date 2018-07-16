@@ -1,6 +1,6 @@
 # Capstone-Project
 ###### Personal Project of [Udacity Android Developer Nanodegree](https://classroom.udacity.com/nanodegrees/nd801/syllabus/core-curriculum)
-
+Implemented my custom app using the full gamut of the Android framework, including a Material user experience and the use of a variety of Google Play services.
 ## Gratitude
 His purpose it’s to sensibilize people through information about organization and charity project
 #### About
