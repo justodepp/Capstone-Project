@@ -1,6 +1,6 @@
 # Capstone-Project
 ###### Personal Project of [Udacity Android Developer Nanodegree](https://classroom.udacity.com/nanodegrees/nd801/syllabus/core-curriculum)
-#####His purpose it’s to sensibilize people through information about organization and charity project
+##### His purpose it’s to sensibilize people through information about organization and charity project
 #### About
 In this project i've:
 
