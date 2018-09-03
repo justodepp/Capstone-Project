@@ -6,6 +6,7 @@ import android.content.Context;
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.core.CrashlyticsCore;
 import com.facebook.stetho.Stetho;
+import com.orhanobut.logger.Logger;
 
 import org.gratitude.BuildConfig;
 import org.gratitude.utils.ReleaseCrashlyticsTree;
@@ -43,6 +44,10 @@ public class Gratitude extends Application{
                 @Override
                 protected String createStackElementTag(StackTraceElement element) {
                     return super.createStackElementTag(element) + ':' + element.getLineNumber();
+                }
+                // Add Logger library to Timber
+                @Override protected void log(int priority, String tag, String message, Throwable t) {
+                    Logger.log(priority, tag, message, t);
                 }
             });
         } else {

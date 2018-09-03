@@ -4,6 +4,7 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
+import com.orhanobut.logger.Logger;
 
 import timber.log.Timber;
 
@@ -41,9 +42,9 @@ public class ReleaseCrashlyticsTree extends Timber.Tree {
 
             if (message.length() < MAX_LOG_LENGTH){
                 if (priority == Log.ASSERT) {
-                    Log.wtf(tag, message);
+                    Logger.wtf(tag, message);
                 } else {
-                    Log.println(priority, tag, message);
+                    Logger.log(priority, tag, message, t);
                 }
                 return;
             }
@@ -56,9 +57,9 @@ public class ReleaseCrashlyticsTree extends Timber.Tree {
                 int end = Math.min(newline, i + MAX_LOG_LENGTH);
                 String part = message.substring(i, end);
                 if (priority == Log.ASSERT) {
-                    Log.wtf(tag, part);
+                    Logger.wtf(tag, part);
                 } else {
-                    Log.println(priority, tag, part);
+                    Logger.log(priority, tag, part, t);
                 }
                 i = end;
             } while (i < newline);
