@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -93,6 +94,7 @@ public class ReportProjectAdapter extends RecyclerView.Adapter<ReportProjectAdap
             String text = Utility.reformatDate(mEntry.get(position).getPublished()) + " - " + mEntry.get(position).getStringListAuthor();
             mBinding.reportAuthor.setText(text);
             mBinding.reportContent.setText(Html.fromHtml(mEntry.get(position).getContent()));
+            mBinding.reportContent.setMovementMethod(LinkMovementMethod.getInstance());
 
             mBinding.layoutImage.rvImage.hasFixedSize();
             if(mEntry.get(position).getLinks() != null) {

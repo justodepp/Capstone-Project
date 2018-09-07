@@ -275,6 +275,7 @@ public class MainActivity extends AppCompatActivity implements BillingHandler.Bi
                 mBundle = getFragmentBundleType(menuItem.getTitle().toString());
                 break;
             case R.id.menu_support:
+                fragmentClass = mFragmentClass;
                 showDonation();
                 break;
             case R.id.menu_login:
@@ -302,7 +303,8 @@ public class MainActivity extends AppCompatActivity implements BillingHandler.Bi
 
         mDrawer.closeDrawer(GravityCompat.START);
         if (!menuItem.getTitle().equals(getString(R.string.menu_login))
-                && !menuItem.getTitle().equals(getString(R.string.menu_logout))) {
+                && !menuItem.getTitle().equals(getString(R.string.menu_logout))
+                && !menuItem.getTitle().equals(getString(R.string.menu_support))) {
             // Highlight the selected item has been done by NavigationView
             // menuItem.setChecked(true);
             // Set action bar title
