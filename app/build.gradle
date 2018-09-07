@@ -11,8 +11,8 @@ android {
         applicationId "org.gratitude"
         minSdkVersion 21
         targetSdkVersion 27
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "1.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
         // Please ensure you have a valid API KEY for globalgiving to use this app
