@@ -1,5 +1,6 @@
 package org.gratitude.main;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.databinding.DataBindingUtil;
@@ -7,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -14,6 +16,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -22,20 +25,29 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.android.billingclient.api.SkuDetails;
 import com.google.firebase.auth.FirebaseAuth;
 
 import org.gratitude.R;
 import org.gratitude.databinding.ActivityMainBinding;
+import org.gratitude.main.billing.BillingHandler;
 import org.gratitude.ui.LoginActivity;
 import org.gratitude.ui.OrganizationsFragment;
 import org.gratitude.ui.ProjectsFragment;
 import org.gratitude.ui.ThemesFragment;
 import org.gratitude.utils.GlideApp;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
 import timber.log.Timber;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements BillingHandler.BillingCallbacks{
 
     private static final int RC_SIGN_IN = 343;
     public static final String ARGUMENT_TYPE_CODE = "typeCode";
@@ -65,13 +77,19 @@ public class MainActivity extends AppCompatActivity {
 
     ActivityMainBinding mBinding;
 
+    private BillingHandler mBilling;
+    private static final List<String> SKU = Arrays.asList("donation.regular", "donation.large");
+    private boolean mHideSnackbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         outState = savedInstanceState;
+
         init();
+
         if(outState == null) {
             showHomeFragment();
         }
@@ -151,6 +169,8 @@ public class MainActivity extends AppCompatActivity {
     private void init() {
         setupToolbar();
         setupDrawer();
+
+        mBilling = new BillingHandler(this, this, SKU);
     }
 
     private void showHomeFragment() {
@@ -164,6 +184,50 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e) {
             Timber.e(e);
         }
+    }
+
+    private void showDonation(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this)
+                .setTitle(R.string.donate_title)
+                .setMessage(R.string.donate_desc)
+                .setNeutralButton(android.R.string.cancel, null);
+
+        List<SkuDetails> skus = new ArrayList<>(getSkus());
+        Collections.sort(skus, new Comparator<SkuDetails>() {
+            @Override
+            public int compare(SkuDetails o1, SkuDetails o2) {
+                return Long.compare(o1.getPriceAmountMicros(), o2.getPriceAmountMicros());
+            }
+        });
+
+        for (int i = 0; i < skus.size() && i < 2; i++) {
+            final SkuDetails sku = skus.get(i);
+
+            String price = sku.getPrice();
+            DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    buy(sku);
+                }
+            };
+
+            if (i == 0) {
+                // Cheapest IAP
+                builder.setNegativeButton(price, listener);
+            } else {
+                // More expensive IAP
+                builder.setPositiveButton(price, listener);
+            }
+        }
+        builder.create().show();
+    }
+
+    private void buy(SkuDetails sku) {
+        mBilling.buy(sku);
+    }
+
+    private Collection<SkuDetails> getSkus() {
+        return mBilling.getSkus();
     }
 
     //region Fragment
@@ -209,6 +273,9 @@ public class MainActivity extends AppCompatActivity {
             case R.id.menu_settings:
                 fragmentClass = null;
                 mBundle = getFragmentBundleType(menuItem.getTitle().toString());
+                break;
+            case R.id.menu_support:
+                showDonation();
                 break;
             case R.id.menu_login:
                 fromLogin = forceLoad = true;
@@ -432,6 +499,32 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        mBilling.destroy();
+        super.onDestroy();
+    }
+
+    @Override
+    public void onStateChanged(boolean connected) {
+        Timber.w("onStateChanged " + connected);
+    }
+
+    @Override
+    public void onPurchased(SkuDetails sku, boolean isNew) {
+        Timber.w("onPurchased " + sku.getSku() + " " + isNew);
+        if (!isNew) {
+            if (mHideSnackbar) {
+                return;
+            } else {
+                mHideSnackbar = true;
+            }
+        }
+        Snackbar.make(mBinding.contentMain.contentFrame,
+                isNew ? R.string.donate_new : R.string.donate_history,
+                Snackbar.LENGTH_LONG).show();
     }
     //endregion
 }

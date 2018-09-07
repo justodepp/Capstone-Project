@@ -36,6 +36,10 @@
                     android:title="@string/menu_settings"
                     android:visible="false"/>
                 <item
+                    android:id="@+id/menu_support"
+                    android:icon="@drawable/ic_support"
+                    android:title="@string/menu_support" />
+                <item
                     android:id="@+id/menu_login"
                     android:icon="@drawable/ic_login"
                     android:title="@string/menu_login" />

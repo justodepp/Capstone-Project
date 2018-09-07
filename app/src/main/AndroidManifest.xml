@@ -27,7 +27,7 @@
             android:name=".ui.LoginActivity" />
 
         <!-- Widget -->
-        <receiver android:name=".ui.widget.GratitudeWidget">
+        <!--<receiver android:name=".ui.widget.GratitudeWidget">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -35,7 +35,7 @@
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/gratitude_widget_info" />
-        </receiver>
+        </receiver>-->
     </application>
 
 </manifest>
