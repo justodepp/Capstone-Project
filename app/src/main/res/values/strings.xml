@@ -77,4 +77,7 @@
     <string name="donate_new">Thank you for your support! &lt;3</string>
     <string name="donate_history">Thank you for your support!</string>
 
+    <!-- InfoAbout -->
+    <string name="attributions_text">Attributions</string>
+
 </resources>

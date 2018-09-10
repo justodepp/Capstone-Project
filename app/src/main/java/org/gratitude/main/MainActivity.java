@@ -31,6 +31,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import org.gratitude.R;
 import org.gratitude.databinding.ActivityMainBinding;
 import org.gratitude.main.billing.BillingHandler;
+import org.gratitude.ui.InfoFragment;
 import org.gratitude.ui.LoginActivity;
 import org.gratitude.ui.OrganizationsFragment;
 import org.gratitude.ui.ProjectsFragment;
@@ -267,7 +268,8 @@ public class MainActivity extends AppCompatActivity implements BillingHandler.Bi
                 mBundle.putBoolean(ARGUMENT_FAVORITE, true);
                 break;
             case R.id.menu_about:
-                fragmentClass = null;
+                fragmentClass = InfoFragment.class;
+                mFragmentClass = fragmentClass;
                 mBundle = getFragmentBundleType(menuItem.getTitle().toString());
                 break;
             case R.id.menu_settings:
