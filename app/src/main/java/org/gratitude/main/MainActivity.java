@@ -236,7 +236,8 @@ public class MainActivity extends AppCompatActivity implements BillingHandler.Bi
         // Create a new fragment and specify the fragment to show based on nav item clicked
 
         // clear stack every time click on drawer menu
-        getSupportFragmentManager().popBackStackImmediate();
+        if(menuItem.getItemId() != R.id.menu_support)
+            getSupportFragmentManager().popBackStackImmediate();
 
         Class fragmentClass = null;
         switch(menuItem.getItemId()) {
@@ -277,7 +278,6 @@ public class MainActivity extends AppCompatActivity implements BillingHandler.Bi
                 mBundle = getFragmentBundleType(menuItem.getTitle().toString());
                 break;
             case R.id.menu_support:
-                fragmentClass = mFragmentClass;
                 showDonation();
                 break;
             case R.id.menu_login:
