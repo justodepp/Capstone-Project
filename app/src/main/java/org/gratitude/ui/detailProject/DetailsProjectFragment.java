@@ -87,7 +87,12 @@ public class DetailsProjectFragment extends Fragment implements View.OnClickList
                 if (mDb.projectDao().loadProjectById(mProject.getId()) != null)
                     favorite = true;
 
-                updateFab(favorite);
+                AppExecutors.getInstance().mainThread().execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        updateFab(favorite);
+                    }
+                });
             }
         });
     }
