@@ -5,6 +5,9 @@
     <string name="guest_name">Guest Name</string>
     <string name="guest_email">guestemail@email.com</string>
 
+    <!-- Search -->
+    <string name="search_title">Search</string>
+    <string name="search_hint">Search project&#8230;</string>
     <!-- Menu -->
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
