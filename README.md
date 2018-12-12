@@ -27,7 +27,7 @@ To use the app you need to retrive a valid API Key from [Global Giving](https://
 <img src="https://raw.githubusercontent.com/justodepp/Capstone-Project/master/art/img_4.png" width="250"> <img src="https://raw.githubusercontent.com/justodepp/Capstone-Project/master/art/img_5.png" width="250">
 
 #### Credits
-All the data (images, informations ...) are provided by [Global Giving](https://www.flaticon.com/authors/pixel-perfect)
+All the data (images, informations ...) are provided by [Global Giving](https://www.globalgiving.org/)
 
 License
 -------------
